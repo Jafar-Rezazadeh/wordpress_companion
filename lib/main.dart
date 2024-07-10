@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordpress_companion/core/router/go_router_config.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +15,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+    return MaterialApp.router(
+      routerConfig: goRouter,
     );
   }
 }
