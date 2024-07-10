@@ -1,3 +1,4 @@
+const wpV2EndPoint = "wp-json/wp/v2";
 const String loginScreen = "/login";
 // const String homeScreen = "/home";
 // const String postScreen = "/post";
