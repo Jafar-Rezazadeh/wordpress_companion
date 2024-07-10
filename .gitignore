@@ -46,3 +46,5 @@ app.*.map.json
 # extra 
 windows/
 web/
+templates/
+
