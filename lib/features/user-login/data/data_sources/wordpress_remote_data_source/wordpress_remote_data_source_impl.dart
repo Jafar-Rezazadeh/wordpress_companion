@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/features/user-login/data/data_sources/wordpress_remote_data_source/wordpress_remote_data_source.dart';
-import 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
+import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 import '../../../../../core/constants/constants.dart';
 

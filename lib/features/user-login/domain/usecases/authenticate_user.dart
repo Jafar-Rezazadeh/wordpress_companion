@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-
-import '../repositories/user_authentication_repo.dart';
+import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class AuthenticateUser implements UseCase<bool, UserAuthenticationParams> {
   final UserAuthenticationRepository _userAuthentication;

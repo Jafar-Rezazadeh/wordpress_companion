@@ -1,12 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/features/user-login/data/data_sources/wordpress_remote_data_source/wordpress_remote_data_source.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
-
-import 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
-
-import '../../domain/repositories/user_authentication_repo.dart';
+import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class UserAuthenticationRepositoryImpl implements UserAuthenticationRepository {
   final WordpressRemoteDataSource _wordpressRemoteDataSource;
