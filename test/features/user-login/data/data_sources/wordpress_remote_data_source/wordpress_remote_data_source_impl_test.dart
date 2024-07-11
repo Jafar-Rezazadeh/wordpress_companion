@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:wordpress_companion/core/data/wordpress_remote_data_source/wordpress_remote_data_source_impl.dart';
+import 'package:wordpress_companion/features/user-login/data/data_sources/wordpress_remote_data_source/wordpress_remote_data_source_impl.dart';
+import 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
 
 void main() {
   late WordpressRemoteDataSourceImpl wordpressRemoteDataSourceImpl;
@@ -11,6 +12,8 @@ void main() {
   late DioAdapter dioAdapter;
   const exampleDomain = "https://example.com";
   const wpV2EndPoint = "wp-json/wp/v2";
+  const UserAuthenticationParams userAuthenticationParams =
+      (name: "test", applicationPassword: "qth0 TUwn HrMP EMNm b6MM NvR0", domain: exampleDomain);
 
   setUp(
     () {
@@ -36,9 +39,7 @@ void main() {
           );
 
           //act
-          final result = wordpressRemoteDataSourceImpl.authenticateUser(
-            (name: "name", applicationPassword: "1234", domain: exampleDomain),
-          );
+          final result = wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
 
           //assert
           expect(
@@ -54,21 +55,41 @@ void main() {
         },
       );
       test(
-        "should return (true) when authentication is successful",
+        "should return (true) when authentication is successful with 200 status code",
         () async {
           //arrange
           dioAdapter.onGet(
             "$exampleDomain/$wpV2EndPoint/settings/",
+            headers: {
+              "Authorization": "Basic dGVzdDpxdGgwIFRVd24gSHJNUCBFTU5tIGI2TU0gTnZSMA==",
+            },
             (server) => server.reply(200, null),
           );
 
           //act
-          final result = await wordpressRemoteDataSourceImpl.authenticateUser(
-            (name: "name", applicationPassword: "1234", domain: exampleDomain),
-          );
+          final result =
+              await wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
 
           //assert
           expect(result, true);
+        },
+      );
+
+      test(
+        "should return (false) when authentication is unsuccessful without 200 status code",
+        () async {
+          //arrange
+          dioAdapter.onGet(
+            "$exampleDomain/$wpV2EndPoint/settings/",
+            (server) => server.reply(201, null),
+          );
+
+          //act
+          final result =
+              await wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
+
+          //assert
+          expect(result, false);
         },
       );
     },

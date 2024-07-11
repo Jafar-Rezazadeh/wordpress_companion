@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/core/data/wordpress_remote_data_source/wordpress_remote_data_source.dart';
+import 'package:wordpress_companion/features/user-login/data/data_sources/wordpress_remote_data_source/wordpress_remote_data_source.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
 
