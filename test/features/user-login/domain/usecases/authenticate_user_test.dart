@@ -19,7 +19,7 @@ void main() {
   setUp(
     () {
       mockUserAuthentication = MockUserAuthentication();
-      authenticateUser = AuthenticateUser(userAuthentication: mockUserAuthentication);
+      authenticateUser = AuthenticateUser(userAuthenticationRepository: mockUserAuthentication);
     },
   );
 

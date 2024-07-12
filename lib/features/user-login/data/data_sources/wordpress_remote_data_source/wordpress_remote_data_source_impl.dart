@@ -11,10 +11,12 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
 
   WordpressRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
 
+  String getSettingsPath(String domain) => "$domain/$wpV2EndPoint/settings/";
+
   @override
   Future<bool> authenticateUser(UserAuthenticationParams params) async {
     final response = await _dio.get(
-      "${params.domain}/$wpV2EndPoint/settings/",
+      getSettingsPath(params.domain),
       options: Options(
         headers: {
           "Authorization":

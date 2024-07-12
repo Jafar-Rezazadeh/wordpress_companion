@@ -12,7 +12,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required AuthenticateUser authenticateUser,
   })  : _authenticateUser = authenticateUser,
-        super(const LoginState.enterCredentials());
+        super(const LoginState.initial());
 
   login(UserAuthenticationParams params) async {
     emit(const LoginState.loggingIn());

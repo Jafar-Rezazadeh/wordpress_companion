@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
@@ -27,7 +27,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
@@ -36,7 +36,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
@@ -46,7 +46,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
@@ -55,7 +55,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
@@ -64,7 +64,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,
@@ -93,35 +93,35 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
 }
 
 /// @nodoc
-abstract class _$$EnterCredentialsImplCopyWith<$Res> {
-  factory _$$EnterCredentialsImplCopyWith(_$EnterCredentialsImpl value,
-          $Res Function(_$EnterCredentialsImpl) then) =
-      __$$EnterCredentialsImplCopyWithImpl<$Res>;
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EnterCredentialsImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$EnterCredentialsImpl>
-    implements _$$EnterCredentialsImplCopyWith<$Res> {
-  __$$EnterCredentialsImplCopyWithImpl(_$EnterCredentialsImpl _value,
-      $Res Function(_$EnterCredentialsImpl) _then)
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EnterCredentialsImpl implements _EnterCredentials {
-  const _$EnterCredentialsImpl();
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
 
   @override
   String toString() {
-    return 'LoginState.enterCredentials()';
+    return 'LoginState.initial()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$EnterCredentialsImpl);
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
   }
 
   @override
@@ -130,39 +130,39 @@ class _$EnterCredentialsImpl implements _EnterCredentials {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
     required TResult Function(Failure failure) loginFailed,
   }) {
-    return enterCredentials();
+    return initial();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
     TResult? Function(Failure failure)? loginFailed,
   }) {
-    return enterCredentials?.call();
+    return initial?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
     TResult Function(Failure failure)? loginFailed,
     required TResult orElse(),
   }) {
-    if (enterCredentials != null) {
-      return enterCredentials();
+    if (initial != null) {
+      return initial();
     }
     return orElse();
   }
@@ -170,46 +170,46 @@ class _$EnterCredentialsImpl implements _EnterCredentials {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
     required TResult Function(_LoginFailed value) loginFailed,
   }) {
-    return enterCredentials(this);
+    return initial(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
     TResult? Function(_LoginFailed value)? loginFailed,
   }) {
-    return enterCredentials?.call(this);
+    return initial?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,
     TResult Function(_LoginFailed value)? loginFailed,
     required TResult orElse(),
   }) {
-    if (enterCredentials != null) {
-      return enterCredentials(this);
+    if (initial != null) {
+      return initial(this);
     }
     return orElse();
   }
 }
 
-abstract class _EnterCredentials implements LoginState {
-  const factory _EnterCredentials() = _$EnterCredentialsImpl;
+abstract class _Initial implements LoginState {
+  const factory _Initial() = _$InitialImpl;
 }
 
 /// @nodoc
@@ -250,7 +250,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
@@ -262,7 +262,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
@@ -274,7 +274,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
@@ -290,7 +290,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
@@ -302,7 +302,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
@@ -314,7 +314,7 @@ class _$LoggingInImpl implements _LoggingIn {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,
@@ -370,7 +370,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
@@ -382,7 +382,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
@@ -394,7 +394,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
@@ -410,7 +410,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
@@ -422,7 +422,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
@@ -434,7 +434,7 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,
@@ -490,7 +490,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
@@ -502,7 +502,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
@@ -514,7 +514,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
@@ -530,7 +530,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
@@ -542,7 +542,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
@@ -554,7 +554,7 @@ class _$NotValidUserImpl implements _NotValidUser {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,
@@ -636,7 +636,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() enterCredentials,
+    required TResult Function() initial,
     required TResult Function() loggingIn,
     required TResult Function() loginSuccess,
     required TResult Function() notValidUser,
@@ -648,7 +648,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? enterCredentials,
+    TResult? Function()? initial,
     TResult? Function()? loggingIn,
     TResult? Function()? loginSuccess,
     TResult? Function()? notValidUser,
@@ -660,7 +660,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? enterCredentials,
+    TResult Function()? initial,
     TResult Function()? loggingIn,
     TResult Function()? loginSuccess,
     TResult Function()? notValidUser,
@@ -676,7 +676,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_EnterCredentials value) enterCredentials,
+    required TResult Function(_Initial value) initial,
     required TResult Function(_LoggingIn value) loggingIn,
     required TResult Function(_LoginSuccess value) loginSuccess,
     required TResult Function(_NotValidUser value) notValidUser,
@@ -688,7 +688,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_EnterCredentials value)? enterCredentials,
+    TResult? Function(_Initial value)? initial,
     TResult? Function(_LoggingIn value)? loggingIn,
     TResult? Function(_LoginSuccess value)? loginSuccess,
     TResult? Function(_NotValidUser value)? notValidUser,
@@ -700,7 +700,7 @@ class _$LoginFailedImpl implements _LoginFailed {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_EnterCredentials value)? enterCredentials,
+    TResult Function(_Initial value)? initial,
     TResult Function(_LoggingIn value)? loggingIn,
     TResult Function(_LoginSuccess value)? loginSuccess,
     TResult Function(_NotValidUser value)? notValidUser,

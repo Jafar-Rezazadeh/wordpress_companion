@@ -31,7 +31,7 @@ void main() {
           expect(
             loginCubit.state,
             isA<LoginState>().having(
-              (state) => state.whenOrNull(enterCredentials: () => true),
+              (state) => state.whenOrNull(initial: () => true),
               "is enterCredentials init state",
               true,
             ),

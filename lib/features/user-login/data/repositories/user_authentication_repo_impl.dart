@@ -19,12 +19,15 @@ class UserAuthenticationRepositoryImpl implements UserAuthenticationRepository {
     } on DioException catch (e, t) {
       return left(
         ServerFailure(
-          message: "${e.message} \n $t",
+          message: e.message.toString(),
           response: e.response,
+          stackTrace: t,
         ),
       );
     } catch (e, t) {
-      return left(UnknownFailure(message: "$e \n\n $t}"));
+      return left(
+        UnknownFailure(message: e.toString(), stackTrace: t),
+      );
     }
   }
 }

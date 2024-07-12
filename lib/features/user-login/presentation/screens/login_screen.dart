@@ -2,8 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/utils/validator.dart';
-import 'package:wordpress_companion/features/user-login/presentation/logic_holder/login_cubit/login_cubit.dart';
+import 'package:wordpress_companion/core/widgets/failure_widget.dart';
+import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,37 +19,98 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final double eachFieldPadding = 30;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _applicationPasswordController = TextEditingController();
-  final TextEditingController _domainController = TextEditingController();
+  final _userNameController = TextEditingController();
+  final _applicationPasswordController = TextEditingController();
+  final _domainController = TextEditingController();
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    _applicationPasswordController.dispose();
+    _domainController.dispose();
+    _formKey.currentState?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        body: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(30),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Gap(20),
-                  _title(),
-                  const Gap(40),
-                  _littleInfo(),
-                  const Gap(20),
-                  _credentialsForm(),
-                  const Gap(40),
-                  _submit(),
-                ],
-              ),
-            ),
-          ),
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) => _stateChangeListener(state),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: _screenLayout(),
+      ),
+    );
+  }
+
+  _stateChangeListener(LoginState state) => state.when(
+        initial: () => null,
+        loggingIn: () {
+          FocusScope.of(context).unfocus();
+          context.loaderOverlay.show();
+        },
+        loginFailed: (failure) {
+          context.loaderOverlay.hide();
+          _showFailureInModalBottomSheet(failure);
+        },
+        loginSuccess: () {
+          context.loaderOverlay.hide();
+          context.goNamed(homeScreen);
+          _showSnackBar(content: "ورود با موفقیت انجام شد");
+        },
+        notValidUser: () {
+          context.loaderOverlay.hide();
+          _showSnackBar(content: "نام کاربری یا رمز عبور اشتباه است");
+        },
+      );
+
+  _showFailureInModalBottomSheet(Failure failure) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => FailureWidget(failure: failure),
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showSnackBar(
+      {required String content}) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  Scaffold _screenLayout() {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: _scrollableContainer(),
+      ),
+    );
+  }
+
+  Widget _scrollableContainer() {
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Gap(30),
+            _title(),
+            const Gap(30),
+            _subTitle(),
+            const Gap(10),
+            _credentialsForm(),
+          ],
         ),
       ),
     );
@@ -60,28 +126,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _littleInfo() {
+  Widget _subTitle() {
     return Align(
       alignment: Alignment.centerRight,
       child: Text(
-        "ورود به حساب کاربری",
+        "ورود به حساب کاربری وردپرس",
         style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
   }
 
   Widget _credentialsForm() {
-    return Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: Column(
-        children: [
-          _userName(),
-          const Gap(20),
-          _applicationPassword(),
-          const Gap(10),
-          _domain(),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _userName(),
+            const Gap(10),
+            _applicationPassword(),
+            const Gap(10),
+            _domain(),
+            const Gap(30),
+            _submitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -125,12 +195,12 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const Gap(15),
-        _appPasswordHelper(),
+        _appPasswordHelperText(),
       ],
     );
   }
 
-  RichText _appPasswordHelper() {
+  RichText _appPasswordHelperText() {
     return RichText(
       text: TextSpan(
         style: Theme.of(context).textTheme.bodySmall,
@@ -138,18 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextSpan(
             text: "برای آموزش ساخت رمز عبور برنامه در وردپرس ",
             children: [
-              TextSpan(
-                text: "اینجا",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                    ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    _showHelperDialog();
-                  },
-              ),
+              _tapGestureText(),
               const TextSpan(
                 text: " ضربه بزنید.",
               ),
@@ -160,86 +219,36 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  TextSpan _tapGestureText() {
+    return TextSpan(
+      text: "اینجا",
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Colors.blue,
+            fontWeight: FontWeight.bold,
+            fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+          ),
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          _showHelperDialog();
+        },
+    );
+  }
+
   void _showHelperDialog() {
     showDialog(
       context: context,
-      builder: (context) => Directionality(
+      builder: (context) => const Directionality(
         textDirection: TextDirection.rtl,
         child: Dialog(
           alignment: Alignment.center,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             child: SingleChildScrollView(
-              child: _stepsOfCreatingAppPassword(),
+              child: AppPasswordCreationSteps(),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Column _stepsOfCreatingAppPassword() {
-    return const Column(
-      children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: "*مهم*" "\n",
-                style: TextStyle(fontWeight: FontWeight.bold),
-                children: [
-                  TextSpan(
-                    text: "برای استفاده از این ویژگی نسخه وردپرس باید بالای 5.6 باشد."
-                        "\n\n\n",
-                  ),
-                ],
-              ),
-              TextSpan(
-                text: "1) ",
-                children: [
-                  TextSpan(text: "در داشبورد وردپرس وارد بخش کاربران شوید" "\n\n\n"),
-                ],
-              ),
-              TextSpan(
-                text: "2) ",
-                children: [
-                  TextSpan(
-                      text: "کاربر مورد نظر را انتخاب کنید و ویرایش کاربر را بزنید"
-                          "\n\n\n"),
-                ],
-              ),
-              TextSpan(
-                text: "3) ",
-                children: [
-                  TextSpan(
-                    text: "در بخش ویرایش کاربر گزینه رمز های عبور برنامه را پیدا کنید"
-                        "\n\n\n",
-                  ),
-                ],
-              ),
-              TextSpan(
-                text: "4) ",
-                children: [
-                  TextSpan(
-                    text:
-                        "یک نام برای رمز عبور برنامه وارد کنید و دکمه افزودن رمز عبور برنامه جدید را بزنید"
-                        "\n\n\n",
-                  ),
-                ],
-              ),
-              TextSpan(
-                text: "5) ",
-                children: [
-                  TextSpan(
-                    text: "رمز عبور برنامه را کپی و در نرم افزار وارد کنید"
-                        "\n\n\n",
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
@@ -258,25 +267,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _submit() {
+  Widget _submitButton() {
     return SizedBox(
       width: double.infinity,
       child: FilledButton(
-        style: FilledButton.styleFrom(
-          padding: EdgeInsets.all(eachFieldPadding - 10),
-        ),
-        onPressed: () {
-          if (_formKey.currentState?.validate() == true) {
-            BlocProvider.of<LoginCubit>(context).login(
-              (
-                name: _userNameController.text,
-                applicationPassword: _applicationPasswordController.text,
-                domain: _domainController.text,
-              ),
-            );
-          }
-        },
+        style: FilledButton.styleFrom(padding: EdgeInsets.all(eachFieldPadding - 10)),
+        onPressed: () => _ifFieldsValid() ? _makeLogin() : null,
         child: const Text("ورود"),
+      ),
+    );
+  }
+
+  bool _ifFieldsValid() => _formKey.currentState?.validate() == true;
+
+  _makeLogin() {
+    BlocProvider.of<LoginCubit>(context).login(
+      (
+        name: _userNameController.text,
+        applicationPassword: _applicationPasswordController.text,
+        domain: _domainController.text,
       ),
     );
   }

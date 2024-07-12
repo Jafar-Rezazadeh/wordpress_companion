@@ -4,13 +4,13 @@ import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class AuthenticateUser implements UseCase<bool, UserAuthenticationParams> {
-  final UserAuthenticationRepository _userAuthentication;
+  final UserAuthenticationRepository _userAuthenticationRepository;
 
-  AuthenticateUser({required UserAuthenticationRepository userAuthentication})
-      : _userAuthentication = userAuthentication;
+  AuthenticateUser({required UserAuthenticationRepository userAuthenticationRepository})
+      : _userAuthenticationRepository = userAuthenticationRepository;
   @override
   Future<Either<Failure, bool>> call(UserAuthenticationParams params) async {
-    return _userAuthentication.authenticateUser(params);
+    return _userAuthenticationRepository.authenticateUser(params);
   }
 }
 
