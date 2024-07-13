@@ -51,6 +51,7 @@ void main() {
             name: "test",
             applicationPassword: "test1234",
             domain: "https://example.com",
+            rememberMe: true,
           ),
         );
 
@@ -81,6 +82,7 @@ void main() {
             name: "test",
             applicationPassword: "test1234",
             domain: "https://example.com",
+            rememberMe: true,
           ),
         );
 

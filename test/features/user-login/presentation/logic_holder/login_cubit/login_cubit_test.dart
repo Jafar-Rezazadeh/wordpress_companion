@@ -2,52 +2,83 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class MockAuthenticateUser extends Mock implements AuthenticateUser {}
 
-class FakeFailure extends Fake implements Failure {}
+class MockSaveUserCredentials extends Mock implements SaveUserCredentials {}
+
+class MockGetLastLoginCredentials extends Mock implements GetLastLoginCredentials {}
+
+class FakeFailure extends Fake implements Failure {
+  @override
+  String get message => "error message";
+}
+
+class FakeUserCredentialsEntity extends Fake implements UserCredentialsEntity {}
 
 void main() {
-  late LoginCubit loginCubit;
   late MockAuthenticateUser mockAuthenticateUser;
-  const UserCredentialsParams fakeAuthenticationParams =
-      (name: "test", applicationPassword: "test1234", domain: "https://example.com");
+  late MockSaveUserCredentials mockSaveUserCredentials;
+  late MockGetLastLoginCredentials mockGetLastLoginCredentials;
+  late LoginCubit loginCubit;
+  const UserCredentialsParams fakeUserCredentialsParams = (
+    name: "test",
+    applicationPassword: "test1234",
+    domain: "https://example.com",
+    rememberMe: true
+  );
+
+  setUpAll(() {
+    registerFallbackValue(NoParams());
+  });
 
   setUp(
     () {
       mockAuthenticateUser = MockAuthenticateUser();
-      loginCubit = LoginCubit(authenticateUser: mockAuthenticateUser);
+      mockSaveUserCredentials = MockSaveUserCredentials();
+      mockGetLastLoginCredentials = MockGetLastLoginCredentials();
+      loginCubit = LoginCubit(
+        authenticateUser: mockAuthenticateUser,
+        saveUserCredentials: mockSaveUserCredentials,
+        getLastLoginCredentials: mockGetLastLoginCredentials,
+      );
+    },
+  );
+
+  test(
+    "should emit (EnterCredentials) on initial state",
+    () {
+      //assert
+      expect(
+        loginCubit.state,
+        isA<LoginState>().having(
+          (state) => state.whenOrNull(initial: () => true),
+          "is enterCredentials init state",
+          true,
+        ),
+      );
     },
   );
   group(
     "login -",
     () {
-      test(
-        "should emit (EnterCredentials) on initial state",
-        () {
-          //assert
-          expect(
-            loginCubit.state,
-            isA<LoginState>().having(
-              (state) => state.whenOrNull(initial: () => true),
-              "is enterCredentials init state",
-              true,
-            ),
-          );
-        },
-      );
+      // TODO: make an state for userCredentials saved and show a pop up maybe
 
       blocTest<LoginCubit, LoginState>(
         'emits [loggingIn, loginSuccess] when userAuthentication is successful and user is valid',
         setUp: () {
           when(
-            () => mockAuthenticateUser.call(fakeAuthenticationParams),
+            () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => right(true));
+          when(
+            () => mockSaveUserCredentials.call(fakeUserCredentialsParams),
+          ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
         },
         build: () => loginCubit,
-        act: (cubit) => cubit.login(fakeAuthenticationParams),
+        act: (cubit) => cubit.login(fakeUserCredentialsParams),
         expect: () => [
           isA<LoginState>().having(
             (state) => state.whenOrNull(loggingIn: () => true),
@@ -66,11 +97,14 @@ void main() {
         'emits [loggingIn, NotValidUser] when user IsNotValidUser',
         setUp: () {
           when(
-            () => mockAuthenticateUser.call(fakeAuthenticationParams),
+            () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => right(false));
+          when(
+            () => mockSaveUserCredentials.call(fakeUserCredentialsParams),
+          ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
         },
         build: () => loginCubit,
-        act: (cubit) => cubit.login(fakeAuthenticationParams),
+        act: (cubit) => cubit.login(fakeUserCredentialsParams),
         expect: () => [
           isA<LoginState>().having(
             (state) => state.whenOrNull(loggingIn: () => true),
@@ -89,11 +123,11 @@ void main() {
         'emits [loggingIn, loginFailed] when failed to login',
         setUp: () {
           when(
-            () => mockAuthenticateUser.call(fakeAuthenticationParams),
+            () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => left(FakeFailure()));
         },
         build: () => loginCubit,
-        act: (cubit) => cubit.login(fakeAuthenticationParams),
+        act: (cubit) => cubit.login(fakeUserCredentialsParams),
         expect: () => [
           isA<LoginState>().having(
             (state) => state.whenOrNull(loggingIn: () => true),
@@ -109,4 +143,40 @@ void main() {
       );
     },
   );
+
+  group("getLastLoginCredentials -", () {
+    test(
+      "should return (UserCredentialsEntity) when success",
+      () async {
+        //arrange
+        when(
+          () => mockGetLastLoginCredentials.call(any()),
+        ).thenAnswer(
+          (invocation) async => right(FakeUserCredentialsEntity()),
+        );
+
+        //act
+        final result = await loginCubit.getLastLoginCredentials();
+
+        //assert
+        expect(result, isA<UserCredentialsEntity>());
+      },
+    );
+
+    test(
+      "should return (null) when failed to get last login credentials",
+      () async {
+        //arrange
+        when(
+          () => mockGetLastLoginCredentials.call(any()),
+        ).thenAnswer((invocation) async => left(FakeFailure()));
+
+        //act
+        final result = await loginCubit.getLastLoginCredentials();
+
+        //assert
+        expect(result, null);
+      },
+    );
+  });
 }

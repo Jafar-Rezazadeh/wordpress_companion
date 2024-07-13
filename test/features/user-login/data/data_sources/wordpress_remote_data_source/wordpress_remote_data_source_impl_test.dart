@@ -12,8 +12,12 @@ void main() {
   late DioAdapter dioAdapter;
   const exampleDomain = "https://example.com";
   const wpV2EndPoint = "wp-json/wp/v2";
-  const UserCredentialsParams userAuthenticationParams =
-      (name: "test", applicationPassword: "qth0 TUwn HrMP EMNm b6MM NvR0", domain: exampleDomain);
+  const UserCredentialsParams userAuthenticationParams = (
+    name: "test",
+    applicationPassword: "qth0 TUwn HrMP EMNm b6MM NvR0",
+    domain: exampleDomain,
+    rememberMe: true
+  );
 
   setUp(
     () {

@@ -13,13 +13,14 @@ class FakeUserCredentialsEntity extends Fake implements UserCredentialsEntity {}
 void main() {
   late SaveUserCredentials saveUserCredentials;
   late MockUserAuthenticationRepository mockUserAuthenticationRepository;
-  const fakeCredentialsParams = (name: "", applicationPassword: "", domain: "");
+  const UserCredentialsParams fakeCredentialsParams =
+      (name: "", applicationPassword: "", domain: "", rememberMe: true);
 
   setUp(
     () {
       mockUserAuthenticationRepository = MockUserAuthenticationRepository();
       saveUserCredentials =
-          SaveUserCredentials(userAuthenticationRepository: mockUserAuthenticationRepository);
+          SaveUserCredentials(userLoginRepository: mockUserAuthenticationRepository);
     },
   );
 

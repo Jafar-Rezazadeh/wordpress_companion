@@ -21,10 +21,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final double eachFieldPadding = 30;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  final _userNameController = TextEditingController();
-  final _applicationPasswordController = TextEditingController();
-  final _domainController = TextEditingController();
+  late TextEditingController _userNameController;
+  late TextEditingController _applicationPasswordController;
+  late TextEditingController _domainController;
   bool _rememberMeValue = true;
+
+  @override
+  void initState() {
+    _initControllers();
+    super.initState();
+  }
+
+  _initControllers() async {
+    _userNameController = TextEditingController();
+    _applicationPasswordController = TextEditingController();
+    _domainController = TextEditingController();
+    await _setLastLoginCredentials();
+  }
+
+  Future<void> _setLastLoginCredentials() async {
+    final lastLoginCredentials = await context.read<LoginCubit>().getLastLoginCredentials();
+
+    if (lastLoginCredentials != null) {
+      setState(() {
+        _userNameController.text = lastLoginCredentials.userName;
+        _applicationPasswordController.text = lastLoginCredentials.applicationPassword;
+        _domainController.text = lastLoginCredentials.domain;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -303,6 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
         name: _userNameController.text,
         applicationPassword: _applicationPasswordController.text,
         domain: _domainController.text,
+        rememberMe: _rememberMeValue,
       ),
     );
   }

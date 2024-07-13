@@ -4,12 +4,12 @@ import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 class SaveUserCredentials implements UseCase<UserCredentialsEntity, UserCredentialsParams> {
-  final UserLoginRepository _userAuthenticationRepository;
+  final UserLoginRepository _userLoginRepository;
 
-  SaveUserCredentials({required UserLoginRepository userAuthenticationRepository})
-      : _userAuthenticationRepository = userAuthenticationRepository;
+  SaveUserCredentials({required UserLoginRepository userLoginRepository})
+      : _userLoginRepository = userLoginRepository;
   @override
   Future<Either<Failure, UserCredentialsEntity>> call(UserCredentialsParams params) async {
-    return await _userAuthenticationRepository.saveCredentials(params);
+    return await _userLoginRepository.saveCredentials(params);
   }
 }

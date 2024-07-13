@@ -13,13 +13,17 @@ void main() {
   late AuthenticateUser authenticateUser;
   late MockUserAuthentication mockUserAuthentication;
 
-  const UserCredentialsParams fakeUserParams =
-      (name: "test", applicationPassword: "test1234", domain: "https://example.com");
+  const UserCredentialsParams fakeUserParams = (
+    name: "test",
+    applicationPassword: "test1234",
+    domain: "https://example.com",
+    rememberMe: true
+  );
 
   setUp(
     () {
       mockUserAuthentication = MockUserAuthentication();
-      authenticateUser = AuthenticateUser(userAuthenticationRepository: mockUserAuthentication);
+      authenticateUser = AuthenticateUser(userLoginRepository: mockUserAuthentication);
     },
   );
 

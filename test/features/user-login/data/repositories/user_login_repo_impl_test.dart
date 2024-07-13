@@ -18,8 +18,12 @@ void main() {
   late MockWordpressRemoteDataSource mockWordpressRemoteDataSource;
   late MockLocalUserLoginDataSource mockLocalUserLoginDataSource;
   late UserLoginRepositoryImpl userLoginRepositoryImpl;
-  const UserCredentialsParams fakeParams =
-      (name: "test", applicationPassword: "test1234", domain: "https://example.com");
+  const UserCredentialsParams fakeParams = (
+    name: "test",
+    applicationPassword: "test1234",
+    domain: "https://example.com",
+    rememberMe: true
+  );
 
   setUp(
     () {
