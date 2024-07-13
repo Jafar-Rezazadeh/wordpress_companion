@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _applicationPasswordController;
   late TextEditingController _domainController;
   bool _rememberMeValue = true;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -214,10 +215,17 @@ class _LoginScreenState extends State<LoginScreen> {
         _textFieldLayout(
           child: TextFormField(
             controller: _applicationPasswordController,
+            obscureText: _obscurePassword,
             validator: InputValidator.isNotEmpty,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
-              label: Text("رمز عبور برنامه"),
+              label: const Text("رمز عبور برنامه"),
+              suffixIcon: IconButton(
+                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                ),
+              ),
             ),
           ),
         ),

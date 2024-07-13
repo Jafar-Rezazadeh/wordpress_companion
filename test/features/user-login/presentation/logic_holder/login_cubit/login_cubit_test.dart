@@ -65,8 +65,6 @@ void main() {
   group(
     "login -",
     () {
-      // TODO: make an state for userCredentials saved and show a pop up maybe
-
       blocTest<LoginCubit, LoginState>(
         'emits [loggingIn, loginSuccess] when userAuthentication is successful and user is valid',
         setUp: () {
