@@ -14,7 +14,7 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
   String getSettingsPath(String domain) => "$domain/$wpV2EndPoint/settings/";
 
   @override
-  Future<bool> authenticateUser(UserAuthenticationParams params) async {
+  Future<bool> authenticateUser(UserCredentialsParams params) async {
     final response = await _dio.get(
       getSettingsPath(params.domain),
       options: Options(

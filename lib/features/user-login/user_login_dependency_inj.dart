@@ -7,10 +7,16 @@ userLoginDependencyInjection() {
   getIt.registerLazySingleton<WordpressRemoteDataSource>(
     () => WordpressRemoteDataSourceImpl(dio: getIt()),
   );
+  getIt.registerLazySingleton<LocalUserLoginDataSource>(
+    () => LocalUserLoginDataSourceImpl(sharedPreferences: getIt()),
+  );
 
   // repository
-  getIt.registerLazySingleton<UserAuthenticationRepository>(
-    () => UserAuthenticationRepositoryImpl(wordpressRemoteDataSource: getIt()),
+  getIt.registerLazySingleton<UserLoginRepository>(
+    () => UserLoginRepositoryImpl(
+      wordpressRemoteDataSource: getIt(),
+      localUserLoginDataSource: getIt(),
+    ),
   );
 
   // usecases

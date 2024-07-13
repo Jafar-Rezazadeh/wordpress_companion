@@ -25,6 +25,19 @@ class ServerFailure extends Failure {
       ];
 }
 
+class AppFailure extends Failure {
+  const AppFailure({
+    required super.message,
+    required super.stackTrace,
+  });
+
+  @override
+  List<Object?> get props => [
+        message,
+        stackTrace,
+      ];
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure({required super.message, required super.stackTrace});
 

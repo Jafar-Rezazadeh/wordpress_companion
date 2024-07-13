@@ -12,7 +12,7 @@ class FakeFailure extends Fake implements Failure {}
 void main() {
   late LoginCubit loginCubit;
   late MockAuthenticateUser mockAuthenticateUser;
-  const UserAuthenticationParams fakeAuthenticationParams =
+  const UserCredentialsParams fakeAuthenticationParams =
       (name: "test", applicationPassword: "test1234", domain: "https://example.com");
 
   setUp(

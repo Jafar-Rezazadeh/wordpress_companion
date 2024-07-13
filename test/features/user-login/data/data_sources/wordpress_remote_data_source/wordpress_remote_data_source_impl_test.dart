@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:wordpress_companion/features/user-login/data/data_sources/wordpress_remote_data_source/wordpress_remote_data_source_impl.dart';
+import 'package:wordpress_companion/features/user-login/data/data_sources/implementations/wordpress_remote_data_source_impl.dart';
 import 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
 
 void main() {
@@ -12,7 +12,7 @@ void main() {
   late DioAdapter dioAdapter;
   const exampleDomain = "https://example.com";
   const wpV2EndPoint = "wp-json/wp/v2";
-  const UserAuthenticationParams userAuthenticationParams =
+  const UserCredentialsParams userAuthenticationParams =
       (name: "test", applicationPassword: "qth0 TUwn HrMP EMNm b6MM NvR0", domain: exampleDomain);
 
   setUp(

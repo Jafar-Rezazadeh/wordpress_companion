@@ -45,6 +45,7 @@ dependencies:
   gap: ^3.0.1
   get_it: ^7.7.0
   loader_overlay: ^4.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
