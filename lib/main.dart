@@ -6,6 +6,7 @@ import 'package:wordpress_companion/dependency_injection.dart';
 import 'core/router/go_router_config.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   initializeDependencyInjections();
   runApp(const WordpressCompanion());
 }

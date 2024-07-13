@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _userNameController = TextEditingController();
   final _applicationPasswordController = TextEditingController();
   final _domainController = TextEditingController();
+  bool _rememberMeValue = true;
 
   @override
   void dispose() {
@@ -110,6 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _subTitle(),
             const Gap(10),
             _credentialsForm(),
+            _rememberMe(),
+            const Gap(30),
+            _submitButton(),
           ],
         ),
       ),
@@ -148,8 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
             _applicationPassword(),
             const Gap(10),
             _domain(),
-            const Gap(30),
-            _submitButton(),
           ],
         ),
       ),
@@ -263,6 +265,21 @@ class _LoginScreenState extends State<LoginScreen> {
           label: Text("دامنه"),
           hintText: "مثال: https://example.com",
         ),
+      ),
+    );
+  }
+
+  Widget _rememberMe() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: CheckboxListTile(
+        title: const Text("مرا به خاطر بسپار"),
+        value: _rememberMeValue,
+        onChanged: (value) {
+          setState(() {
+            _rememberMeValue = value ?? _rememberMeValue;
+          });
+        },
       ),
     );
   }
