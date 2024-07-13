@@ -12,6 +12,8 @@ class MockLocalUserLoginDataSource extends Mock implements LocalUserLoginDataSou
 
 class FakeAppFailure extends Fake implements AppFailure {}
 
+class FakeUserCredentialsModel extends Fake implements UserCredentialsModel {}
+
 void main() {
   late MockWordpressRemoteDataSource mockWordpressRemoteDataSource;
   late MockLocalUserLoginDataSource mockLocalUserLoginDataSource;
@@ -126,6 +128,44 @@ void main() {
         //assert
         expect(result.isRight(), true);
         expect(userCredentials, isA<UserCredentialsEntity>());
+      },
+    );
+  });
+
+  group("getLastLoginCredentials -", () {
+    test(
+      "should return (UserCredentialsEntity) when getLastLoginCredentials is successful",
+      () async {
+        //arrange
+        when(
+          () => mockLocalUserLoginDataSource.getLastCredentials(),
+        ).thenAnswer((invocation) async => FakeUserCredentialsModel());
+
+        //act
+        final result = await userLoginRepositoryImpl.getLastLoginCredentials();
+        final userCredentials = result.fold((l) => null, (r) => r);
+
+        //assert
+        expect(result.isRight(), true);
+        expect(userCredentials, isA<UserCredentialsEntity>());
+      },
+    );
+
+    test(
+      "should return (AppFailure) when any exception is thrown",
+      () async {
+        //arrange
+        when(
+          () => mockLocalUserLoginDataSource.getLastCredentials(),
+        ).thenAnswer((invocation) => throw Exception());
+
+        //act
+        final result = await userLoginRepositoryImpl.getLastLoginCredentials();
+        final failure = result.fold((l) => l, (r) => null);
+
+        //assert
+        expect(result.isLeft(), true);
+        expect(failure, isA<AppFailure>());
       },
     );
   });

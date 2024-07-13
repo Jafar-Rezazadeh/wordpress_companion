@@ -49,4 +49,16 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, UserCredentialsEntity>> getLastLoginCredentials() async {
+    try {
+      final UserCredentialsEntity userCredentials =
+          await _localUserLoginDataSource.getLastCredentials();
+
+      return right(userCredentials);
+    } catch (e, t) {
+      return left(AppFailure(message: e.toString(), stackTrace: t));
+    }
+  }
 }

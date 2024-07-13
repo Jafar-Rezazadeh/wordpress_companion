@@ -7,4 +7,5 @@ import '../../../../core/errors/failures.dart';
 abstract class UserLoginRepository {
   Future<Either<Failure, bool>> authenticateUser(UserCredentialsParams params);
   Future<Either<Failure, UserCredentialsEntity>> saveCredentials(UserCredentialsParams params);
+  Future<Either<Failure, UserCredentialsEntity>> getLastLoginCredentials();
 }

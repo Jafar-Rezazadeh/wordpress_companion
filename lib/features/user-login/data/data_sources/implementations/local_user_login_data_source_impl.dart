@@ -4,22 +4,22 @@ import '../../../user_login_exports.dart';
 
 class LocalUserLoginDataSourceImpl implements LocalUserLoginDataSource {
   final SharedPreferences _sharedPreferences;
-  String userNameKey = "userName";
-  String applicationPasswordKey = "applicationPassword";
-  String domainKey = "domain";
+  final String _userNameKey = "userName";
+  final String _applicationPasswordKey = "applicationPassword";
+  final String _domainKey = "domain";
 
   LocalUserLoginDataSourceImpl({required SharedPreferences sharedPreferences})
       : _sharedPreferences = sharedPreferences;
   @override
   Future<UserCredentialsModel> saveCredentials(UserCredentialsParams params) async {
-    final isUserNameSaved = await _sharedPreferences.setString(userNameKey, params.name);
+    final isUserNameSaved = await _sharedPreferences.setString(_userNameKey, params.name);
 
     final isApplicationPasswordSaved = await _sharedPreferences.setString(
-      applicationPasswordKey,
+      _applicationPasswordKey,
       params.applicationPassword,
     );
 
-    final isDomainSaved = await _sharedPreferences.setString(domainKey, params.domain);
+    final isDomainSaved = await _sharedPreferences.setString(_domainKey, params.domain);
 
     if (isUserNameSaved && isApplicationPasswordSaved && isDomainSaved) {
       return UserCredentialsModel(
@@ -30,5 +30,18 @@ class LocalUserLoginDataSourceImpl implements LocalUserLoginDataSource {
     }
 
     throw Exception("Failed to save credentials");
+  }
+
+  @override
+  Future<UserCredentialsModel> getLastCredentials() async {
+    final userName = _sharedPreferences.getString(_userNameKey);
+    final applicationPassword = _sharedPreferences.getString(_applicationPasswordKey);
+    final domain = _sharedPreferences.getString(_domainKey);
+
+    return UserCredentialsModel(
+      userName: userName ?? "",
+      applicationPassword: applicationPassword ?? "",
+      domain: domain ?? "",
+    );
   }
 }

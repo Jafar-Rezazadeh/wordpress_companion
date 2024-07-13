@@ -11,6 +11,8 @@ export 'package:wordpress_companion/features/user-login/domain/repositories/user
 export 'package:wordpress_companion/features/user-login/domain/entities/user_credentials_entity.dart';
 export 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
 export 'package:wordpress_companion/features/user-login/domain/usecases/save_user_credentials.dart';
+export 'package:wordpress_companion/features/user-login/domain/usecases/get_last_login_credentials.dart';
+
 //presentation
 export 'package:wordpress_companion/features/user-login/presentation/logic_holder/login_cubit/login_cubit.dart';
 export 'package:wordpress_companion/features/user-login/presentation/screens/login_screen.dart';

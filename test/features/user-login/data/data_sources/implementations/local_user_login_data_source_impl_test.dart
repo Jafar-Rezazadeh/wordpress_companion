@@ -21,7 +21,7 @@ void main() {
       );
     },
   );
-  group("save credentials -", () {
+  group("saveCredentials -", () {
     test(
       "should return (UserCredentialsModel) when SaveCredentials is successful",
       () async {
@@ -86,6 +86,59 @@ void main() {
 
         //assert
         expect(result, throwsA(isA<Exception>()));
+      },
+    );
+  });
+
+  group("getLastCredentials -", () {
+    test(
+      "should throw (Exception) when any exception thrown while getting credentials",
+      () {
+        //arrange
+        when(
+          () => mockSharedPreferences.getString(userNameKey),
+        ).thenAnswer((invocation) => "");
+
+        when(
+          () => mockSharedPreferences.getString(applicationPasswordKey),
+        ).thenAnswer((invocation) => throw Exception());
+
+        when(
+          () => mockSharedPreferences.getString(domainKey),
+        ).thenAnswer((invocation) => "");
+
+        //act
+        final result = localUserLoginDataSourceImpl.getLastCredentials();
+
+        //assert
+        expect(result, throwsA(isA<Exception>()));
+      },
+    );
+
+    test(
+      "should return (UserCredentialsModel) when  getLastCredentials is successful even fields are empty",
+      () async {
+        //arrange
+        when(
+          () => mockSharedPreferences.getString(userNameKey),
+        ).thenAnswer((invocation) => "test");
+
+        when(
+          () => mockSharedPreferences.getString(applicationPasswordKey),
+        ).thenAnswer((invocation) => "test1234");
+
+        when(
+          () => mockSharedPreferences.getString(domainKey),
+        ).thenAnswer((invocation) => "https://example.com");
+
+        //act
+        final userCredentials = await localUserLoginDataSourceImpl.getLastCredentials();
+
+        //assert
+        expect(userCredentials, isA<UserCredentialsModel>());
+        expect(userCredentials.userName, "test");
+        expect(userCredentials.applicationPassword, "test1234");
+        expect(userCredentials.domain, "https://example.com");
       },
     );
   });
