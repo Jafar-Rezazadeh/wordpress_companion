@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../user_login_exports.dart';
@@ -12,12 +13,10 @@ class LocalUserLoginDataSourceImpl implements LocalUserLoginDataSource {
     _sharedPreferences = sharedPreferences;
   }
 
-  LocalUserLoginDataSourceImpl() {
-    _getSharedPreferences();
-  }
-
-  _getSharedPreferences() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
+  static Future<LocalUserLoginDataSource> instance() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    return LocalUserLoginDataSourceImpl.test(sharedPreferences: sharedPreferences);
   }
 
   @override

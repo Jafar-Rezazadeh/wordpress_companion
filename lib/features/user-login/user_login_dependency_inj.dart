@@ -2,12 +2,15 @@ import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
-userLoginDependencyInjection() {
+userLoginDependencyInjection() async {
   // data sources
   getIt.registerLazySingleton<WordpressRemoteDataSource>(
     () => WordpressRemoteDataSourceImpl(dio: getIt()),
   );
-  getIt.registerLazySingleton<LocalUserLoginDataSource>(() => LocalUserLoginDataSourceImpl());
+  getIt.registerLazySingletonAsync<LocalUserLoginDataSource>(
+    () => LocalUserLoginDataSourceImpl.instance(),
+  );
+  await getIt.isReady<LocalUserLoginDataSource>();
 
   // repository
   getIt.registerLazySingleton<UserLoginRepository>(
@@ -18,8 +21,16 @@ userLoginDependencyInjection() {
   );
 
   // usecases
-  getIt.registerLazySingleton(() => AuthenticateUser(userAuthenticationRepository: getIt()));
+  getIt.registerLazySingleton(() => AuthenticateUser(userLoginRepository: getIt()));
+  getIt.registerLazySingleton(() => SaveUserCredentials(userLoginRepository: getIt()));
+  getIt.registerLazySingleton(() => GetLastLoginCredentials(userLoginRepository: getIt()));
 
   // cubit
-  getIt.registerFactory(() => LoginCubit(authenticateUser: getIt()));
+  getIt.registerFactory(
+    () => LoginCubit(
+      authenticateUser: getIt(),
+      saveUserCredentials: getIt(),
+      getLastLoginCredentials: getIt(),
+    ),
+  );
 }

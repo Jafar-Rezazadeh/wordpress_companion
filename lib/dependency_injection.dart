@@ -8,7 +8,7 @@ GetIt getIt = GetIt.instance;
 initializeDependencyInjections() async {
   _initDio();
 
-  userLoginDependencyInjection();
+  await userLoginDependencyInjection();
 }
 
 _initDio() {

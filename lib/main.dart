@@ -5,8 +5,8 @@ import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'core/router/go_router_config.dart';
 
-void main() {
-  initializeDependencyInjections();
+Future<void> main() async {
+  await initializeDependencyInjections();
   runApp(const WordpressCompanion());
 }
 
