@@ -16,7 +16,7 @@ void main() {
   setUp(
     () {
       mockSharedPreferences = MockSharedPreferences();
-      localUserLoginDataSourceImpl = LocalUserLoginDataSourceImpl(
+      localUserLoginDataSourceImpl = LocalUserLoginDataSourceImpl.test(
         sharedPreferences: mockSharedPreferences,
       );
     },

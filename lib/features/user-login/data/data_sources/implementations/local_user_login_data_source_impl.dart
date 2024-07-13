@@ -3,13 +3,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../user_login_exports.dart';
 
 class LocalUserLoginDataSourceImpl implements LocalUserLoginDataSource {
-  final SharedPreferences _sharedPreferences;
+  late SharedPreferences _sharedPreferences;
   final String _userNameKey = "userName";
   final String _applicationPasswordKey = "applicationPassword";
   final String _domainKey = "domain";
 
-  LocalUserLoginDataSourceImpl({required SharedPreferences sharedPreferences})
-      : _sharedPreferences = sharedPreferences;
+  LocalUserLoginDataSourceImpl.test({required SharedPreferences sharedPreferences}) {
+    _sharedPreferences = sharedPreferences;
+  }
+
+  LocalUserLoginDataSourceImpl() {
+    _getSharedPreferences();
+  }
+
+  _getSharedPreferences() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+  }
+
   @override
   Future<UserCredentialsModel> saveCredentials(UserCredentialsParams params) async {
     final isUserNameSaved = await _sharedPreferences.setString(_userNameKey, params.name);
