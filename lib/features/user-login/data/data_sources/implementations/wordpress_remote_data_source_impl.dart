@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -19,8 +18,7 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
       getSettingsPath(params.domain),
       options: Options(
         headers: {
-          "Authorization":
-              "Basic ${base64.encode(utf8.encode("${params.name}:${params.applicationPassword}"))}",
+          "Authorization": makeBase64Encode(params.name, params.applicationPassword),
         },
       ),
     );

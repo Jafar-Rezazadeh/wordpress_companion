@@ -12,14 +12,18 @@ initializeDependencyInjections() async {
 }
 
 _initDio() {
-  getIt.registerLazySingleton(() {
-    final dio = Dio();
-    //FIXME: Remove this on Production to check bad certificate
-    // just for testing
-    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (client) {
-      client.badCertificateCallback = (cert, String host, int port) => true;
-      return client;
-    };
-    return dio;
-  });
+  getIt.registerLazySingleton(
+    () {
+      final dio = Dio();
+      //FIXME: Remove this on Production to check bad certificate
+      // just for testing
+      (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (client) {
+        client.badCertificateCallback = (cert, String host, int port) => true;
+        return client;
+      };
+      return dio;
+    },
+  );
+
+  getIt.allowReassignment = true;
 }
