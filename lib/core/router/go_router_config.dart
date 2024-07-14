@@ -1,18 +1,30 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/core/screens/main_screen.dart';
+import 'package:wordpress_companion/dependency_injection.dart';
+import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 final goRouter = GoRouter(
-  initialLocation: "/",
+  initialLocation: loginScreen,
   routes: [
-    GoRoute(
-      name: loginScreen,
-      path: "/",
-      builder: (context, state) => const Scaffold(
-        body: Center(
-          child: Text("login screen"),
-        ),
+    ShellRoute(
+      builder: (context, state, child) => BlocProvider(
+        create: (context) => getIt<LoginCubit>(),
+        child: child,
       ),
-    ),
+      routes: [
+        GoRoute(
+          name: loginScreen,
+          path: loginScreen,
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          name: mainScreen,
+          path: mainScreen,
+          builder: (context, state) => const MainScreen(),
+        ),
+      ],
+    )
   ],
 );

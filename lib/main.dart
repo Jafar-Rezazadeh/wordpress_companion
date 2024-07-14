@@ -1,8 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:wordpress_companion/core/theme/theme.dart';
+import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'core/router/go_router_config.dart';
 
-void main() {
+Future<void> main() async {
+  await initializeDependencyInjections();
   runApp(const WordpressCompanion());
 }
 
@@ -11,8 +18,30 @@ class WordpressCompanion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: goRouter,
+    return GlobalLoaderOverlay(
+      useDefaultLoading: false,
+      overlayColor: Colors.transparent,
+      overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
+      duration: Durations.medium1,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme(),
+        routerConfig: goRouter,
+      ),
+    );
+  }
+
+  Widget _loaderOverlayWidget(BuildContext context) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: 3,
+        sigmaY: 3,
+      ),
+      child: Center(
+        child: SpinKitFoldingCube(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
     );
   }
 }
