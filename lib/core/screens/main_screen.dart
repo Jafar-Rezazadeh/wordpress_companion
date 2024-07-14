@@ -46,6 +46,7 @@ class MainScreen extends StatelessWidget {
   Widget _profileAvatar() {
     return InkWell(
       onTap: () {},
+      borderRadius: BorderRadius.circular(20),
       child: const CircleAvatar(
         child: Icon(Icons.person),
       ),
