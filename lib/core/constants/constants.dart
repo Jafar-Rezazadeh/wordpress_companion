@@ -9,5 +9,5 @@ const String mainScreen = "/mainScreen";
 // const String profileScreen = "/profile";
 // const String settingsScreen = "/settings";
 
-makeBase64Encode(String name, String password) =>
+makeBase64Encode({required String name, required String password}) =>
     "Basic ${base64.encode(utf8.encode("$name:$password"))}";

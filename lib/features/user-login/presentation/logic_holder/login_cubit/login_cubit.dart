@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
@@ -55,7 +54,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     return result.fold(
       (failure) async {
-        debugPrint(failure.message.toString());
+        // debugPrint(failure.message.toString());
         return null;
       },
       (userCredentials) => userCredentials,

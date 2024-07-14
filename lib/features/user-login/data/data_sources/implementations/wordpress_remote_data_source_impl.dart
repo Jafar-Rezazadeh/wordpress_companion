@@ -18,7 +18,8 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
       getSettingsPath(params.domain),
       options: Options(
         headers: {
-          "Authorization": makeBase64Encode(params.name, params.applicationPassword),
+          "Authorization":
+              makeBase64Encode(name: params.name, password: params.applicationPassword),
         },
       ),
     );
