@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         loginSuccess: () {
           context.loaderOverlay.hide();
-          context.goNamed(homeScreen);
+          context.goNamed(mainScreen);
           _showSnackBar(content: "ورود با موفقیت انجام شد");
         },
         notValidUser: () {
@@ -220,18 +220,22 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: InputDecoration(
               border: InputBorder.none,
               label: const Text("رمز عبور برنامه"),
-              suffixIcon: IconButton(
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                ),
-              ),
+              suffixIcon: _hideOrShowObscurePasswordButton(),
             ),
           ),
         ),
         const Gap(15),
         _appPasswordHelperText(),
       ],
+    );
+  }
+
+  IconButton _hideOrShowObscurePasswordButton() {
+    return IconButton(
+      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+      icon: Icon(
+        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+      ),
     );
   }
 

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 const wpV2EndPoint = "wp-json/wp/v2";
-const String loginScreen = "/login";
-const String homeScreen = "/home";
+
+const String loginScreen = "/loginScreen";
+const String mainScreen = "/mainScreen";
 // const String postScreen = "/post";
 // const String postsScreen = "/posts";
 // const String profileScreen = "/profile";

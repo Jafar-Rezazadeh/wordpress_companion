@@ -17,6 +17,7 @@ class WordpressCompanion extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlobalLoaderOverlay(
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         theme: lightTheme(),
         routerConfig: goRouter,
       ),
