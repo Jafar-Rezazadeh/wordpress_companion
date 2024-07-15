@@ -19,4 +19,5 @@ lightTheme() => ThemeData(
           borderRadius: BorderRadius.circular(10),
         ),
       ),
+      scaffoldBackgroundColor: Color.lerp(Colors.white, Colors.black, 0.04),
     );

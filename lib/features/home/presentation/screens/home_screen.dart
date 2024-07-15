@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wordpress_companion/core/utils/extensions.dart';
+import 'package:wordpress_companion/features/home/presentation/widgets/hero_section.dart';
+import 'package:wordpress_companion/features/home/presentation/widgets/quick_access_buttons.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,8 @@ class MainScreen extends StatelessWidget {
       elevation: 5,
       shape: _appBarShape(),
       leading: _menuButton(context),
+      title: Text("وردپرس یار", style: Theme.of(context).textTheme.titleMedium),
+      centerTitle: true,
       actions: [
         _profileAvatar(),
         const Gap(10),
@@ -54,11 +59,23 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _bodyLayout() {
-    return const Directionality(
+    return Directionality(
       textDirection: TextDirection.rtl,
-      child: Center(
-        child: Text("MainScreen"),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: _bodySections(),
+        ),
       ),
+    );
+  }
+
+  Widget _bodySections() {
+    return Column(
+      children: [
+        const HeroSection(),
+        const QuickAccessButtons(),
+      ].withSpaceBetween(20),
     );
   }
 }
