@@ -335,7 +335,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _ifFieldsValid() => _formKey.currentState?.validate() == true;
 
   _makeLogin() {
-    BlocProvider.of<LoginCubit>(context).login(
+    BlocProvider.of<LoginCubit>(context).loginAndSave(
       (
         name: _userNameController.text,
         applicationPassword: _applicationPasswordController.text,

@@ -2,10 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/dependency_injection.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
-
-import '../../../../core/constants/constants.dart';
 
 class UserLoginRepositoryImpl implements UserLoginRepository {
   final WordpressRemoteDataSource _wordpressRemoteDataSource;
@@ -18,14 +15,9 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
         _localUserLoginDataSource = localUserLoginDataSource;
 
   @override
-  Future<Either<Failure, bool>> authenticateUser(UserCredentialsParams params) async {
+  Future<Either<Failure, bool>> authenticateUser(LoginCredentialsParams params) async {
     try {
       final isValidUser = await _wordpressRemoteDataSource.authenticateUser(params);
-
-      if (isValidUser) {
-        // FIXME: there is a side effect here the function lies on the name
-        _setDioOptions(params);
-      }
 
       return right(isValidUser);
     } on DioException catch (e, t) {
@@ -43,21 +35,9 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
     }
   }
 
-  // FIXME: this is not a good solution Make a class that handles this and call it in logic holder
-  void _setDioOptions(UserCredentialsParams params) {
-    getIt.get<Dio>().options
-      ..baseUrl = params.domain
-      ..headers.addAll(
-        {
-          "Authorization":
-              makeBase64Encode(name: params.name, password: params.applicationPassword),
-        },
-      );
-  }
-
   @override
   Future<Either<Failure, LoginCredentialsEntity>> saveCredentials(
-      UserCredentialsParams params) async {
+      LoginCredentialsParams params) async {
     try {
       final LoginCredentialsEntity userCredentials =
           await _localUserLoginDataSource.saveCredentials(params);
@@ -75,14 +55,6 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
     try {
       final LoginCredentialsEntity userCredentials =
           await _localUserLoginDataSource.getLastCredentials();
-
-      // FIXME: side effect here too
-      _setDioOptions((
-        name: userCredentials.userName,
-        applicationPassword: userCredentials.applicationPassword,
-        domain: userCredentials.domain,
-        rememberMe: true
-      ));
 
       return right(userCredentials);
     } catch (e, t) {

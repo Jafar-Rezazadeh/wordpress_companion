@@ -20,7 +20,7 @@ class LocalUserLoginDataSourceImpl implements LocalUserLoginDataSource {
   }
 
   @override
-  Future<UserCredentialsModel> saveCredentials(UserCredentialsParams params) async {
+  Future<UserCredentialsModel> saveCredentials(LoginCredentialsParams params) async {
     final isUserNameSaved = await _sharedPreferences.setString(_userNameKey, params.name);
 
     final isApplicationPasswordSaved = await _sharedPreferences.setString(

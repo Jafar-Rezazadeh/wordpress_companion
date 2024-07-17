@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wordpress_companion/core/utils/injected_dio_options_handler.dart';
 import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
 
 import '../../../../../core/contracts/use_case.dart';
@@ -12,16 +13,19 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthenticateUser _authenticateUser;
   final SaveUserCredentials _saveUserCredentials;
   final GetLastLoginCredentials _getLastLoginCredentials;
+  final InjectedDioOptionsHandler _injectedDioOptionsHandler;
   LoginCubit({
     required AuthenticateUser authenticateUser,
     required SaveUserCredentials saveUserCredentials,
     required GetLastLoginCredentials getLastLoginCredentials,
+    required InjectedDioOptionsHandler injectedDioOptionsHandler,
   })  : _authenticateUser = authenticateUser,
         _saveUserCredentials = saveUserCredentials,
         _getLastLoginCredentials = getLastLoginCredentials,
+        _injectedDioOptionsHandler = injectedDioOptionsHandler,
         super(const LoginState.initial());
 
-  login(UserCredentialsParams params) async {
+  loginAndSave(LoginCredentialsParams params) async {
     emit(const LoginState.loggingIn());
     final result = await _authenticateUser(params);
 
@@ -29,13 +33,33 @@ class LoginCubit extends Cubit<LoginState> {
       (failure) => emit(LoginState.loginFailed(failure)),
       (isValidUser) async {
         await _handleRememberMe(params);
-        // TODO: 1) set the dio options to avoid side effect
-        isValidUser ? emit(const LoginState.loginSuccess()) : emit(const LoginState.notValidUser());
+
+        if (isValidUser) {
+          _setInjectedDioOptions(
+            LoginCredentialsEntity(
+              userName: params.name,
+              applicationPassword: params.applicationPassword,
+              domain: params.domain,
+            ),
+          );
+
+          emit(const LoginState.loginSuccess());
+        } else {
+          emit(const LoginState.notValidUser());
+        }
       },
     );
   }
 
-  Future<void> _handleRememberMe(UserCredentialsParams params) async {
+  void _setInjectedDioOptions(LoginCredentialsEntity credentials) {
+    _injectedDioOptionsHandler.setAuthorization(
+      username: credentials.userName,
+      password: credentials.applicationPassword,
+    );
+    _injectedDioOptionsHandler.setBaseUrl(credentials.domain);
+  }
+
+  Future<void> _handleRememberMe(LoginCredentialsParams params) async {
     if (params.rememberMe) {
       await _saveUserCredentials(params);
     } else {
@@ -58,7 +82,7 @@ class LoginCubit extends Cubit<LoginState> {
         return null;
       },
       (userCredentials) {
-        // TODO: 2) set the dio options to avoid side effect
+        _setInjectedDioOptions(userCredentials);
         return userCredentials;
       },
     );

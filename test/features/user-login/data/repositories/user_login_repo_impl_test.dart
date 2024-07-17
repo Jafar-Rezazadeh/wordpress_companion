@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/dependency_injection.dart';
@@ -29,7 +28,7 @@ void main() {
   late MockWordpressRemoteDataSource mockWordpressRemoteDataSource;
   late MockLocalUserLoginDataSource mockLocalUserLoginDataSource;
   late UserLoginRepositoryImpl userLoginRepositoryImpl;
-  const UserCredentialsParams fakeParams = (
+  const LoginCredentialsParams fakeParams = (
     name: "test",
     applicationPassword: "test1234",
     domain: "https://example.com",
@@ -106,29 +105,6 @@ void main() {
         expect(isValidUser, true);
       },
     );
-
-    test(
-      "should set dio options when authentication success",
-      () async {
-        //arrange
-        when(
-          () => mockWordpressRemoteDataSource.authenticateUser(fakeParams),
-        ).thenAnswer((invocation) async => true);
-
-        //act
-        await userLoginRepositoryImpl.authenticateUser(fakeParams);
-
-        //assert
-        expect(getIt.get<Dio>().options.baseUrl, fakeParams.domain);
-        expect(
-          getIt.get<Dio>().options.headers["Authorization"],
-          makeBase64Encode(
-            name: fakeParams.name,
-            password: fakeParams.applicationPassword,
-          ),
-        );
-      },
-    );
   });
 
   group("saveCredentials -", () {
@@ -190,28 +166,6 @@ void main() {
         //assert
         expect(result.isRight(), true);
         expect(userCredentials, isA<LoginCredentialsEntity>());
-      },
-    );
-    test(
-      "should (set the last login credentials in dio options) when getLastLoginCredentials is successful",
-      () async {
-        //arrange
-        when(
-          () => mockLocalUserLoginDataSource.getLastCredentials(),
-        ).thenAnswer((invocation) async => FakeUserCredentialsModel());
-
-        //act
-        await userLoginRepositoryImpl.getLastLoginCredentials();
-
-        //assert
-        expect(getIt.get<Dio>().options.baseUrl, FakeUserCredentialsModel().domain);
-        expect(
-          getIt.get<Dio>().options.headers["Authorization"],
-          makeBase64Encode(
-            name: FakeUserCredentialsModel().userName,
-            password: FakeUserCredentialsModel().applicationPassword,
-          ),
-        );
       },
     );
 
