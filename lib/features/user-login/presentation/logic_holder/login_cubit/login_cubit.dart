@@ -29,6 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
       (failure) => emit(LoginState.loginFailed(failure)),
       (isValidUser) async {
         await _handleRememberMe(params);
+        // TODO: 1) set the dio options to avoid side effect
         isValidUser ? emit(const LoginState.loginSuccess()) : emit(const LoginState.notValidUser());
       },
     );
@@ -49,15 +50,17 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<UserCredentialsEntity?> getLastLoginCredentials() async {
+  Future<LoginCredentialsEntity?> getLastLoginCredentials() async {
     final result = await _getLastLoginCredentials.call(NoParams());
 
     return result.fold(
       (failure) async {
-        // debugPrint(failure.message.toString());
         return null;
       },
-      (userCredentials) => userCredentials,
+      (userCredentials) {
+        // TODO: 2) set the dio options to avoid side effect
+        return userCredentials;
+      },
     );
   }
 }

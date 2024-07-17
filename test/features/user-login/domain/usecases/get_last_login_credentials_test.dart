@@ -7,7 +7,7 @@ import 'package:wordpress_companion/features/user-login/user_login_exports.dart'
 
 class MockUserLoginRepository extends Mock implements UserLoginRepository {}
 
-class FakeUserCredentialsEntity extends Fake implements UserCredentialsEntity {}
+class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {}
 
 class FakeAppFailure extends Fake implements AppFailure {}
 
@@ -37,7 +37,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(userCredentials, isA<UserCredentialsEntity>());
+      expect(userCredentials, isA<LoginCredentialsEntity>());
     },
   );
 

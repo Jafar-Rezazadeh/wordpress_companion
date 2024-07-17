@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class UserCredentialsEntity extends Equatable {
+class LoginCredentialsEntity extends Equatable {
   final String userName;
   final String applicationPassword;
   final String domain;
 
-  const UserCredentialsEntity({
+  const LoginCredentialsEntity({
     required this.userName,
     required this.applicationPassword,
     required this.domain,

@@ -8,7 +8,7 @@ class MockUserAuthenticationRepository extends Mock implements UserLoginReposito
 
 class FakeAppFailure extends Fake implements AppFailure {}
 
-class FakeUserCredentialsEntity extends Fake implements UserCredentialsEntity {}
+class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {}
 
 void main() {
   late SaveUserCredentials saveUserCredentials;
@@ -58,7 +58,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(userCredentials, isA<UserCredentialsEntity>());
+      expect(userCredentials, isA<LoginCredentialsEntity>());
     },
   );
 }

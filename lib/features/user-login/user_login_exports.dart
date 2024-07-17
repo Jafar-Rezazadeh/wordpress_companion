@@ -8,7 +8,7 @@ export 'package:wordpress_companion/features/user-login/data/repositories/user_l
 
 // domain
 export 'package:wordpress_companion/features/user-login/domain/repositories/user_login_repo.dart';
-export 'package:wordpress_companion/features/user-login/domain/entities/user_credentials_entity.dart';
+export 'package:wordpress_companion/features/user-login/domain/entities/login_credentials_entity.dart';
 export 'package:wordpress_companion/features/user-login/domain/usecases/authenticate_user.dart';
 export 'package:wordpress_companion/features/user-login/domain/usecases/save_user_credentials.dart';
 export 'package:wordpress_companion/features/user-login/domain/usecases/get_last_login_credentials.dart';

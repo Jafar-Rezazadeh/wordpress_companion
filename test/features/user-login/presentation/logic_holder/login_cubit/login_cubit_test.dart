@@ -17,7 +17,7 @@ class FakeFailure extends Fake implements Failure {
   String get message => "error message";
 }
 
-class FakeUserCredentialsEntity extends Fake implements UserCredentialsEntity {}
+class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {}
 
 void main() {
   late MockAuthenticateUser mockAuthenticateUser;
@@ -157,7 +157,7 @@ void main() {
         final result = await loginCubit.getLastLoginCredentials();
 
         //assert
-        expect(result, isA<UserCredentialsEntity>());
+        expect(result, isA<LoginCredentialsEntity>());
       },
     );
 

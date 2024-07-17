@@ -169,7 +169,7 @@ void main() {
 
         //assert
         expect(result.isRight(), true);
-        expect(userCredentials, isA<UserCredentialsEntity>());
+        expect(userCredentials, isA<LoginCredentialsEntity>());
       },
     );
   });
@@ -189,7 +189,7 @@ void main() {
 
         //assert
         expect(result.isRight(), true);
-        expect(userCredentials, isA<UserCredentialsEntity>());
+        expect(userCredentials, isA<LoginCredentialsEntity>());
       },
     );
     test(

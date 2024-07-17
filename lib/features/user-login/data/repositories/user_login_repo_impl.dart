@@ -23,6 +23,7 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
       final isValidUser = await _wordpressRemoteDataSource.authenticateUser(params);
 
       if (isValidUser) {
+        // FIXME: there is a side effect here the function lies on the name
         _setDioOptions(params);
       }
 
@@ -42,6 +43,7 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
     }
   }
 
+  // FIXME: this is not a good solution Make a class that handles this and call it in logic holder
   void _setDioOptions(UserCredentialsParams params) {
     getIt.get<Dio>().options
       ..baseUrl = params.domain
@@ -54,10 +56,10 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
   }
 
   @override
-  Future<Either<Failure, UserCredentialsEntity>> saveCredentials(
+  Future<Either<Failure, LoginCredentialsEntity>> saveCredentials(
       UserCredentialsParams params) async {
     try {
-      final UserCredentialsEntity userCredentials =
+      final LoginCredentialsEntity userCredentials =
           await _localUserLoginDataSource.saveCredentials(params);
 
       return right(userCredentials);
@@ -69,11 +71,12 @@ class UserLoginRepositoryImpl implements UserLoginRepository {
   }
 
   @override
-  Future<Either<Failure, UserCredentialsEntity>> getLastLoginCredentials() async {
+  Future<Either<Failure, LoginCredentialsEntity>> getLastLoginCredentials() async {
     try {
-      final UserCredentialsEntity userCredentials =
+      final LoginCredentialsEntity userCredentials =
           await _localUserLoginDataSource.getLastCredentials();
 
+      // FIXME: side effect here too
       _setDioOptions((
         name: userCredentials.userName,
         applicationPassword: userCredentials.applicationPassword,
