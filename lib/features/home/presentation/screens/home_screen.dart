@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/utils/extensions.dart';
 import 'package:wordpress_companion/features/home/presentation/widgets/hero_section.dart';
+import 'package:wordpress_companion/features/home/presentation/widgets/management_section.dart';
 import 'package:wordpress_companion/features/home/presentation/widgets/quick_access_buttons.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,7 +33,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  RoundedRectangleBorder _appBarShape() {
+  ShapeBorder _appBarShape() {
     return const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(20),
@@ -73,8 +74,10 @@ class HomeScreen extends StatelessWidget {
   Widget _bodySections() {
     return Column(
       children: [
-        const HeroSection(),
         const QuickAccessButtons(),
+        const HeroSection(),
+        const ManagementSection(),
+        const Gap(50),
       ].withSpaceBetween(20),
     );
   }

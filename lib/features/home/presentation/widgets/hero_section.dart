@@ -2,19 +2,58 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/utils/extensions.dart';
 
-class HeroSection extends StatelessWidget {
+class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
 
+  @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _header(context),
+        _header(),
         _latestPostsCarousel(),
       ].withSpaceBetween(10),
+    );
+  }
+
+  Row _header() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _title(),
+        _viewAllButton(),
+      ],
+    );
+  }
+
+  Widget _title() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        "آخرین پست ها",
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+    );
+  }
+
+  Widget _viewAllButton() {
+    return SizedBox(
+      height: 30,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+        ),
+        onPressed: () {},
+        child: const Text("مشاهده همه"),
+      ),
     );
   }
 
@@ -28,7 +67,7 @@ class HeroSection extends StatelessWidget {
 
   CarouselOptions _carouselOptions() {
     return CarouselOptions(
-      height: 200,
+      height: 220,
       enlargeCenterPage: true,
       enlargeFactor: 0.25,
       autoPlay: true,
@@ -44,9 +83,17 @@ class HeroSection extends StatelessWidget {
   Widget _carouselItemLayout(int index) {
     return Container(
       padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+            spreadRadius: 2,
+          ),
+        ],
       ),
       child: _carouselItemContents(index),
     );
@@ -57,10 +104,15 @@ class HeroSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _carouselItemContentImage(),
-        // TODO: add post details
-        Text("پست $index"),
-      ].withSpaceBetween(10),
+        _carouselItemContentTitle(index),
+        _carouselItemContentSubTitle(),
+        _carouselItemContentFootnote(),
+      ].withSpaceBetween(5),
     );
+  }
+
+  Text _carouselItemContentTitle(int index) {
+    return Text("پست $index");
   }
 
   Expanded _carouselItemContentImage() {
@@ -79,36 +131,37 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Row _header(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _carouselItemContentSubTitle() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _title(context),
-        _viewAllButton(),
+        Text(
+          "توضیحات پست",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
       ],
     );
   }
 
-  TextButton _viewAllButton() {
-    return TextButton(
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black26),
-          borderRadius: BorderRadius.circular(10),
+  Row _carouselItemContentFootnote() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "1403/04/14",
+          style: Theme.of(context).textTheme.labelSmall,
         ),
-      ),
-      onPressed: () {},
-      child: const Text("مشاهده همه"),
-    );
-  }
-
-  Widget _title(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        "آخرین پست ها",
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
+        const Gap(
+          5,
+          crossAxisExtent: 1,
+          color: Colors.black26,
+        ),
+        Text(
+          "انتشار داده شده",
+          style: Theme.of(context).textTheme.labelSmall,
+        ),
+      ],
     );
   }
 }

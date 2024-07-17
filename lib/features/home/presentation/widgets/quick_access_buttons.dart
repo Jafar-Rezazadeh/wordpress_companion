@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordpress_companion/core/utils/extensions.dart';
 
 class QuickAccessButtons extends StatefulWidget {
   const QuickAccessButtons({super.key});
@@ -10,14 +11,20 @@ class QuickAccessButtons extends StatefulWidget {
 class _QuickAccessButtonsState extends State<QuickAccessButtons> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: double.infinity,
-      child: _listOfButtons(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("دسترسی سریع", style: Theme.of(context).textTheme.titleMedium),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black12),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          width: double.infinity,
+          child: _listOfButtons(),
+        ),
+      ].withSpaceBetween(10),
     );
   }
 
