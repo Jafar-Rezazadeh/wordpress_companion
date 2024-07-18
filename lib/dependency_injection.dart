@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wordpress_companion/features/user-login/user_login_dependency_inj.dart';
+import 'package:wordpress_companion/features/login/login_dependency_inj.dart';
 
 GetIt getIt = GetIt.instance;
 
