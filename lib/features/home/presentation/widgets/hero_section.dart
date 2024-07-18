@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/utils/extensions.dart';
+import 'package:wordpress_companion/core/utils/string_formatter.dart';
 
 class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
@@ -20,7 +21,7 @@ class _HeroSectionState extends State<HeroSection> {
       children: [
         _header(),
         _latestPostsCarousel(),
-      ].withSpaceBetween(10),
+      ],
     );
   }
 
@@ -67,7 +68,7 @@ class _HeroSectionState extends State<HeroSection> {
 
   CarouselOptions _carouselOptions() {
     return CarouselOptions(
-      height: 220,
+      height: 240,
       enlargeCenterPage: true,
       enlargeFactor: 0.25,
       autoPlay: true,
@@ -83,7 +84,7 @@ class _HeroSectionState extends State<HeroSection> {
   Widget _carouselItemLayout(int index) {
     return Container(
       padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -137,7 +138,12 @@ class _HeroSectionState extends State<HeroSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "توضیحات پست",
+          StringFormatter.shortenText(
+            "Exercitation deserunt incididunt consectetur fugiat amet qui.",
+            50,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
