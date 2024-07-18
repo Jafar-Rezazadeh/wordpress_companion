@@ -1,29 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/utils/extensions.dart';
 import 'package:wordpress_companion/features/home/presentation/widgets/hero_section.dart';
 import 'package:wordpress_companion/features/home/presentation/widgets/management_section.dart';
 import 'package:wordpress_companion/features/home/presentation/widgets/quick_access_buttons.dart';
+import 'package:wordpress_companion/features/login/login_exports.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read<LoginCubit>().state.whenOrNull(
+          loginSuccess: (credentials) => print(credentials),
+        );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context),
+      appBar: _appBar(),
       body: _bodyLayout(),
     );
   }
 
-  AppBar _appBar(BuildContext context) {
+  AppBar _appBar() {
     return AppBar(
       backgroundColor: Colors.white,
       shadowColor: Colors.black,
       surfaceTintColor: Colors.white,
       elevation: 5,
       shape: _appBarShape(),
-      leading: _menuButton(context),
+      leading: _menuButton(),
       title: Text("وردپرس یار", style: Theme.of(context).textTheme.titleMedium),
       centerTitle: true,
       actions: [
@@ -42,7 +58,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  IconButton _menuButton(BuildContext context) {
+  IconButton _menuButton() {
     return IconButton(
       onPressed: () {},
       icon: const Icon(Icons.menu),

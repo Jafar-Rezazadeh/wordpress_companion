@@ -1,0 +1,9 @@
+import 'package:wordpress_companion/features/login/login_exports.dart';
+
+class LoginCredentialsModel extends LoginCredentialsEntity {
+  const LoginCredentialsModel({
+    required super.userName,
+    required super.applicationPassword,
+    required super.domain,
+  });
+}

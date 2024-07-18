@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/features/home/presentation/screens/home_screen.dart';
 import 'package:wordpress_companion/dependency_injection.dart';
-import 'package:wordpress_companion/features/user-login/user_login_exports.dart';
+import 'package:wordpress_companion/features/login/login_exports.dart';
 
 final goRouter = GoRouter(
   initialLocation: loginScreen,
