@@ -68,11 +68,19 @@ class FailureWidget extends StatelessWidget {
         ),
         const Gap(5),
         Text(
-          "پیام از سمت سرور: " "${failure.response?.data['message'] ?? "نامعلوم"}",
+          "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
           overflow: TextOverflow.ellipsis,
         ),
       ],
     );
+  }
+
+  _getMessage(ServerFailure failure) {
+    try {
+      return failure.response?.data['message'];
+    } catch (e) {
+      return failure.response;
+    }
   }
 
   Widget _showUnknownFailureMessage(UnknownFailure unknownFailure) {
