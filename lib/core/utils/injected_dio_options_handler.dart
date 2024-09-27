@@ -8,6 +8,7 @@ class InjectedDioOptionsHandler {
 
   InjectedDioOptionsHandler({required GetIt getItInstance}) : _getIt = getItInstance;
 
+  // FIXME: wrog way to add valid credentials to injected dio options
   setAuthorization({required String username, required String password}) {
     _getIt.get<Dio>().options.headers.addAll(
       {

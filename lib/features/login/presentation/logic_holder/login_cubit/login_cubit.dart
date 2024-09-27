@@ -46,6 +46,7 @@ class LoginCubit extends Cubit<LoginState> {
         applicationPassword: params.applicationPassword,
         domain: params.domain,
       );
+      // FIXME: This should be done in a better way
       _setInjectedDioOptions(credentials);
 
       emit(LoginState.loginSuccess(credentials));
