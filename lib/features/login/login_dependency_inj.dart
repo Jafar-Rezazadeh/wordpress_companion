@@ -1,4 +1,4 @@
-import 'package:wordpress_companion/core/utils/injected_dio_options_handler.dart';
+import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'package:wordpress_companion/features/login/login_exports.dart';
@@ -32,7 +32,7 @@ userLoginDependencyInjection() async {
       authenticateUser: getIt(),
       saveUserCredentials: getIt(),
       getLastLoginCredentials: getIt(),
-      injectedDioOptionsHandler: InjectedDioOptionsHandler(getItInstance: getIt),
+      globalDioHeadersHandler: GlobalDioHeadersHandler(getItInstance: getIt),
     ),
   );
 }

@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/utils/injected_dio_options_handler.dart';
+import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 class MockAuthenticateUser extends Mock implements AuthenticateUser {}
@@ -59,7 +59,7 @@ void main() {
         authenticateUser: mockAuthenticateUser,
         saveUserCredentials: mockSaveUserCredentials,
         getLastLoginCredentials: mockGetLastLoginCredentials,
-        injectedDioOptionsHandler: InjectedDioOptionsHandler(getItInstance: getIt),
+        globalDioHeadersHandler: GlobalDioHeadersHandler(getItInstance: getIt),
       );
     },
   );

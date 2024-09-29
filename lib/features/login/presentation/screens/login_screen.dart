@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _setLastLoginCredentials() async {
+    //TODO: use need cubit to get last login credentials
     final lastLoginCredentials = await context.read<LoginCubit>().getLastLoginCredentials();
 
     if (lastLoginCredentials != null) {

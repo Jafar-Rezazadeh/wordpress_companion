@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
-import 'package:wordpress_companion/core/utils/injected_dio_options_handler.dart';
+import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 
 void main() {
-  late InjectedDioOptionsHandler injectedDioOptionsHandler;
+  late GlobalDioHeadersHandler injectedDioOptionsHandler;
 
   late GetIt getIt;
 
@@ -16,7 +16,7 @@ void main() {
   });
 
   setUp(() {
-    injectedDioOptionsHandler = InjectedDioOptionsHandler(getItInstance: getIt);
+    injectedDioOptionsHandler = GlobalDioHeadersHandler(getItInstance: getIt);
   });
 
   group(

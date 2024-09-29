@@ -7,13 +7,9 @@ extension WidgetList on List<Widget> {
 
     separatedList.add(first);
 
-    map(
-      (e) {
-        if (_isNotFirstAndLastItem(e)) {
-          separatedList.addAll([Gap(gapSize), e]);
-        }
-      },
-    ).toList();
+    map((e) {
+      _isNotFirstAndLastItem(e) ? separatedList.addAll([Gap(gapSize), e]) : null;
+    }).toList();
 
     return separatedList;
   }

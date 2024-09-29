@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/utils/injected_dio_options_handler.dart';
+import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 import '../../../../../core/contracts/use_case.dart';
@@ -13,19 +13,19 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthenticateUser _authenticateUser;
   final SaveUserCredentials _saveUserCredentials;
   final GetLastLoginCredentials _getLastLoginCredentials;
-  final InjectedDioOptionsHandler _injectedDioOptionsHandler;
+  final GlobalDioHeadersHandler _globalDioHeadersHandler;
   LoginCubit({
     required AuthenticateUser authenticateUser,
     required SaveUserCredentials saveUserCredentials,
     required GetLastLoginCredentials getLastLoginCredentials,
-    required InjectedDioOptionsHandler injectedDioOptionsHandler,
+    required GlobalDioHeadersHandler globalDioHeadersHandler,
   })  : _authenticateUser = authenticateUser,
         _saveUserCredentials = saveUserCredentials,
         _getLastLoginCredentials = getLastLoginCredentials,
-        _injectedDioOptionsHandler = injectedDioOptionsHandler,
+        _globalDioHeadersHandler = globalDioHeadersHandler,
         super(const LoginState.initial());
 
-  loginAndSave(LoginCredentialsParams params) async {
+  void loginAndSave(LoginCredentialsParams params) async {
     emit(const LoginState.loggingIn());
     final result = await _authenticateUser(params);
 
@@ -37,30 +37,6 @@ class LoginCubit extends Cubit<LoginState> {
         _handleUserValidation(isValidUser, params);
       },
     );
-  }
-
-  void _handleUserValidation(bool isValidUser, LoginCredentialsParams params) {
-    if (isValidUser) {
-      final credentials = LoginCredentialsEntity(
-        userName: params.name,
-        applicationPassword: params.applicationPassword,
-        domain: params.domain,
-      );
-      // FIXME: This should be done in a better way
-      _setInjectedDioOptions(credentials);
-
-      emit(LoginState.loginSuccess(credentials));
-    } else {
-      emit(const LoginState.notValidUser());
-    }
-  }
-
-  void _setInjectedDioOptions(LoginCredentialsEntity credentials) {
-    _injectedDioOptionsHandler.setAuthorization(
-      username: credentials.userName,
-      password: credentials.applicationPassword,
-    );
-    _injectedDioOptionsHandler.setBaseUrl(credentials.domain);
   }
 
   Future<void> _handleRememberMe(LoginCredentialsParams params) async {
@@ -78,15 +54,38 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  void _handleUserValidation(bool isValidUser, LoginCredentialsParams params) {
+    if (isValidUser) {
+      final credentials = LoginCredentialsEntity(
+        userName: params.name,
+        applicationPassword: params.applicationPassword,
+        domain: params.domain,
+      );
+      _setGlobalDioHeaders(credentials);
+
+      emit(LoginState.loginSuccess(credentials));
+    } else {
+      emit(const LoginState.notValidUser());
+    }
+  }
+
+  void _setGlobalDioHeaders(LoginCredentialsEntity credentials) {
+    _globalDioHeadersHandler.setBaseUrl(credentials.domain);
+
+    _globalDioHeadersHandler.setAuthorization(
+      username: credentials.userName,
+      password: credentials.applicationPassword,
+    );
+  }
+
+  // FIXME: should be refactored wrog way to use a cubit should emit some state make another cubit if needed
   Future<LoginCredentialsEntity?> getLastLoginCredentials() async {
     final result = await _getLastLoginCredentials.call(NoParams());
 
     return result.fold(
-      (failure) async {
-        return null;
-      },
+      (failure) async => null,
       (userCredentials) {
-        _setInjectedDioOptions(userCredentials);
+        _setGlobalDioHeaders(userCredentials);
         return userCredentials;
       },
     );
