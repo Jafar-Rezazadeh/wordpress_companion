@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/utils/extensions.dart';
+import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 
 class QuickAccessButtons extends StatefulWidget {
   const QuickAccessButtons({super.key});
@@ -24,7 +24,7 @@ class _QuickAccessButtonsState extends State<QuickAccessButtons> {
           width: double.infinity,
           child: _listOfButtons(),
         ),
-      ].withSpaceBetween(10),
+      ].withGapInBetween(10),
     );
   }
 

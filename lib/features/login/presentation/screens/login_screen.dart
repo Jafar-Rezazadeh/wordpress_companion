@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -8,6 +9,7 @@ import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/utils/validator.dart';
 import 'package:wordpress_companion/core/widgets/failure_widget.dart';
+import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,26 +23,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final double eachFieldPadding = 30;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _userNameController;
-  late TextEditingController _applicationPasswordController;
-  late TextEditingController _domainController;
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _applicationPasswordController =
+      TextEditingController();
+  final TextEditingController _domainController = TextEditingController();
   bool _rememberMeValue = true;
   bool _obscurePassword = true;
 
   @override
   void initState() {
-    _initControllers();
+    BlocProvider.of<LoginCredentialsCubit>(context).getLastLoginCredentials();
     super.initState();
-  }
-
-  _initControllers() async {
-    _userNameController = TextEditingController();
-    _applicationPasswordController = TextEditingController();
-    _domainController = TextEditingController();
-  }
-
-  Future<void> _setLastLoginCredentials() async {
-    //TODO: use need cubit to get last login credentials
   }
 
   @override
@@ -109,12 +102,33 @@ class _LoginScreenState extends State<LoginScreen> {
       key: _scaffoldKey,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: _scrollableContainer(),
+        child: _contentBuilder(),
       ),
     );
   }
 
-  Widget _scrollableContainer() {
+  Widget _contentBuilder() {
+    return BlocBuilder<LoginCredentialsCubit, LoginCredentialsState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => Container(),
+          gettingCredentials: () => const Center(
+            child: LoadingWidget(),
+          ),
+          credentialsReceived: (credentials) {
+            _userNameController.text = credentials.userName;
+            _applicationPasswordController.text =
+                credentials.applicationPassword;
+            _domainController.text = credentials.domain;
+            return _contents();
+          },
+          error: (failure) => FailureWidget(failure: failure),
+        );
+      },
+    );
+  }
+
+  Widget _contents() {
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -156,7 +170,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // TODO: use the cubit to get last login credentials
   Widget _credentialsForm() {
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -165,13 +178,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             _userName(),
-            const Gap(10),
             _applicationPassword(),
-            const Gap(10),
             _domain(),
-            const Gap(10),
             _rememberMe()
-          ],
+          ].withGapInBetween(10),
         ),
       ),
     );

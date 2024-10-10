@@ -37,4 +37,7 @@ userLoginDependencyInjection() async {
       globalDioHeadersHandler: GlobalDioHeadersHandler(getItInstance: getIt),
     ),
   );
+  getIt.registerFactory(
+    () => LoginCredentialsCubit(getLastLoginCredentials: getIt()),
+  );
 }

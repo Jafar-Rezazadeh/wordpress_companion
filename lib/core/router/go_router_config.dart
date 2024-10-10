@@ -9,8 +9,15 @@ final goRouter = GoRouter(
   initialLocation: loginScreen,
   routes: [
     ShellRoute(
-      builder: (context, state, child) => BlocProvider(
-        create: (context) => getIt<AuthenticationCubit>(),
+      builder: (context, state, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => getIt<AuthenticationCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<LoginCredentialsCubit>(),
+          ),
+        ],
         child: child,
       ),
       routes: [

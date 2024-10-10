@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
-import '../../utils/extensions.dart';
 import '../widgets/hero_section.dart';
 import "../widgets/management_section.dart";
 import '../widgets/quick_access_buttons.dart';
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const HeroSection(),
         const ManagementSection(),
         const Gap(50),
-      ].withSpaceBetween(20),
+      ].withGapInBetween(20),
     );
   }
 }

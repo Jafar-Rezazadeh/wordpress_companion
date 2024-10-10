@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/utils/extensions.dart';
 import 'package:wordpress_companion/core/utils/string_formatter.dart';
 
 class HeroSection extends StatefulWidget {
@@ -108,7 +108,7 @@ class _HeroSectionState extends State<HeroSection> {
         _carouselItemContentTitle(index),
         _carouselItemContentSubTitle(),
         _carouselItemContentFootnote(),
-      ].withSpaceBetween(5),
+      ].withGapInBetween(5),
     );
   }
 

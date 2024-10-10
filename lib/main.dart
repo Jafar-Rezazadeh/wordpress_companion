@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/theme/theme.dart';
+import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'core/router/go_router_config.dart';
@@ -37,10 +37,8 @@ class WordpressCompanion extends StatelessWidget {
         sigmaX: 3,
         sigmaY: 3,
       ),
-      child: Center(
-        child: SpinKitFoldingCube(
-          color: Theme.of(context).colorScheme.primary,
-        ),
+      child: const Center(
+        child: LoadingWidget(),
       ),
     );
   }
