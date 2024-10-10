@@ -28,7 +28,8 @@ void main() {
           //arrange
 
           //act
-          injectedDioOptionsHandler.setAuthorization(username: "test", password: "test1234");
+          injectedDioOptionsHandler.setAuthorization(
+              username: "test", password: "test1234");
 
           //assert
           expect(
