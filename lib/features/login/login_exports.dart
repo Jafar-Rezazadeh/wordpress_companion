@@ -9,11 +9,12 @@ export 'package:wordpress_companion/features/login/data/repositories/login_repo_
 // domain
 export 'package:wordpress_companion/features/login/domain/repositories/login_repo.dart';
 export 'package:wordpress_companion/features/login/domain/entities/login_credentials_entity.dart';
-export 'package:wordpress_companion/features/login/domain/usecases/authenticate_user.dart';
-export 'package:wordpress_companion/features/login/domain/usecases/save_user_credentials.dart';
-export 'package:wordpress_companion/features/login/domain/usecases/get_last_login_credentials.dart';
+export 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
+export 'package:wordpress_companion/features/login/domain/use_cases/save_user_credentials.dart';
+export 'package:wordpress_companion/features/login/domain/use_cases/get_last_login_credentials.dart';
 
 //presentation
-export 'package:wordpress_companion/features/login/presentation/logic_holder/login_cubit/login_cubit.dart';
+export 'package:wordpress_companion/features/login/presentation/logic_holder/authentication_cubit/authentication_cubit.dart';
+export 'package:wordpress_companion/features/login/presentation/logic_holder/login_credentials/login_credentials_cubit.dart';
 export 'package:wordpress_companion/features/login/presentation/screens/login_screen.dart';
 export 'package:wordpress_companion/features/login/presentation/widgets/steps_of_creating_app_password.dart';

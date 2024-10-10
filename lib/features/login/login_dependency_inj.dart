@@ -21,17 +21,19 @@ userLoginDependencyInjection() async {
     ),
   );
 
-  // usecases
-  getIt.registerLazySingleton(() => AuthenticateUser(userLoginRepository: getIt()));
-  getIt.registerLazySingleton(() => SaveUserCredentials(userLoginRepository: getIt()));
-  getIt.registerLazySingleton(() => GetLastLoginCredentials(userLoginRepository: getIt()));
+  // use cases
+  getIt.registerLazySingleton(
+      () => AuthenticateUser(userLoginRepository: getIt()));
+  getIt.registerLazySingleton(
+      () => SaveUserCredentials(userLoginRepository: getIt()));
+  getIt.registerLazySingleton(
+      () => GetLastLoginCredentials(userLoginRepository: getIt()));
 
   // cubit
   getIt.registerFactory(
-    () => LoginCubit(
+    () => AuthenticationCubit(
       authenticateUser: getIt(),
       saveUserCredentials: getIt(),
-      getLastLoginCredentials: getIt(),
       globalDioHeadersHandler: GlobalDioHeadersHandler(getItInstance: getIt),
     ),
   );

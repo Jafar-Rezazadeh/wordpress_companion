@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_cubit.dart';
+part of 'authentication_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,76 +15,76 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LoginState {
+mixin _$AuthenticationState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LoginStateCopyWith<$Res> {
-  factory $LoginStateCopyWith(
-          LoginState value, $Res Function(LoginState) then) =
-      _$LoginStateCopyWithImpl<$Res, LoginState>;
+abstract class $AuthenticationStateCopyWith<$Res> {
+  factory $AuthenticationStateCopyWith(
+          AuthenticationState value, $Res Function(AuthenticationState) then) =
+      _$AuthenticationStateCopyWithImpl<$Res, AuthenticationState>;
 }
 
 /// @nodoc
-class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
-    implements $LoginStateCopyWith<$Res> {
-  _$LoginStateCopyWithImpl(this._value, this._then);
+class _$AuthenticationStateCopyWithImpl<$Res, $Val extends AuthenticationState>
+    implements $AuthenticationStateCopyWith<$Res> {
+  _$AuthenticationStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -101,7 +101,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$AuthenticationStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -115,7 +115,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'LoginState.initial()';
+    return 'AuthenticationState.initial()';
   }
 
   @override
@@ -131,10 +131,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) {
     return initial();
   }
@@ -143,10 +143,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) {
     return initial?.call();
   }
@@ -155,10 +155,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -171,10 +171,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) {
     return initial(this);
   }
@@ -183,10 +183,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) {
     return initial?.call(this);
   }
@@ -195,10 +195,10 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -208,40 +208,40 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements LoginState {
+abstract class _Initial implements AuthenticationState {
   const factory _Initial() = _$InitialImpl;
 }
 
 /// @nodoc
-abstract class _$$LoggingInImplCopyWith<$Res> {
-  factory _$$LoggingInImplCopyWith(
-          _$LoggingInImpl value, $Res Function(_$LoggingInImpl) then) =
-      __$$LoggingInImplCopyWithImpl<$Res>;
+abstract class _$$AuthenticatingImplCopyWith<$Res> {
+  factory _$$AuthenticatingImplCopyWith(_$AuthenticatingImpl value,
+          $Res Function(_$AuthenticatingImpl) then) =
+      __$$AuthenticatingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoggingInImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoggingInImpl>
-    implements _$$LoggingInImplCopyWith<$Res> {
-  __$$LoggingInImplCopyWithImpl(
-      _$LoggingInImpl _value, $Res Function(_$LoggingInImpl) _then)
+class __$$AuthenticatingImplCopyWithImpl<$Res>
+    extends _$AuthenticationStateCopyWithImpl<$Res, _$AuthenticatingImpl>
+    implements _$$AuthenticatingImplCopyWith<$Res> {
+  __$$AuthenticatingImplCopyWithImpl(
+      _$AuthenticatingImpl _value, $Res Function(_$AuthenticatingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoggingInImpl implements _LoggingIn {
-  const _$LoggingInImpl();
+class _$AuthenticatingImpl implements _Authenticating {
+  const _$AuthenticatingImpl();
 
   @override
   String toString() {
-    return 'LoginState.loggingIn()';
+    return 'AuthenticationState.authenticating()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoggingInImpl);
+        (other.runtimeType == runtimeType && other is _$AuthenticatingImpl);
   }
 
   @override
@@ -251,38 +251,38 @@ class _$LoggingInImpl implements _LoggingIn {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) {
-    return loggingIn();
+    return authenticating();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) {
-    return loggingIn?.call();
+    return authenticating?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loggingIn != null) {
-      return loggingIn();
+    if (authenticating != null) {
+      return authenticating();
     }
     return orElse();
   }
@@ -291,62 +291,62 @@ class _$LoggingInImpl implements _LoggingIn {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) {
-    return loggingIn(this);
+    return authenticating(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) {
-    return loggingIn?.call(this);
+    return authenticating?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loggingIn != null) {
-      return loggingIn(this);
+    if (authenticating != null) {
+      return authenticating(this);
     }
     return orElse();
   }
 }
 
-abstract class _LoggingIn implements LoginState {
-  const factory _LoggingIn() = _$LoggingInImpl;
+abstract class _Authenticating implements AuthenticationState {
+  const factory _Authenticating() = _$AuthenticatingImpl;
 }
 
 /// @nodoc
-abstract class _$$LoginSuccessImplCopyWith<$Res> {
-  factory _$$LoginSuccessImplCopyWith(
-          _$LoginSuccessImpl value, $Res Function(_$LoginSuccessImpl) then) =
-      __$$LoginSuccessImplCopyWithImpl<$Res>;
+abstract class _$$AuthenticatedImplCopyWith<$Res> {
+  factory _$$AuthenticatedImplCopyWith(
+          _$AuthenticatedImpl value, $Res Function(_$AuthenticatedImpl) then) =
+      __$$AuthenticatedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LoginCredentialsEntity credentials});
 }
 
 /// @nodoc
-class __$$LoginSuccessImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginSuccessImpl>
-    implements _$$LoginSuccessImplCopyWith<$Res> {
-  __$$LoginSuccessImplCopyWithImpl(
-      _$LoginSuccessImpl _value, $Res Function(_$LoginSuccessImpl) _then)
+class __$$AuthenticatedImplCopyWithImpl<$Res>
+    extends _$AuthenticationStateCopyWithImpl<$Res, _$AuthenticatedImpl>
+    implements _$$AuthenticatedImplCopyWith<$Res> {
+  __$$AuthenticatedImplCopyWithImpl(
+      _$AuthenticatedImpl _value, $Res Function(_$AuthenticatedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -354,7 +354,7 @@ class __$$LoginSuccessImplCopyWithImpl<$Res>
   $Res call({
     Object? credentials = null,
   }) {
-    return _then(_$LoginSuccessImpl(
+    return _then(_$AuthenticatedImpl(
       null == credentials
           ? _value.credentials
           : credentials // ignore: cast_nullable_to_non_nullable
@@ -365,22 +365,22 @@ class __$$LoginSuccessImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoginSuccessImpl implements _LoginSuccess {
-  const _$LoginSuccessImpl(this.credentials);
+class _$AuthenticatedImpl implements _Authenticated {
+  _$AuthenticatedImpl(this.credentials);
 
   @override
   final LoginCredentialsEntity credentials;
 
   @override
   String toString() {
-    return 'LoginState.loginSuccess(credentials: $credentials)';
+    return 'AuthenticationState.authenticated(credentials: $credentials)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginSuccessImpl &&
+            other is _$AuthenticatedImpl &&
             (identical(other.credentials, credentials) ||
                 other.credentials == credentials));
   }
@@ -391,45 +391,45 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoginSuccessImplCopyWith<_$LoginSuccessImpl> get copyWith =>
-      __$$LoginSuccessImplCopyWithImpl<_$LoginSuccessImpl>(this, _$identity);
+  _$$AuthenticatedImplCopyWith<_$AuthenticatedImpl> get copyWith =>
+      __$$AuthenticatedImplCopyWithImpl<_$AuthenticatedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) {
-    return loginSuccess(credentials);
+    return authenticated(credentials);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) {
-    return loginSuccess?.call(credentials);
+    return authenticated?.call(credentials);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loginSuccess != null) {
-      return loginSuccess(credentials);
+    if (authenticated != null) {
+      return authenticated(credentials);
     }
     return orElse();
   }
@@ -438,50 +438,50 @@ class _$LoginSuccessImpl implements _LoginSuccess {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) {
-    return loginSuccess(this);
+    return authenticated(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) {
-    return loginSuccess?.call(this);
+    return authenticated?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loginSuccess != null) {
-      return loginSuccess(this);
+    if (authenticated != null) {
+      return authenticated(this);
     }
     return orElse();
   }
 }
 
-abstract class _LoginSuccess implements LoginState {
-  const factory _LoginSuccess(final LoginCredentialsEntity credentials) =
-      _$LoginSuccessImpl;
+abstract class _Authenticated implements AuthenticationState {
+  factory _Authenticated(final LoginCredentialsEntity credentials) =
+      _$AuthenticatedImpl;
 
   LoginCredentialsEntity get credentials;
   @JsonKey(ignore: true)
-  _$$LoginSuccessImplCopyWith<_$LoginSuccessImpl> get copyWith =>
+  _$$AuthenticatedImplCopyWith<_$AuthenticatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -494,7 +494,7 @@ abstract class _$$NotValidUserImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$NotValidUserImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$NotValidUserImpl>
+    extends _$AuthenticationStateCopyWithImpl<$Res, _$NotValidUserImpl>
     implements _$$NotValidUserImplCopyWith<$Res> {
   __$$NotValidUserImplCopyWithImpl(
       _$NotValidUserImpl _value, $Res Function(_$NotValidUserImpl) _then)
@@ -508,7 +508,7 @@ class _$NotValidUserImpl implements _NotValidUser {
 
   @override
   String toString() {
-    return 'LoginState.notValidUser()';
+    return 'AuthenticationState.notValidUser()';
   }
 
   @override
@@ -524,10 +524,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) {
     return notValidUser();
   }
@@ -536,10 +536,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) {
     return notValidUser?.call();
   }
@@ -548,10 +548,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) {
     if (notValidUser != null) {
@@ -564,10 +564,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) {
     return notValidUser(this);
   }
@@ -576,10 +576,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) {
     return notValidUser?.call(this);
   }
@@ -588,10 +588,10 @@ class _$NotValidUserImpl implements _NotValidUser {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) {
     if (notValidUser != null) {
@@ -601,25 +601,25 @@ class _$NotValidUserImpl implements _NotValidUser {
   }
 }
 
-abstract class _NotValidUser implements LoginState {
+abstract class _NotValidUser implements AuthenticationState {
   const factory _NotValidUser() = _$NotValidUserImpl;
 }
 
 /// @nodoc
-abstract class _$$LoginFailedImplCopyWith<$Res> {
-  factory _$$LoginFailedImplCopyWith(
-          _$LoginFailedImpl value, $Res Function(_$LoginFailedImpl) then) =
-      __$$LoginFailedImplCopyWithImpl<$Res>;
+abstract class _$$AuthenticationFailedImplCopyWith<$Res> {
+  factory _$$AuthenticationFailedImplCopyWith(_$AuthenticationFailedImpl value,
+          $Res Function(_$AuthenticationFailedImpl) then) =
+      __$$AuthenticationFailedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Failure failure});
 }
 
 /// @nodoc
-class __$$LoginFailedImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginFailedImpl>
-    implements _$$LoginFailedImplCopyWith<$Res> {
-  __$$LoginFailedImplCopyWithImpl(
-      _$LoginFailedImpl _value, $Res Function(_$LoginFailedImpl) _then)
+class __$$AuthenticationFailedImplCopyWithImpl<$Res>
+    extends _$AuthenticationStateCopyWithImpl<$Res, _$AuthenticationFailedImpl>
+    implements _$$AuthenticationFailedImplCopyWith<$Res> {
+  __$$AuthenticationFailedImplCopyWithImpl(_$AuthenticationFailedImpl _value,
+      $Res Function(_$AuthenticationFailedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -627,7 +627,7 @@ class __$$LoginFailedImplCopyWithImpl<$Res>
   $Res call({
     Object? failure = null,
   }) {
-    return _then(_$LoginFailedImpl(
+    return _then(_$AuthenticationFailedImpl(
       null == failure
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
@@ -638,22 +638,22 @@ class __$$LoginFailedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoginFailedImpl implements _LoginFailed {
-  const _$LoginFailedImpl(this.failure);
+class _$AuthenticationFailedImpl implements _AuthenticationFailed {
+  const _$AuthenticationFailedImpl(this.failure);
 
   @override
   final Failure failure;
 
   @override
   String toString() {
-    return 'LoginState.loginFailed(failure: $failure)';
+    return 'AuthenticationState.authenticationFailed(failure: $failure)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginFailedImpl &&
+            other is _$AuthenticationFailedImpl &&
             (identical(other.failure, failure) || other.failure == failure));
   }
 
@@ -663,45 +663,47 @@ class _$LoginFailedImpl implements _LoginFailed {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoginFailedImplCopyWith<_$LoginFailedImpl> get copyWith =>
-      __$$LoginFailedImplCopyWithImpl<_$LoginFailedImpl>(this, _$identity);
+  _$$AuthenticationFailedImplCopyWith<_$AuthenticationFailedImpl>
+      get copyWith =>
+          __$$AuthenticationFailedImplCopyWithImpl<_$AuthenticationFailedImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loggingIn,
-    required TResult Function(LoginCredentialsEntity credentials) loginSuccess,
+    required TResult Function() authenticating,
+    required TResult Function(LoginCredentialsEntity credentials) authenticated,
     required TResult Function() notValidUser,
-    required TResult Function(Failure failure) loginFailed,
+    required TResult Function(Failure failure) authenticationFailed,
   }) {
-    return loginFailed(failure);
+    return authenticationFailed(failure);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loggingIn,
-    TResult? Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult? Function()? authenticating,
+    TResult? Function(LoginCredentialsEntity credentials)? authenticated,
     TResult? Function()? notValidUser,
-    TResult? Function(Failure failure)? loginFailed,
+    TResult? Function(Failure failure)? authenticationFailed,
   }) {
-    return loginFailed?.call(failure);
+    return authenticationFailed?.call(failure);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loggingIn,
-    TResult Function(LoginCredentialsEntity credentials)? loginSuccess,
+    TResult Function()? authenticating,
+    TResult Function(LoginCredentialsEntity credentials)? authenticated,
     TResult Function()? notValidUser,
-    TResult Function(Failure failure)? loginFailed,
+    TResult Function(Failure failure)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loginFailed != null) {
-      return loginFailed(failure);
+    if (authenticationFailed != null) {
+      return authenticationFailed(failure);
     }
     return orElse();
   }
@@ -710,48 +712,49 @@ class _$LoginFailedImpl implements _LoginFailed {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoggingIn value) loggingIn,
-    required TResult Function(_LoginSuccess value) loginSuccess,
+    required TResult Function(_Authenticating value) authenticating,
+    required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_NotValidUser value) notValidUser,
-    required TResult Function(_LoginFailed value) loginFailed,
+    required TResult Function(_AuthenticationFailed value) authenticationFailed,
   }) {
-    return loginFailed(this);
+    return authenticationFailed(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoggingIn value)? loggingIn,
-    TResult? Function(_LoginSuccess value)? loginSuccess,
+    TResult? Function(_Authenticating value)? authenticating,
+    TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_NotValidUser value)? notValidUser,
-    TResult? Function(_LoginFailed value)? loginFailed,
+    TResult? Function(_AuthenticationFailed value)? authenticationFailed,
   }) {
-    return loginFailed?.call(this);
+    return authenticationFailed?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoggingIn value)? loggingIn,
-    TResult Function(_LoginSuccess value)? loginSuccess,
+    TResult Function(_Authenticating value)? authenticating,
+    TResult Function(_Authenticated value)? authenticated,
     TResult Function(_NotValidUser value)? notValidUser,
-    TResult Function(_LoginFailed value)? loginFailed,
+    TResult Function(_AuthenticationFailed value)? authenticationFailed,
     required TResult orElse(),
   }) {
-    if (loginFailed != null) {
-      return loginFailed(this);
+    if (authenticationFailed != null) {
+      return authenticationFailed(this);
     }
     return orElse();
   }
 }
 
-abstract class _LoginFailed implements LoginState {
-  const factory _LoginFailed(final Failure failure) = _$LoginFailedImpl;
+abstract class _AuthenticationFailed implements AuthenticationState {
+  const factory _AuthenticationFailed(final Failure failure) =
+      _$AuthenticationFailedImpl;
 
   Failure get failure;
   @JsonKey(ignore: true)
-  _$$LoginFailedImplCopyWith<_$LoginFailedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$AuthenticationFailedImplCopyWith<_$AuthenticationFailedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

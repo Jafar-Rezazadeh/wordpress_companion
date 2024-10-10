@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/login/domain/repositories/login_repo.dart';
-import 'package:wordpress_companion/features/login/domain/usecases/authenticate_user.dart';
+import 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
 
 class MockUserAuthentication extends Mock implements LoginRepository {}
 
@@ -23,7 +23,8 @@ void main() {
   setUp(
     () {
       mockUserAuthentication = MockUserAuthentication();
-      authenticateUser = AuthenticateUser(userLoginRepository: mockUserAuthentication);
+      authenticateUser =
+          AuthenticateUser(userLoginRepository: mockUserAuthentication);
     },
   );
 

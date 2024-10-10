@@ -10,7 +10,7 @@ final goRouter = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) => BlocProvider(
-        create: (context) => getIt<LoginCubit>(),
+        create: (context) => getIt<AuthenticationCubit>(),
         child: child,
       ),
       routes: [

@@ -14,8 +14,6 @@ class MockAuthenticateUser extends Mock implements AuthenticateUser {}
 
 class MockSaveUserCredentials extends Mock implements SaveUserCredentials {}
 
-class MockGetLastLoginCredentials extends Mock implements GetLastLoginCredentials {}
-
 class FakeFailure extends Fake implements Failure {
   @override
   String get message => "error message";
@@ -35,8 +33,7 @@ class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {
 void main() {
   late MockAuthenticateUser mockAuthenticateUser;
   late MockSaveUserCredentials mockSaveUserCredentials;
-  late MockGetLastLoginCredentials mockGetLastLoginCredentials;
-  late LoginCubit loginCubit;
+  late AuthenticationCubit authenticationCubit;
   const LoginCredentialsParams fakeUserCredentialsParams = (
     name: "test",
     applicationPassword: "test1234",
@@ -54,11 +51,9 @@ void main() {
     () {
       mockAuthenticateUser = MockAuthenticateUser();
       mockSaveUserCredentials = MockSaveUserCredentials();
-      mockGetLastLoginCredentials = MockGetLastLoginCredentials();
-      loginCubit = LoginCubit(
+      authenticationCubit = AuthenticationCubit(
         authenticateUser: mockAuthenticateUser,
         saveUserCredentials: mockSaveUserCredentials,
-        getLastLoginCredentials: mockGetLastLoginCredentials,
         globalDioHeadersHandler: GlobalDioHeadersHandler(getItInstance: getIt),
       );
     },
@@ -69,8 +64,8 @@ void main() {
     () {
       //assert
       expect(
-        loginCubit.state,
-        isA<LoginState>().having(
+        authenticationCubit.state,
+        isA<AuthenticationState>().having(
           (state) => state.whenOrNull(initial: () => true),
           "is enterCredentials init state",
           true,
@@ -81,27 +76,28 @@ void main() {
   group(
     "login -",
     () {
-      blocTest<LoginCubit, LoginState>(
-        'emits [loggingIn, loginSuccess] when userAuthentication is successful and user is valid',
+      blocTest<AuthenticationCubit, AuthenticationState>(
+        'emits [authenticating, Authenticated] when userAuthentication is successful and user is valid',
         setUp: () {
           when(
             () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => right(true));
           when(
             () => mockSaveUserCredentials.call(fakeUserCredentialsParams),
-          ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
+          ).thenAnswer(
+              (invocation) async => right(FakeUserCredentialsEntity()));
         },
-        build: () => loginCubit,
+        build: () => authenticationCubit,
         act: (cubit) => cubit.loginAndSave(fakeUserCredentialsParams),
         expect: () => [
-          isA<LoginState>().having(
-            (state) => state.whenOrNull(loggingIn: () => true),
-            "is loggingIn state",
+          isA<AuthenticationState>().having(
+            (state) => state.whenOrNull(authenticating: () => true),
+            "is authenticating state",
             true,
           ),
-          isA<LoginState>().having(
-            (state) => state.whenOrNull(loginSuccess: (_) => true),
-            "is loginSuccess state",
+          isA<AuthenticationState>().having(
+            (state) => state.whenOrNull(authenticated: (_) => true),
+            "is Authenticated state",
             true,
           )
         ],
@@ -116,13 +112,15 @@ void main() {
           ).thenAnswer((invocation) async => right(true));
           when(
             () => mockSaveUserCredentials.call(fakeUserCredentialsParams),
-          ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
+          ).thenAnswer(
+              (invocation) async => right(FakeUserCredentialsEntity()));
 
           //act
-          loginCubit.loginAndSave(fakeUserCredentialsParams);
+          authenticationCubit.loginAndSave(fakeUserCredentialsParams);
 
           //assert
-          expect(getIt.get<Dio>().options.baseUrl, fakeUserCredentialsParams.domain);
+          expect(getIt.get<Dio>().options.baseUrl,
+              fakeUserCredentialsParams.domain);
           expect(
             getIt.get<Dio>().options.headers["Authorization"],
             makeBase64Encode(
@@ -132,25 +130,26 @@ void main() {
           );
         },
       );
-      blocTest<LoginCubit, LoginState>(
-        'emits [loggingIn, NotValidUser] when user IsNotValidUser',
+      blocTest<AuthenticationCubit, AuthenticationState>(
+        'emits [authenticating, NotValidUser] when user IsNotValidUser',
         setUp: () {
           when(
             () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => right(false));
           when(
             () => mockSaveUserCredentials.call(fakeUserCredentialsParams),
-          ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
+          ).thenAnswer(
+              (invocation) async => right(FakeUserCredentialsEntity()));
         },
-        build: () => loginCubit,
+        build: () => authenticationCubit,
         act: (cubit) => cubit.loginAndSave(fakeUserCredentialsParams),
         expect: () => [
-          isA<LoginState>().having(
-            (state) => state.whenOrNull(loggingIn: () => true),
-            "is LoggingIn state",
+          isA<AuthenticationState>().having(
+            (state) => state.whenOrNull(authenticating: () => true),
+            "is authenticating state",
             true,
           ),
-          isA<LoginState>().having(
+          isA<AuthenticationState>().having(
             (state) => state.whenOrNull(notValidUser: () => true),
             "is NotValidUser state",
             true,
@@ -158,87 +157,28 @@ void main() {
         ],
       );
 
-      blocTest<LoginCubit, LoginState>(
-        'emits [loggingIn, loginFailed] when failed to login',
+      blocTest<AuthenticationCubit, AuthenticationState>(
+        'emits [authenticating, authenticationFailed] when failed to login',
         setUp: () {
           when(
             () => mockAuthenticateUser.call(fakeUserCredentialsParams),
           ).thenAnswer((invocation) async => left(FakeFailure()));
         },
-        build: () => loginCubit,
+        build: () => authenticationCubit,
         act: (cubit) => cubit.loginAndSave(fakeUserCredentialsParams),
         expect: () => [
-          isA<LoginState>().having(
-            (state) => state.whenOrNull(loggingIn: () => true),
-            "is LoggingIn state",
+          isA<AuthenticationState>().having(
+            (state) => state.whenOrNull(authenticating: () => true),
+            "is authenticating state",
             true,
           ),
-          isA<LoginState>().having(
-            (state) => state.whenOrNull(loginFailed: (_) => true),
-            "is LoginFailed state",
+          isA<AuthenticationState>().having(
+            (state) => state.whenOrNull(authenticationFailed: (_) => true),
+            "is authenticationFailed state",
             true,
           )
         ],
       );
     },
   );
-
-  group("getLastLoginCredentials -", () {
-    test(
-      "should return (UserCredentialsEntity) when success",
-      () async {
-        //arrange
-        when(
-          () => mockGetLastLoginCredentials.call(any()),
-        ).thenAnswer(
-          (invocation) async => right(FakeUserCredentialsEntity()),
-        );
-
-        //act
-        final result = await loginCubit.getLastLoginCredentials();
-
-        //assert
-        expect(result, isA<LoginCredentialsEntity>());
-      },
-    );
-
-    test(
-      "should set (injected dio options by getIt) when success",
-      () {
-        //arrange
-        when(
-          () => mockGetLastLoginCredentials.call(any()),
-        ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
-
-        //act
-        loginCubit.getLastLoginCredentials();
-
-        //assert
-        expect(getIt.get<Dio>().options.baseUrl, FakeUserCredentialsEntity().domain);
-        expect(
-          getIt.get<Dio>().options.headers["Authorization"],
-          makeBase64Encode(
-            name: FakeUserCredentialsEntity().userName,
-            password: FakeUserCredentialsEntity().applicationPassword,
-          ),
-        );
-      },
-    );
-
-    test(
-      "should return (null) when failed to get last login credentials",
-      () async {
-        //arrange
-        when(
-          () => mockGetLastLoginCredentials.call(any()),
-        ).thenAnswer((invocation) async => left(FakeFailure()));
-
-        //act
-        final result = await loginCubit.getLastLoginCredentials();
-
-        //assert
-        expect(result, null);
-      },
-    );
-  });
 }

@@ -37,20 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
     _userNameController = TextEditingController();
     _applicationPasswordController = TextEditingController();
     _domainController = TextEditingController();
-    await _setLastLoginCredentials();
   }
 
   Future<void> _setLastLoginCredentials() async {
     //TODO: use need cubit to get last login credentials
-    final lastLoginCredentials = await context.read<LoginCubit>().getLastLoginCredentials();
-
-    if (lastLoginCredentials != null) {
-      setState(() {
-        _userNameController.text = lastLoginCredentials.userName;
-        _applicationPasswordController.text = lastLoginCredentials.applicationPassword;
-        _domainController.text = lastLoginCredentials.domain;
-      });
-    }
   }
 
   @override
@@ -64,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) => _stateChangeListener(state),
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -73,17 +63,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _stateChangeListener(LoginState state) => state.when(
+  _stateChangeListener(AuthenticationState state) => state.when(
         initial: () => null,
-        loggingIn: () {
+        authenticating: () {
           FocusScope.of(context).unfocus();
           context.loaderOverlay.show();
         },
-        loginFailed: (failure) {
+        authenticationFailed: (failure) {
           context.loaderOverlay.hide();
           _showFailureInModalBottomSheet(failure);
         },
-        loginSuccess: (credentials) {
+        authenticated: (credentials) {
           context.loaderOverlay.hide();
           context.goNamed(mainScreen, extra: credentials);
           _showSnackBar(content: "ورود با موفقیت انجام شد");
@@ -138,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
             _subTitle(),
             const Gap(10),
             _credentialsForm(),
-            _rememberMe(),
             const Gap(30),
             _submitButton(),
           ],
@@ -167,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // TODO: use the cubit to get last login credentials
   Widget _credentialsForm() {
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -179,6 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
             _applicationPassword(),
             const Gap(10),
             _domain(),
+            const Gap(10),
+            _rememberMe()
           ],
         ),
       ),
@@ -326,7 +318,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return SizedBox(
       width: double.infinity,
       child: FilledButton(
-        style: FilledButton.styleFrom(padding: EdgeInsets.all(eachFieldPadding - 10)),
+        style: FilledButton.styleFrom(
+            padding: EdgeInsets.all(eachFieldPadding - 10)),
         onPressed: () => _ifFieldsValid() ? _makeLogin() : null,
         child: const Text("ورود"),
       ),
@@ -336,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _ifFieldsValid() => _formKey.currentState?.validate() == true;
 
   _makeLogin() {
-    BlocProvider.of<LoginCubit>(context).loginAndSave(
+    BlocProvider.of<AuthenticationCubit>(context).loginAndSave(
       (
         name: _userNameController.text,
         applicationPassword: _applicationPasswordController.text,

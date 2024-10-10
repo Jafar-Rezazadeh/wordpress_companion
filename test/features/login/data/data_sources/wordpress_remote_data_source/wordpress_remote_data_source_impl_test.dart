@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:wordpress_companion/features/login/data/data_sources/implementations/wordpress_remote_data_source_impl.dart';
-import 'package:wordpress_companion/features/login/domain/usecases/authenticate_user.dart';
+import 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
 
 void main() {
   late WordpressRemoteDataSourceImpl wordpressRemoteDataSourceImpl;
@@ -43,7 +43,8 @@ void main() {
           );
 
           //act
-          final result = wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
+          final result = wordpressRemoteDataSourceImpl
+              .authenticateUser(userAuthenticationParams);
 
           //assert
           expect(
@@ -65,14 +66,15 @@ void main() {
           dioAdapter.onGet(
             "$exampleDomain/$wpV2EndPoint/settings/",
             headers: {
-              "Authorization": "Basic dGVzdDpxdGgwIFRVd24gSHJNUCBFTU5tIGI2TU0gTnZSMA==",
+              "Authorization":
+                  "Basic dGVzdDpxdGgwIFRVd24gSHJNUCBFTU5tIGI2TU0gTnZSMA==",
             },
             (server) => server.reply(200, null),
           );
 
           //act
-          final result =
-              await wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
+          final result = await wordpressRemoteDataSourceImpl
+              .authenticateUser(userAuthenticationParams);
 
           //assert
           expect(result, true);
@@ -89,8 +91,8 @@ void main() {
           );
 
           //act
-          final result =
-              await wordpressRemoteDataSourceImpl.authenticateUser(userAuthenticationParams);
+          final result = await wordpressRemoteDataSourceImpl
+              .authenticateUser(userAuthenticationParams);
 
           //assert
           expect(result, false);

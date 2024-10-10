@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+// TODO: add remember me property
+
 class LoginCredentialsEntity extends Equatable {
   final String userName;
   final String applicationPassword;
