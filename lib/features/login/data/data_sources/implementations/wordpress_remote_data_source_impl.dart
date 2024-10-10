@@ -10,24 +10,20 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
 
   WordpressRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
 
-  String getSettingsPath(String domain) => "$domain/$wpV2EndPoint/settings/";
+  String myProfileRoute(String domain) => "$domain/$wpV2EndPoint/users/me";
 
   @override
   Future<bool> authenticateUser(LoginCredentialsParams params) async {
     final response = await _dio.get(
-      getSettingsPath(params.domain),
+      myProfileRoute(params.domain),
       options: Options(
         headers: {
-          "Authorization":
-              makeBase64Encode(name: params.name, password: params.applicationPassword),
+          "Authorization": makeBase64Encode(
+              name: params.name, password: params.applicationPassword),
         },
       ),
     );
 
-    if (response.statusCode == HttpStatus.ok) {
-      return true;
-    } else {
-      return false;
-    }
+    return response.statusCode == HttpStatus.ok;
   }
 }
