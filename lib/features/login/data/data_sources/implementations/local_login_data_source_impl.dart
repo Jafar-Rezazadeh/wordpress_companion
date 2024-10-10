@@ -8,8 +8,10 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
   final String _userNameKey = "userName";
   final String _applicationPasswordKey = "applicationPassword";
   final String _domainKey = "domain";
+  final String _rememberMeKey = "rememberMe";
 
-  LocalLoginDataSourceImpl.test({required SharedPreferences sharedPreferences}) {
+  LocalLoginDataSourceImpl.test(
+      {required SharedPreferences sharedPreferences}) {
     _sharedPreferences = sharedPreferences;
   }
 
@@ -20,21 +22,31 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
   }
 
   @override
-  Future<LoginCredentialsModel> saveCredentials(LoginCredentialsParams params) async {
-    final isUserNameSaved = await _sharedPreferences.setString(_userNameKey, params.name);
+  Future<LoginCredentialsModel> saveCredentials(
+      LoginCredentialsParams params) async {
+    final isUserNameSaved =
+        await _sharedPreferences.setString(_userNameKey, params.name);
 
     final isApplicationPasswordSaved = await _sharedPreferences.setString(
       _applicationPasswordKey,
       params.applicationPassword,
     );
 
-    final isDomainSaved = await _sharedPreferences.setString(_domainKey, params.domain);
+    final isDomainSaved =
+        await _sharedPreferences.setString(_domainKey, params.domain);
 
-    if (isUserNameSaved && isApplicationPasswordSaved && isDomainSaved) {
+    final isRememberMeSaved =
+        await _sharedPreferences.setBool(_rememberMeKey, params.rememberMe);
+
+    if (isUserNameSaved &&
+        isApplicationPasswordSaved &&
+        isDomainSaved &&
+        isRememberMeSaved) {
       return LoginCredentialsModel(
         userName: params.name,
         applicationPassword: params.applicationPassword,
         domain: params.domain,
+        rememberMe: params.rememberMe,
       );
     }
 
@@ -44,13 +56,16 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
   @override
   Future<LoginCredentialsModel> getLastCredentials() async {
     final userName = _sharedPreferences.getString(_userNameKey);
-    final applicationPassword = _sharedPreferences.getString(_applicationPasswordKey);
+    final applicationPassword =
+        _sharedPreferences.getString(_applicationPasswordKey);
     final domain = _sharedPreferences.getString(_domainKey);
+    final rememberMe = _sharedPreferences.getBool(_rememberMeKey);
 
     return LoginCredentialsModel(
       userName: userName ?? "",
       applicationPassword: applicationPassword ?? "",
       domain: domain ?? "",
+      rememberMe: rememberMe ?? false,
     );
   }
 }

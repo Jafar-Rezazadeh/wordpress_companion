@@ -55,6 +55,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         userName: params.name,
         applicationPassword: params.applicationPassword,
         domain: params.domain,
+        rememberMe: params.rememberMe,
       );
       _setGlobalDioHeaders(credentials);
 

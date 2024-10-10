@@ -5,5 +5,6 @@ class LoginCredentialsModel extends LoginCredentialsEntity {
     required super.userName,
     required super.applicationPassword,
     required super.domain,
+    required super.rememberMe,
   });
 }

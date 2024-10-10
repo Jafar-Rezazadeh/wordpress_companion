@@ -108,22 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _contentBuilder() {
-    return BlocBuilder<LoginCredentialsCubit, LoginCredentialsState>(
+    return BlocConsumer<LoginCredentialsCubit, LoginCredentialsState>(
+      listener: _loginCredentialsListener,
       builder: (context, state) {
         return state.when(
           initial: () => Container(),
-          gettingCredentials: () => const Center(
-            child: LoadingWidget(),
-          ),
-          credentialsReceived: (credentials) {
-            _userNameController.text = credentials.userName;
-            _applicationPasswordController.text =
-                credentials.applicationPassword;
-            _domainController.text = credentials.domain;
-            return _contents();
-          },
+          gettingCredentials: () => const Center(child: LoadingWidget()),
+          credentialsReceived: (credentials) => _contents(),
           error: (failure) => FailureWidget(failure: failure),
         );
+      },
+    );
+  }
+
+  void _loginCredentialsListener(_, LoginCredentialsState state) {
+    state.whenOrNull(
+      credentialsReceived: (credentials) {
+        _userNameController.text = credentials.userName;
+        _applicationPasswordController.text = credentials.applicationPassword;
+        _domainController.text = credentials.domain;
+        _rememberMeValue = credentials.rememberMe;
       },
     );
   }
@@ -315,11 +319,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: CheckboxListTile(
         title: const Text("مرا به خاطر بسپار"),
         value: _rememberMeValue,
-        onChanged: (value) {
-          setState(() {
-            _rememberMeValue = value ?? _rememberMeValue;
-          });
-        },
+        onChanged: (value) =>
+            setState(() => _rememberMeValue = value ?? _rememberMeValue),
       ),
     );
   }

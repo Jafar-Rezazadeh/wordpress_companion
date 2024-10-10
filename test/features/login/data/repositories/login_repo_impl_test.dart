@@ -7,7 +7,8 @@ import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
-class MockWordpressRemoteDataSource extends Mock implements WordpressRemoteDataSource {}
+class MockWordpressRemoteDataSource extends Mock
+    implements WordpressRemoteDataSource {}
 
 class MockLocalLoginDataSource extends Mock implements LocalLoginDataSource {}
 
@@ -58,7 +59,8 @@ void main() {
 
         when(
           () => mockWordpressRemoteDataSource.authenticateUser(fakeParams),
-        ).thenAnswer((invocation) async => throw DioException(requestOptions: RequestOptions()));
+        ).thenAnswer((invocation) async =>
+            throw DioException(requestOptions: RequestOptions()));
 
         //act
         final result = await loginRepositoryImpl.authenticateUser(fakeParams);
@@ -136,6 +138,7 @@ void main() {
             userName: "test",
             applicationPassword: "test1234",
             domain: "https://example.com",
+            rememberMe: true,
           ),
         );
 

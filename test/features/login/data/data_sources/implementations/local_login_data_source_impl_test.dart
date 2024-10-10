@@ -12,6 +12,7 @@ void main() {
   String userNameKey = "userName";
   String applicationPasswordKey = "applicationPassword";
   String domainKey = "domain";
+  String rememberMeKey = "rememberMe";
 
   setUp(
     () {
@@ -23,26 +24,21 @@ void main() {
   );
   group("saveCredentials -", () {
     test(
-      "should return (UserCredentialsModel) when SaveCredentials is successful",
+      "should set all variables and return (UserCredentialsModel) when SaveCredentials is successful",
       () async {
         //arrange
         when(
-          () => mockSharedPreferences.setString(
-            userNameKey,
-            any(),
-          ),
+          () => mockSharedPreferences.setString(userNameKey, any()),
         ).thenAnswer((invocation) async => true);
         when(
-          () => mockSharedPreferences.setString(
-            applicationPasswordKey,
-            any(),
-          ),
+          () => mockSharedPreferences.setString(applicationPasswordKey, any()),
         ).thenAnswer((invocation) async => true);
         when(
-          () => mockSharedPreferences.setString(
-            domainKey,
-            any(),
-          ),
+          () => mockSharedPreferences.setString(domainKey, any()),
+        ).thenAnswer((invocation) async => true);
+
+        when(
+          () => mockSharedPreferences.setBool(rememberMeKey, any()),
         ).thenAnswer((invocation) async => true);
 
         //act
@@ -57,6 +53,18 @@ void main() {
 
         //assert
         expect(result, isA<LoginCredentialsModel>());
+        verify(
+          () => mockSharedPreferences.setString(userNameKey, any()),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.setString(applicationPasswordKey, any()),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.setString(domainKey, any()),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.setBool(rememberMeKey, any()),
+        ).called(1);
       },
     );
 
@@ -70,11 +78,14 @@ void main() {
 
         when(
           () => mockSharedPreferences.setString(applicationPasswordKey, any()),
-        ).thenAnswer((invocation) async => false);
+        ).thenAnswer((invocation) async => true);
 
         when(
           () => mockSharedPreferences.setString(domainKey, any()),
         ).thenAnswer((invocation) async => true);
+        when(
+          () => mockSharedPreferences.setBool(rememberMeKey, any()),
+        ).thenAnswer((_) async => false);
 
         //act
         final result = localUserLoginDataSourceImpl.saveCredentials(
@@ -94,30 +105,6 @@ void main() {
 
   group("getLastCredentials -", () {
     test(
-      "should throw (Exception) when any exception thrown while getting credentials",
-      () {
-        //arrange
-        when(
-          () => mockSharedPreferences.getString(userNameKey),
-        ).thenAnswer((invocation) => "");
-
-        when(
-          () => mockSharedPreferences.getString(applicationPasswordKey),
-        ).thenAnswer((invocation) => throw Exception());
-
-        when(
-          () => mockSharedPreferences.getString(domainKey),
-        ).thenAnswer((invocation) => "");
-
-        //act
-        final result = localUserLoginDataSourceImpl.getLastCredentials();
-
-        //assert
-        expect(result, throwsA(isA<Exception>()));
-      },
-    );
-
-    test(
       "should return (UserCredentialsModel) when  getLastCredentials is successful even fields are empty",
       () async {
         //arrange
@@ -133,14 +120,59 @@ void main() {
           () => mockSharedPreferences.getString(domainKey),
         ).thenAnswer((invocation) => "https://example.com");
 
+        when(
+          () => mockSharedPreferences.getBool(rememberMeKey),
+        ).thenAnswer((_) => true);
+
         //act
-        final userCredentials = await localUserLoginDataSourceImpl.getLastCredentials();
+        final userCredentials =
+            await localUserLoginDataSourceImpl.getLastCredentials();
 
         //assert
         expect(userCredentials, isA<LoginCredentialsModel>());
         expect(userCredentials.userName, "test");
         expect(userCredentials.applicationPassword, "test1234");
         expect(userCredentials.domain, "https://example.com");
+        expect(userCredentials.rememberMe, true);
+
+        verify(
+          () => mockSharedPreferences.getString(userNameKey),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.getString(applicationPasswordKey),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.getString(domainKey),
+        ).called(1);
+        verify(
+          () => mockSharedPreferences.getBool(rememberMeKey),
+        ).called(1);
+      },
+    );
+    test(
+      "should throw (Exception) when any exception thrown while getting credentials",
+      () {
+        //arrange
+        when(
+          () => mockSharedPreferences.getString(userNameKey),
+        ).thenAnswer((invocation) => "");
+
+        when(
+          () => mockSharedPreferences.getString(applicationPasswordKey),
+        ).thenAnswer((invocation) => throw Exception());
+
+        when(
+          () => mockSharedPreferences.getString(domainKey),
+        ).thenAnswer((invocation) => "");
+        when(
+          () => mockSharedPreferences.getBool(rememberMeKey),
+        ).thenAnswer((invocation) => true);
+
+        //act
+        final result = localUserLoginDataSourceImpl.getLastCredentials();
+
+        //assert
+        expect(result, throwsA(isA<Exception>()));
       },
     );
   });
