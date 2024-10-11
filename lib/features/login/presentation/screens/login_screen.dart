@@ -11,6 +11,7 @@ import 'package:wordpress_companion/core/utils/validator.dart';
 import 'package:wordpress_companion/core/widgets/failure_widget.dart';
 import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
+import 'package:wordpress_companion/features/login/presentation/widgets/login_screen/login_header.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
-      listener: (context, state) => _stateChangeListener(state),
+      listener: (context, state) => _authenticationStateListener(state),
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: _screenLayout(),
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _stateChangeListener(AuthenticationState state) => state.when(
+  _authenticationStateListener(AuthenticationState state) => state.when(
         initial: () => null,
         authenticating: () {
           FocusScope.of(context).unfocus();
@@ -133,34 +134,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _contents() {
-    return SingleChildScrollView(
-      child: Container(
+    return const SingleChildScrollView(
+      child: SizedBox(
         width: double.infinity,
-        padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Gap(30),
-            _title(),
-            const Gap(30),
-            _subTitle(),
-            const Gap(10),
-            _credentialsForm(),
-            const Gap(30),
-            _submitButton(),
+            LoginHeader(),
+            // const Gap(30),
+            // _subTitle(),
+            // const Gap(10),
+            // _credentialsForm(),
+            // const Gap(30),
+            // _submitButton(),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _title() {
-    return Text(
-      "وردپرس یار",
-      style: Theme.of(context)
-          .textTheme
-          .titleLarge
-          ?.copyWith(color: const Color.fromARGB(255, 28, 45, 141)),
     );
   }
 

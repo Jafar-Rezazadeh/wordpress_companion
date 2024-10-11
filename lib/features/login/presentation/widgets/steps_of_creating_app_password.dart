@@ -15,7 +15,8 @@ class AppPasswordCreationSteps extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
-                    text: "برای استفاده از این ویژگی نسخه وردپرس باید بالای 5.6 باشد."
+                    text:
+                        "برای استفاده از این ویژگی نسخه وردپرس باید بالای 5.6 باشد."
                         "\n\n\n",
                   ),
                 ],
@@ -23,7 +24,8 @@ class AppPasswordCreationSteps extends StatelessWidget {
               TextSpan(
                 text: "1) ",
                 children: [
-                  TextSpan(text: "در داشبورد وردپرس وارد بخش کاربران شوید" "\n\n\n"),
+                  TextSpan(
+                      text: "در داشبورد وردپرس وارد بخش کاربران شوید" "\n\n\n"),
                 ],
               ),
               TextSpan(
@@ -40,7 +42,8 @@ class AppPasswordCreationSteps extends StatelessWidget {
                 text: "3) ",
                 children: [
                   TextSpan(
-                    text: "در بخش ویرایش کاربر گزینه رمز های عبور برنامه را پیدا کنید"
+                    text:
+                        "در بخش ویرایش کاربر گزینه رمز های عبور برنامه را پیدا کنید"
                         "\n\n\n",
                   ),
                 ],

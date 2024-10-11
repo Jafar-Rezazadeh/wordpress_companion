@@ -16,14 +16,18 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
   Future<bool> authenticateUser(LoginCredentialsParams params) async {
     final response = await _dio.get(
       myProfileRoute(params.domain),
-      options: Options(
-        headers: {
-          "Authorization": makeBase64Encode(
-              name: params.name, password: params.applicationPassword),
-        },
-      ),
+      options: Options(headers: _header(params)),
     );
 
     return response.statusCode == HttpStatus.ok;
+  }
+
+  Map<String, dynamic> _header(LoginCredentialsParams params) {
+    return {
+      "Authorization": makeBase64Encode(
+        name: params.name,
+        password: params.applicationPassword,
+      ),
+    };
   }
 }

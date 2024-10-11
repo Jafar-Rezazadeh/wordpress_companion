@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/theme/theme.dart';
 import 'package:wordpress_companion/core/widgets/loading_widget.dart';
@@ -18,15 +19,17 @@ class WordpressCompanion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalLoaderOverlay(
-      useDefaultLoading: false,
-      overlayColor: Colors.transparent,
-      overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
-      duration: Durations.medium1,
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme(),
-        routerConfig: goRouter,
+    return ScreenUtilInit(
+      child: GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        overlayColor: Colors.transparent,
+        overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
+        duration: Durations.medium1,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme(),
+          routerConfig: goRouter,
+        ),
       ),
     );
   }
