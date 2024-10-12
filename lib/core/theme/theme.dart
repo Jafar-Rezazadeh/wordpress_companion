@@ -7,7 +7,7 @@ class CustomTheme {
       fontFamily: "Vazir",
       colorScheme: ColorScheme(
         brightness: Brightness.light,
-        primary: ColorPallet.lightBlue,
+        primary: ColorPallet.midBlue,
         onPrimary: ColorPallet.white,
         secondary: ColorPallet.lightBlue,
         onSecondary: ColorPallet.blue,

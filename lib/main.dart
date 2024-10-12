@@ -20,13 +20,7 @@ class WordpressCompanion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      child: GlobalLoaderOverlay(
-        useDefaultLoading: false,
-        overlayColor: Colors.transparent,
-        overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
-        duration: Durations.medium1,
-        child: _materialApp(),
-      ),
+      child: _materialApp(),
     );
   }
 
@@ -34,6 +28,13 @@ class WordpressCompanion extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: CustomTheme().lightTheme(),
+      builder: (context, child) => GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        overlayColor: Colors.transparent,
+        overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
+        duration: Durations.medium1,
+        child: child ?? Container(),
+      ),
       routerConfig: goRouter,
     );
   }
