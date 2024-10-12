@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
+import 'package:wordpress_companion/core/utils/encoder.dart';
 import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
@@ -123,7 +123,7 @@ void main() {
               fakeUserCredentialsParams.domain);
           expect(
             getIt.get<Dio>().options.headers["Authorization"],
-            makeBase64Encode(
+            CustomEncoder.base64Encode(
               name: fakeUserCredentialsParams.name,
               password: fakeUserCredentialsParams.applicationPassword,
             ),

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 import '../../../../../core/constants/constants.dart';
+import '../../../../../core/utils/encoder.dart';
 
 class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
   final Dio _dio;
@@ -24,7 +25,7 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
 
   Map<String, dynamic> _header(LoginCredentialsParams params) {
     return {
-      "Authorization": makeBase64Encode(
+      "Authorization": CustomEncoder.base64Encode(
         name: params.name,
         password: params.applicationPassword,
       ),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/core/utils/encoder.dart';
 import 'package:wordpress_companion/features/login/data/data_sources/implementations/wordpress_remote_data_source_impl.dart';
 import 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
 
@@ -65,7 +65,7 @@ void main() {
       dioAdapter.onGet(
         "$exampleDomain/$wpV2EndPoint/users/me",
         headers: {
-          "Authorization": makeBase64Encode(
+          "Authorization": CustomEncoder.base64Encode(
               name: userAuthenticationParams.name,
               password: userAuthenticationParams.applicationPassword),
         },

@@ -2,16 +2,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
+import 'package:wordpress_companion/core/theme/color_pallet.dart';
 import 'package:wordpress_companion/core/utils/validator.dart';
+import 'package:wordpress_companion/core/widgets/custom_input_field.dart';
 import 'package:wordpress_companion/core/widgets/failure_widget.dart';
 import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 import 'package:wordpress_companion/features/login/presentation/widgets/login_screen/login_header.dart';
+
+import '../../../../core/router/go_router_config.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,7 +26,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final double eachFieldPadding = 30;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
@@ -134,73 +138,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _contents() {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            LoginHeader(),
-            // const Gap(30),
-            // _subTitle(),
-            // const Gap(10),
-            // _credentialsForm(),
-            // const Gap(30),
-            // _submitButton(),
+            LoginHeader(headerSize: Size(double.infinity, 0.4.sh)),
+            _credentialsForm(),
           ],
         ),
       ),
     );
   }
 
-  Widget _subTitle() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        "ورود به حساب کاربری وردپرس",
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-    );
-  }
-
   Widget _credentialsForm() {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: edgeToEdgePaddingHorizontal,
+        vertical: 10,
+      ),
       child: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            _userName(),
-            _applicationPassword(),
-            _domain(),
-            _rememberMe()
-          ].withGapInBetween(10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _userName(),
+              _applicationPassword(),
+              _rememberMe(),
+              _domain(),
+              Gap(0.01.sh),
+              _submitButton()
+            ].withGapInBetween(20),
+          ),
         ),
       ),
     );
   }
 
-  Material _userName() {
-    return _textFieldLayout(
-      child: TextFormField(
-        controller: _userNameController,
-        validator: InputValidator.isNotEmpty,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          label: Text("نام کاربری"),
-        ),
-      ),
-    );
-  }
-
-  Material _textFieldLayout({required Widget child}) {
-    return Material(
-      elevation: 20,
-      borderRadius: BorderRadius.all(Radius.circular(eachFieldPadding)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: child,
-      ),
+  Widget _userName() {
+    return CustomInputField(
+      label: "نام کاربری",
+      controller: _userNameController,
+      validator: InputValidator.isNotEmpty,
     );
   }
 
@@ -208,17 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _textFieldLayout(
-          child: TextFormField(
-            controller: _applicationPasswordController,
-            obscureText: _obscurePassword,
-            validator: InputValidator.isNotEmpty,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              label: const Text("رمز عبور برنامه"),
-              suffixIcon: _hideOrShowObscurePasswordButton(),
-            ),
-          ),
+        CustomInputField(
+          controller: _applicationPasswordController,
+          obscureText: _obscurePassword,
+          validator: InputValidator.isNotEmpty,
+          label: "رمز عبور برنامه",
+          suffixIcon: _hideOrShowObscurePasswordButton(),
         ),
         const Gap(15),
         _appPasswordHelperText(),
@@ -241,31 +216,18 @@ class _LoginScreenState extends State<LoginScreen> {
         style: Theme.of(context).textTheme.bodySmall,
         children: [
           TextSpan(
-            text: "برای آموزش ساخت رمز عبور برنامه در وردپرس ",
-            children: [
-              _tapGestureText(),
-              const TextSpan(
-                text: " ضربه بزنید.",
-              ),
-            ],
+            text: "نحوه ایجاد رمز عبور برنامه",
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: ColorPallet.midBlue,
+                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _showHelperDialog();
+              },
           ),
         ],
       ),
-    );
-  }
-
-  TextSpan _tapGestureText() {
-    return TextSpan(
-      text: "اینجا",
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
-            fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-          ),
-      recognizer: TapGestureRecognizer()
-        ..onTap = () {
-          _showHelperDialog();
-        },
     );
   }
 
@@ -287,48 +249,50 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _domain() {
-    return _textFieldLayout(
-      child: TextFormField(
-        controller: _domainController,
-        validator: InputValidator.isNotEmpty,
-        textDirection: TextDirection.ltr,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          label: Text("دامنه"),
-          hintText: "مثال: https://example.com",
+  Widget _rememberMe() {
+    return Row(
+      children: [
+        Checkbox(
+          value: _rememberMeValue,
+          splashRadius: 0,
+          onChanged: (value) =>
+              setState(() => _rememberMeValue = value ?? _rememberMeValue),
         ),
-      ),
+        const Text("مرا به خاطر بسپار"),
+      ],
     );
   }
 
-  Widget _rememberMe() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: CheckboxListTile(
-        title: const Text("مرا به خاطر بسپار"),
-        value: _rememberMeValue,
-        onChanged: (value) =>
-            setState(() => _rememberMeValue = value ?? _rememberMeValue),
-      ),
+  Widget _domain() {
+    return CustomInputField(
+      controller: _domainController,
+      validator: InputValidator.isNotEmpty,
+      textDirection: TextDirection.ltr,
+      label: "دامنه",
+      hintText: "مثال: https://example.com",
     );
   }
 
   Widget _submitButton() {
-    return SizedBox(
+    return Container(
       width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 55),
       child: FilledButton(
         style: FilledButton.styleFrom(
-            padding: EdgeInsets.all(eachFieldPadding - 10)),
-        onPressed: () => _ifFieldsValid() ? _makeLogin() : null,
-        child: const Text("ورود"),
+          backgroundColor: ColorPallet.midBlue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(smallCornerRadius),
+          ),
+        ),
+        onPressed: () => ifFieldsValid() ? login() : null,
+        child: const Text("ورود", style: TextStyle(fontSize: 20)),
       ),
     );
   }
 
-  bool _ifFieldsValid() => _formKey.currentState?.validate() == true;
+  bool ifFieldsValid() => _formKey.currentState?.validate() == true;
 
-  _makeLogin() {
+  login() {
     BlocProvider.of<AuthenticationCubit>(context).loginAndSave(
       (
         name: _userNameController.text,

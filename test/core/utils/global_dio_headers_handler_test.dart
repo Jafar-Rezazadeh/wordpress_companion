@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/core/utils/encoder.dart';
 import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 
 void main() {
@@ -34,7 +34,7 @@ void main() {
           //assert
           expect(
             getIt.get<Dio>().options.headers["Authorization"],
-            makeBase64Encode(name: "test", password: "test1234"),
+            CustomEncoder.base64Encode(name: "test", password: "test1234"),
           );
         },
       );

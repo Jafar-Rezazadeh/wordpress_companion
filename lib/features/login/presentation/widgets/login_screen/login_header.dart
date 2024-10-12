@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 class LoginHeader extends StatelessWidget {
-  const LoginHeader({super.key});
+  final Size headerSize;
+  const LoginHeader({super.key, required this.headerSize});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: HeaderPainter(color: Colors.black),
-      size: Size(double.infinity, 0.45.sh),
+      size: headerSize,
     );
   }
 }

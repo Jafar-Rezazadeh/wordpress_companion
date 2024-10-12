@@ -25,12 +25,16 @@ class WordpressCompanion extends StatelessWidget {
         overlayColor: Colors.transparent,
         overlayWidgetBuilder: (_) => _loaderOverlayWidget(context),
         duration: Durations.medium1,
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme(),
-          routerConfig: goRouter,
-        ),
+        child: _materialApp(),
       ),
+    );
+  }
+
+  MaterialApp _materialApp() {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: CustomTheme().lightTheme(),
+      routerConfig: goRouter,
     );
   }
 

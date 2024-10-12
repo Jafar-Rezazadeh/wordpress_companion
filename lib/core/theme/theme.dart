@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
-lightTheme() => ThemeData(
-      colorSchemeSeed: const Color.fromRGBO(31, 49, 157, 1),
+class CustomTheme {
+  lightTheme() {
+    return ThemeData(
       fontFamily: "Vazir",
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: const Color.fromRGBO(31, 49, 157, 1),
-        ),
-      ),
-      expansionTileTheme: ExpansionTileThemeData(
-        childrenPadding: const EdgeInsets.all(10),
-        collapsedShape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black45),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black45),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      scaffoldBackgroundColor: Color.lerp(Colors.white, Colors.black, 0.04),
-      textTheme: const TextTheme(
-        bodySmall: TextStyle(
-          color: Colors.black54,
-        ),
+      colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: ColorPallet.lightBlue,
+        onPrimary: ColorPallet.white,
+        secondary: ColorPallet.lightBlue,
+        onSecondary: ColorPallet.blue,
+        error: ColorPallet.crimson,
+        onError: ColorPallet.white,
+        surface: ColorPallet.white,
+        onSurface: ColorPallet.text,
       ),
     );
+  }
+}

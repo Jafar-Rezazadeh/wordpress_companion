@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-
-import '../constants/constants.dart';
+import 'package:wordpress_companion/core/utils/encoder.dart';
 
 class GlobalDioHeadersHandler {
   final GetIt _getIt;
@@ -14,7 +13,8 @@ class GlobalDioHeadersHandler {
 
     _getIt.get<Dio>().options.headers.addAll(
       {
-        "Authorization": makeBase64Encode(name: username, password: password),
+        "Authorization":
+            CustomEncoder.base64Encode(name: username, password: password),
       },
     );
 
