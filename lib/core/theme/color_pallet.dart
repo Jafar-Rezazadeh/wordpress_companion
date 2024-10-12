@@ -14,4 +14,5 @@ class ColorPallet {
   static Color lightGreen = const Color.fromRGBO(0, 202, 70, 1);
   static Color lowBackGround = const Color.fromRGBO(246, 246, 246, 1);
   static Color yellowishGreen = const Color.fromRGBO(127, 148, 0, 1);
+  static Color yellow = const Color.fromRGBO(255, 176, 49, 1);
 }
