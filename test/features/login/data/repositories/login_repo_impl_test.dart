@@ -12,7 +12,7 @@ class MockWordpressRemoteDataSource extends Mock
 
 class MockLocalLoginDataSource extends Mock implements LocalLoginDataSource {}
 
-class FakeAppFailure extends Fake implements AppFailure {}
+class FakeAppFailure extends Fake implements InternalFailure {}
 
 class FakeUserCredentialsModel extends Fake implements LoginCredentialsModel {
   @override
@@ -124,7 +124,7 @@ void main() {
 
         //assert
         expect(result.isLeft(), true);
-        expect(failure, isA<AppFailure>());
+        expect(failure, isA<InternalFailure>());
       },
     );
     test(
@@ -186,8 +186,39 @@ void main() {
 
         //assert
         expect(result.isLeft(), true);
-        expect(failure, isA<AppFailure>());
+        expect(failure, isA<InternalFailure>());
       },
     );
+  });
+
+  group("clearCachedCredentials -", () {
+    test("should return (void) when success to clear", () async {
+      //arrange
+      when(
+        () => mockLocalLoginDataSource.clearCachedCredentials(),
+      ).thenAnswer((invocation) async {});
+
+      //act
+      final result = await loginRepositoryImpl.clearCachedCredentials();
+
+      //assert
+      expect(result.isRight(), true);
+    });
+
+    test("should return (InternalFailure) when any exception is thrown",
+        () async {
+      //arrange
+      when(
+        () => mockLocalLoginDataSource.clearCachedCredentials(),
+      ).thenThrow(Exception());
+
+      //act
+      final result = await loginRepositoryImpl.clearCachedCredentials();
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<Failure>());
+    });
   });
 }

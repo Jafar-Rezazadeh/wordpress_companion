@@ -7,7 +7,7 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   late MockSharedPreferences mockSharedPreferences;
-  late LocalLoginDataSourceImpl localUserLoginDataSourceImpl;
+  late LocalLoginDataSourceImpl localLoginDataSourceImpl;
 
   String userNameKey = "userName";
   String applicationPasswordKey = "applicationPassword";
@@ -17,11 +17,30 @@ void main() {
   setUp(
     () {
       mockSharedPreferences = MockSharedPreferences();
-      localUserLoginDataSourceImpl = LocalLoginDataSourceImpl.test(
+      localLoginDataSourceImpl = LocalLoginDataSourceImpl.instance(
         sharedPreferences: mockSharedPreferences,
       );
     },
   );
+
+  void verifyAllEntriesCalledToRemove() {
+    verify(
+      () => mockSharedPreferences.remove(userNameKey),
+    ).called(1);
+
+    verify(
+      () => mockSharedPreferences.remove(applicationPasswordKey),
+    ).called(1);
+
+    verify(
+      () => mockSharedPreferences.remove(domainKey),
+    ).called(1);
+
+    verify(
+      () => mockSharedPreferences.remove(rememberMeKey),
+    ).called(1);
+  }
+
   group("saveCredentials -", () {
     test(
       "should set all variables and return (UserCredentialsModel) when SaveCredentials is successful",
@@ -42,7 +61,7 @@ void main() {
         ).thenAnswer((invocation) async => true);
 
         //act
-        final result = await localUserLoginDataSourceImpl.saveCredentials(
+        final result = await localLoginDataSourceImpl.saveCredentials(
           (
             name: "test",
             applicationPassword: "test1234",
@@ -88,7 +107,7 @@ void main() {
         ).thenAnswer((_) async => false);
 
         //act
-        final result = localUserLoginDataSourceImpl.saveCredentials(
+        final result = localLoginDataSourceImpl.saveCredentials(
           (
             name: "test",
             applicationPassword: "test1234",
@@ -126,7 +145,7 @@ void main() {
 
         //act
         final userCredentials =
-            await localUserLoginDataSourceImpl.getLastCredentials();
+            await localLoginDataSourceImpl.getLastCredentials();
 
         //assert
         expect(userCredentials, isA<LoginCredentialsModel>());
@@ -169,11 +188,59 @@ void main() {
         ).thenAnswer((invocation) => true);
 
         //act
-        final result = localUserLoginDataSourceImpl.getLastCredentials();
+        final result = localLoginDataSourceImpl.getLastCredentials();
 
         //assert
         expect(result, throwsA(isA<Exception>()));
       },
     );
+  });
+
+  group("clearCachedCredentials -", () {
+    test("should return (void) when all entries are removed successfully ",
+        () async {
+      //arrange
+      when(
+        () => mockSharedPreferences.remove(userNameKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(applicationPasswordKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(domainKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(rememberMeKey),
+      ).thenAnswer((invocation) async => true);
+
+      //act
+      await localLoginDataSourceImpl.clearCachedCredentials();
+
+      //assert
+      verifyAllEntriesCalledToRemove();
+    });
+
+    test("should throw (Exception) when some entries are not removed",
+        () async {
+      //arrange
+      when(
+        () => mockSharedPreferences.remove(userNameKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(applicationPasswordKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(domainKey),
+      ).thenAnswer((invocation) async => true);
+      when(
+        () => mockSharedPreferences.remove(rememberMeKey),
+      ).thenAnswer((invocation) async => false);
+
+      //act
+
+      //assert
+      expect(localLoginDataSourceImpl.clearCachedCredentials(),
+          throwsA(isA<Exception>()));
+    });
   });
 }

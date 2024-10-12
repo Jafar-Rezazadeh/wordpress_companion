@@ -12,6 +12,7 @@ export 'package:wordpress_companion/features/login/domain/entities/login_credent
 export 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
 export 'package:wordpress_companion/features/login/domain/use_cases/save_user_credentials.dart';
 export 'package:wordpress_companion/features/login/domain/use_cases/get_last_login_credentials.dart';
+export 'package:wordpress_companion/features/login/domain/use_cases/clear_cached_credentials.dart';
 
 //presentation
 export 'package:wordpress_companion/features/login/presentation/logic_holder/authentication_cubit/authentication_cubit.dart';

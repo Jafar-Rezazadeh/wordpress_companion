@@ -25,8 +25,8 @@ class ServerFailure extends Failure {
       ];
 }
 
-class AppFailure extends Failure {
-  const AppFailure({
+class InternalFailure extends Failure {
+  const InternalFailure({
     required super.message,
     required super.stackTrace,
   });

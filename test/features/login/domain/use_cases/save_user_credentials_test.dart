@@ -4,11 +4,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
-class MockUserAuthenticationRepository extends Mock implements LoginRepository {}
+class MockUserAuthenticationRepository extends Mock
+    implements LoginRepository {}
 
-class FakeAppFailure extends Fake implements AppFailure {}
+class FakeAppFailure extends Fake implements InternalFailure {}
 
-class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {}
+class FakeUserCredentialsEntity extends Fake
+    implements LoginCredentialsEntity {}
 
 void main() {
   late SaveUserCredentials saveUserCredentials;
@@ -19,8 +21,8 @@ void main() {
   setUp(
     () {
       mockUserAuthenticationRepository = MockUserAuthenticationRepository();
-      saveUserCredentials =
-          SaveUserCredentials(userLoginRepository: mockUserAuthenticationRepository);
+      saveUserCredentials = SaveUserCredentials(
+          userLoginRepository: mockUserAuthenticationRepository);
     },
   );
 
@@ -29,7 +31,8 @@ void main() {
     () async {
       //arrange
       when(
-        () => mockUserAuthenticationRepository.saveCredentials(fakeCredentialsParams),
+        () => mockUserAuthenticationRepository
+            .saveCredentials(fakeCredentialsParams),
       ).thenAnswer(
         (invocation) async => left(FakeAppFailure()),
       );
@@ -40,7 +43,7 @@ void main() {
 
       //assert
       expect(result.isLeft(), true);
-      expect(failure, isA<AppFailure>());
+      expect(failure, isA<InternalFailure>());
     },
   );
 
@@ -49,7 +52,8 @@ void main() {
     () async {
       //arrange
       when(
-        () => mockUserAuthenticationRepository.saveCredentials(fakeCredentialsParams),
+        () => mockUserAuthenticationRepository
+            .saveCredentials(fakeCredentialsParams),
       ).thenAnswer((invocation) async => right(FakeUserCredentialsEntity()));
 
       //act

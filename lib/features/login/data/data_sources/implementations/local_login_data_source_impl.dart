@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../login_exports.dart';
@@ -10,15 +9,9 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
   final String _domainKey = "domain";
   final String _rememberMeKey = "rememberMe";
 
-  LocalLoginDataSourceImpl.test(
+  LocalLoginDataSourceImpl.instance(
       {required SharedPreferences sharedPreferences}) {
     _sharedPreferences = sharedPreferences;
-  }
-
-  static Future<LocalLoginDataSource> instance() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final sharedPreferences = await SharedPreferences.getInstance();
-    return LocalLoginDataSourceImpl.test(sharedPreferences: sharedPreferences);
   }
 
   @override
@@ -67,5 +60,19 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
       domain: domain ?? "",
       rememberMe: rememberMe ?? false,
     );
+  }
+
+  @override
+  Future<void> clearCachedCredentials() async {
+    final isAllRemoved = await Future.wait([
+      _sharedPreferences.remove(_userNameKey),
+      _sharedPreferences.remove(_applicationPasswordKey),
+      _sharedPreferences.remove(_domainKey),
+      _sharedPreferences.remove(_rememberMeKey),
+    ]);
+
+    isAllRemoved.every((e) => e == true)
+        ? null
+        : throw Exception("Failed to clear credentials");
   }
 }

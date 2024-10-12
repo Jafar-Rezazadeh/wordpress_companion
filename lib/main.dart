@@ -10,6 +10,7 @@ import 'package:wordpress_companion/dependency_injection.dart';
 import 'core/router/go_router_config.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencyInjections();
   runApp(const WordpressCompanion());
 }

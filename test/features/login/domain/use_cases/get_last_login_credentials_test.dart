@@ -7,9 +7,10 @@ import 'package:wordpress_companion/features/login/login_exports.dart';
 
 class MockUserLoginRepository extends Mock implements LoginRepository {}
 
-class FakeUserCredentialsEntity extends Fake implements LoginCredentialsEntity {}
+class FakeUserCredentialsEntity extends Fake
+    implements LoginCredentialsEntity {}
 
-class FakeAppFailure extends Fake implements AppFailure {}
+class FakeAppFailure extends Fake implements InternalFailure {}
 
 void main() {
   late MockUserLoginRepository mockUserLoginRepository;
@@ -55,7 +56,7 @@ void main() {
 
       //assert
       expect(result.isLeft(), true);
-      expect(failure, isA<AppFailure>());
+      expect(failure, isA<InternalFailure>());
     },
   );
 }
