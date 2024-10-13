@@ -22,6 +22,7 @@ class ServerFailure extends Failure {
   List<Object?> get props => [
         message,
         response,
+        stackTrace,
       ];
 }
 
@@ -38,9 +39,19 @@ class InternalFailure extends Failure {
       ];
 }
 
-class UnknownFailure extends Failure {
-  const UnknownFailure({required super.message, required super.stackTrace});
-
-  @override
-  List<Object?> get props => [message];
+class FailureFactory {
+  static Failure createFailure(Object object) {
+    if (object is DioException) {
+      return ServerFailure(
+        message: object.message ?? "",
+        response: object.response,
+        stackTrace: object.stackTrace,
+      );
+    } else {
+      return InternalFailure(
+        message: object.toString(),
+        stackTrace: StackTrace.current,
+      );
+    }
+  }
 }

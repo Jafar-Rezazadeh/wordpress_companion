@@ -73,7 +73,7 @@ void main() {
     );
 
     test(
-      "should return (UnknownFailure) when any other exception is thrown",
+      "should return (InternalFailure) when any other exception is thrown",
       () async {
         //arrange
         when(
@@ -86,7 +86,7 @@ void main() {
 
         //assert
         expect(result.isLeft(), true);
-        expect(failure, isA<UnknownFailure>());
+        expect(failure, isA<InternalFailure>());
       },
     );
 
@@ -111,7 +111,7 @@ void main() {
 
   group("saveCredentials -", () {
     test(
-      "should return (AppFailure) when any exception is thrown",
+      "should return (InternalFailure) when any exception is thrown",
       () async {
         //arrange
         when(

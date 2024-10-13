@@ -4,6 +4,7 @@ import 'package:wordpress_companion/core/utils/http_status_helper.dart';
 
 import '../errors/failures.dart';
 
+// TODO: test this
 class FailureWidget extends StatelessWidget {
   final Failure failure;
   const FailureWidget({super.key, required this.failure});
@@ -23,13 +24,10 @@ class FailureWidget extends StatelessWidget {
   }
 
   Widget _showBasedOnFailure() {
-    switch (failure) {
-      case ServerFailure serverFailure:
-        return _showServerFailureMessage(serverFailure);
-      case UnknownFailure unknownFailure:
-        return _showUnknownFailureMessage(unknownFailure);
-      default:
-        return const Text("UnknownFailure");
+    if (failure is ServerFailure) {
+      return _showServerFailureMessage(failure as ServerFailure);
+    } else {
+      return _showInternalFailureMessage(failure as InternalFailure);
     }
   }
 
@@ -84,18 +82,18 @@ class FailureWidget extends StatelessWidget {
     }
   }
 
-  Widget _showUnknownFailureMessage(UnknownFailure unknownFailure) {
+  Widget _showInternalFailureMessage(InternalFailure failure) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text("خطای ناشناخته"),
         const Gap(10),
-        Text(unknownFailure.message),
+        Text(failure.message),
         const Gap(10),
         Text(
-          unknownFailure.stackTrace.toString().length >= 300
-              ? unknownFailure.stackTrace.toString().substring(0, 300)
-              : unknownFailure.stackTrace.toString(),
+          failure.stackTrace.toString().length >= 300
+              ? failure.stackTrace.toString().substring(0, 300)
+              : failure.stackTrace.toString(),
           textAlign: TextAlign.left,
         ),
       ],

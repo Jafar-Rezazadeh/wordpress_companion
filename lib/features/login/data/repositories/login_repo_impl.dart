@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
@@ -22,18 +21,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _wordpressRemoteDataSource.authenticateUser(params);
 
       return right(isValidUser);
-    } on DioException catch (e, t) {
-      return left(
-        ServerFailure(
-          message: e.message.toString(),
-          response: e.response,
-          stackTrace: t,
-        ),
-      );
-    } catch (e, t) {
-      return left(
-        UnknownFailure(message: e.toString(), stackTrace: t),
-      );
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
     }
   }
 
@@ -45,10 +34,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _localUserLoginDataSource.saveCredentials(params);
 
       return right(userCredentials);
-    } catch (e, t) {
-      return left(
-        InternalFailure(message: e.toString(), stackTrace: t),
-      );
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
     }
   }
 
@@ -60,8 +47,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _localUserLoginDataSource.getLastCredentials();
 
       return right(userCredentials);
-    } catch (e, t) {
-      return left(InternalFailure(message: e.toString(), stackTrace: t));
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
     }
   }
 
@@ -71,8 +58,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
       await _localUserLoginDataSource.clearCachedCredentials();
 
       return right(null);
-    } catch (e, t) {
-      return left(InternalFailure(message: e.toString(), stackTrace: t));
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
     }
   }
 }
