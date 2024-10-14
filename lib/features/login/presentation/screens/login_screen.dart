@@ -220,6 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _domain() {
     return CustomInputField(
+      key: const Key("domain"),
       controller: _domainController,
       validator: InputValidator.isNotEmpty,
       textDirection: TextDirection.ltr,
@@ -233,6 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       constraints: const BoxConstraints(minHeight: 55),
       child: FilledButton(
+        key: const Key("login_button"),
         style: FilledButton.styleFrom(
           backgroundColor: ColorPallet.midBlue,
           shape: RoundedRectangleBorder(

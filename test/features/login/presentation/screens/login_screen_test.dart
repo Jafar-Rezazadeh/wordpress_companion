@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/widgets/custom_input_field.dart';
@@ -16,6 +17,8 @@ class MockAuthenticationCubit extends MockCubit<AuthenticationState>
 class MockLoginCredentialsCubit extends MockCubit<LoginCredentialsState>
     implements LoginCredentialsCubit {}
 
+class FakeLoginCredentialsState extends Fake implements LoginCredentialsState {}
+
 class FakeLoginCredentialsEntity extends Fake
     implements LoginCredentialsEntity {}
 
@@ -23,24 +26,45 @@ void main() {
   late AuthenticationCubit authenticationCubit;
   late LoginCredentialsCubit loginCredentialsCubit;
 
-  final navigatorKey = GlobalKey<NavigatorState>();
-  final loginScreenWidget = ScreenUtilInit(
-    child: MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => authenticationCubit,
-        ),
-        BlocProvider(
-          create: (context) => loginCredentialsCubit,
-        ),
-      ],
-      child: MaterialApp(navigatorKey: navigatorKey, home: const LoginScreen()),
-    ),
+  const LoginCredentialsParams loginParams = (
+    name: "name",
+    applicationPassword: "pass",
+    domain: "domain",
+    rememberMe: true,
   );
+  final navigatorKey = GlobalKey<NavigatorState>();
+  late Widget loginScreenWidget;
 
   setUp(() {
     authenticationCubit = MockAuthenticationCubit();
     loginCredentialsCubit = MockLoginCredentialsCubit();
+    loginScreenWidget = ScreenUtilInit(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationCubit>(
+            create: (context) => authenticationCubit,
+          ),
+          BlocProvider<LoginCredentialsCubit>(
+            create: (context) => loginCredentialsCubit,
+          ),
+        ],
+        child: GlobalLoaderOverlay(
+          useDefaultLoading: false,
+          overlayColor: Colors.transparent,
+          overlayWidgetBuilder: (_) => const LoadingWidget(),
+          duration: Durations.medium1,
+          child: MaterialApp(
+            navigatorKey: navigatorKey,
+            home: const LoginScreen(),
+          ),
+        ),
+      ),
+    );
+  });
+
+  setUpAll(() {
+    registerFallbackValue(loginParams);
+    registerFallbackValue(FakeLoginCredentialsState());
   });
 
   group("Main Behaviors -", () {
@@ -226,7 +250,136 @@ void main() {
         expect(find.byType(Dialog), findsOneWidget);
       });
     });
+
+    group("_rememberMe -", () {
+      testWidgets("should be checked when initialized", (tester) async {
+        //arrange
+        when(() => authenticationCubit.state).thenReturn(
+          const AuthenticationState.initial(),
+        );
+        when(() => loginCredentialsCubit.state).thenReturn(
+          LoginCredentialsState.credentialsReceived(
+            FakeLoginCredentialsEntity(),
+          ),
+        );
+
+        //act
+        await tester.pumpWidget(loginScreenWidget);
+        bool? initialCheckBoxValue = _getCheckBoxValue(tester);
+
+        //assert
+        expect(initialCheckBoxValue, true);
+      });
+
+      testWidgets("should be checked when use taped", (tester) async {
+        //arrange
+        when(() => authenticationCubit.state).thenReturn(
+          const AuthenticationState.initial(),
+        );
+        when(() => loginCredentialsCubit.state).thenReturn(
+          LoginCredentialsState.credentialsReceived(
+            FakeLoginCredentialsEntity(),
+          ),
+        );
+
+        //act
+        await tester.pumpWidget(loginScreenWidget);
+        bool? initialCheckBoxValue = _getCheckBoxValue(tester);
+
+        await tester.tap(find.byType(Checkbox));
+        await tester.pump();
+
+        bool? afterTapValue = _getCheckBoxValue(tester);
+
+        //assert
+        expect(initialCheckBoxValue, true);
+        expect(afterTapValue, false);
+      });
+    });
+
+    group("_loginButton -", () {
+      testWidgets(
+          "should Not Call loginAndSave when one of the inputs is empty",
+          (tester) async {
+        //arrange
+        when(() => authenticationCubit.state).thenReturn(
+          const AuthenticationState.initial(),
+        );
+        when(() => loginCredentialsCubit.state).thenReturn(
+          LoginCredentialsState.credentialsReceived(
+            FakeLoginCredentialsEntity(),
+          ),
+        );
+        when(() => authenticationCubit.loginAndSave(any())).thenAnswer(
+          (invocation) async {},
+        );
+
+        //act
+        await tester.pumpWidget(loginScreenWidget);
+
+        await tester.enterText(find.byType(TextFormField).at(0), "user");
+        await tester.enterText(find.byType(TextFormField).at(1), "pass");
+        await tester.enterText(find.byType(TextFormField).at(2), "");
+
+        await tester.ensureVisible(find.byKey(const Key('login_button')));
+        await tester.tap(find.byKey(const Key("login_button")));
+        await tester.pump();
+
+        //assert
+        verifyNever(() => authenticationCubit.loginAndSave(any()));
+      });
+      testWidgets("should call loginAndSave when inputs are valid",
+          (tester) async {
+        //arrange
+        when(() => authenticationCubit.state).thenReturn(
+          const AuthenticationState.initial(),
+        );
+        when(() => loginCredentialsCubit.state).thenReturn(
+          LoginCredentialsState.credentialsReceived(
+            FakeLoginCredentialsEntity(),
+          ),
+        );
+        when(
+          () => authenticationCubit.loginAndSave(any()),
+        ).thenAnswer((invocation) async {});
+
+        //act
+        await tester.pumpWidget(loginScreenWidget);
+
+        await _enterSomeTextToFields(tester);
+
+        await tester.ensureVisible(find.byKey(const Key('login_button')));
+        await tester.tap(find.byKey(const Key("login_button")));
+        await tester.pump();
+
+        //assert
+        verify(
+          () => authenticationCubit.loginAndSave(any()),
+        ).called(1);
+      });
+    });
   });
+}
+
+Future<void> _enterSomeTextToFields(WidgetTester tester) async {
+  await tester.enterText(
+    find.byType(TextFormField).at(0),
+    "user",
+  );
+  await tester.enterText(
+    find.byType(TextFormField).at(1),
+    "user",
+  );
+  await tester.enterText(
+    find.byType(TextFormField).at(2),
+    "user",
+  );
+}
+
+bool? _getCheckBoxValue(WidgetTester tester) {
+  final rememberMeCheckBox = tester.widget<Checkbox>(find.byType(Checkbox));
+  final checkBoxValue = rememberMeCheckBox.value;
+  return checkBoxValue;
 }
 
 IconData? _getInputSuffixIconData(WidgetTester tester, Finder inputFinder) {

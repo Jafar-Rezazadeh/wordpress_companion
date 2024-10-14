@@ -15,7 +15,7 @@ const String mainScreen = "/mainScreen";
 
 final goRouter = GoRouter(
   // FIXME: change it to login when testing ends
-  initialLocation: loginScreen,
+  initialLocation: mainScreen,
   routes: [
     ShellRoute(
       builder: (context, state, child) => MultiBlocProvider(
