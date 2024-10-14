@@ -4,27 +4,25 @@ import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 class CustomInputField extends StatelessWidget {
-  final TextEditingController _controller;
+  final TextEditingController controller;
   final String? Function(String?)? _validator;
   final String _label;
-  final Widget? _suffixIcon;
+  final Widget? suffixIcon;
   final bool _obscureText;
   final TextDirection? _textDirection;
   final String? _hintText;
 
   const CustomInputField({
     super.key,
-    required TextEditingController controller,
+    required this.controller,
     required String label,
     String? Function(String?)? validator,
-    Widget? suffixIcon,
+    this.suffixIcon,
     bool obscureText = false,
     TextDirection? textDirection,
     String? hintText,
-  })  : _controller = controller,
-        _validator = validator,
+  })  : _validator = validator,
         _label = label,
-        _suffixIcon = suffixIcon,
         _obscureText = obscureText,
         _textDirection = textDirection,
         _hintText = hintText;
@@ -32,7 +30,7 @@ class CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _controller,
+      controller: controller,
       validator: _validator,
       obscureText: _obscureText,
       textDirection: _textDirection,
@@ -47,7 +45,7 @@ class CustomInputField extends StatelessWidget {
   InputDecoration _inputDecoration() {
     return InputDecoration(
       label: Text(_label),
-      suffixIcon: _suffixIcon,
+      suffixIcon: suffixIcon,
       hintText: _hintText,
       contentPadding: const EdgeInsets.fromLTRB(16, 5, 16, 5),
       border: OutlineInputBorder(

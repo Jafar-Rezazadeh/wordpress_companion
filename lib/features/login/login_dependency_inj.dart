@@ -1,3 +1,4 @@
+//coverage:ignore-file
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
 import 'package:wordpress_companion/dependency_injection.dart';

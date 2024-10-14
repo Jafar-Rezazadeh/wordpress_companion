@@ -1,22 +1,11 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/theme/color_pallet.dart';
-import 'package:wordpress_companion/core/utils/validator.dart';
-import 'package:wordpress_companion/core/widgets/custom_input_field.dart';
-import 'package:wordpress_companion/core/widgets/failure_widget.dart';
-import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
-import 'package:wordpress_companion/features/login/presentation/widgets/login_screen/login_header.dart';
 
-import '../../../../core/router/go_router_config.dart';
+import '../../../../core/core_export.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -52,74 +41,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationCubit, AuthenticationState>(
-      listener: (context, state) => _authenticationStateListener(state),
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: _screenLayout(),
-      ),
-    );
-  }
-
-  _authenticationStateListener(AuthenticationState state) => state.when(
-        initial: () => null,
-        authenticating: () {
-          FocusScope.of(context).unfocus();
-          context.loaderOverlay.show();
-        },
-        authenticationFailed: (failure) {
-          context.loaderOverlay.hide();
-          _showFailureInModalBottomSheet(failure);
-        },
-        authenticated: (credentials) {
-          context.loaderOverlay.hide();
-          context.goNamed(mainScreen, extra: credentials);
-          _showSnackBar(content: "ورود با موفقیت انجام شد");
-        },
-        notValidUser: () {
-          context.loaderOverlay.hide();
-          _showSnackBar(content: "نام کاربری یا رمز عبور اشتباه است");
-        },
-      );
-
-  _showFailureInModalBottomSheet(Failure failure) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => FailureWidget(failure: failure),
-    );
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showSnackBar(
-      {required String content}) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          content,
-          textAlign: TextAlign.center,
+    return _authenticationListener(
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: Directionality(
+          textDirection: TextDirection.rtl,
+          child: _loginCredentialsBuilder(),
         ),
       ),
     );
   }
 
-  Scaffold _screenLayout() {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: _contentBuilder(),
-      ),
+  Widget _authenticationListener({required Widget child}) {
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
+      listener: (_, state) =>
+          AuthenticationStateListener(context: context, state: state).listen(),
+      child: child,
     );
   }
 
-  Widget _contentBuilder() {
+  Widget _loginCredentialsBuilder() {
     return BlocConsumer<LoginCredentialsCubit, LoginCredentialsState>(
       listener: _loginCredentialsListener,
       builder: (context, state) {
         return state.when(
           initial: () => Container(),
           gettingCredentials: () => const Center(child: LoadingWidget()),
-          credentialsReceived: (credentials) => _contents(),
+          credentialsReceived: (credentials) => _credentialsContents(),
           error: (failure) => FailureWidget(failure: failure),
         );
       },
@@ -137,16 +85,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _contents() {
-    return SingleChildScrollView(
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            LoginHeader(headerSize: Size(double.infinity, 0.4.sh)),
-            _credentialsForm(),
-          ],
+  Widget _credentialsContents() {
+    return Container(
+      key: const Key("credentials_contents"),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LoginHeader(headerSize: Size(double.infinity, 0.4.sh)),
+              _credentialsForm(),
+            ],
+          ),
         ),
       ),
     );
@@ -178,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _userName() {
     return CustomInputField(
+      key: const Key("username"),
       label: "نام کاربری",
       controller: _userNameController,
       validator: InputValidator.isNotEmpty,
@@ -189,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomInputField(
+          key: const Key("application_password"),
           controller: _applicationPasswordController,
           obscureText: _obscurePassword,
           validator: InputValidator.isNotEmpty,
@@ -210,23 +163,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  RichText _appPasswordHelperText() {
-    return RichText(
-      text: TextSpan(
-        style: Theme.of(context).textTheme.bodySmall,
-        children: [
-          TextSpan(
-            text: "نحوه ایجاد رمز عبور برنامه",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: ColorPallet.midBlue,
-                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
-                ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _showHelperDialog();
-              },
-          ),
-        ],
+  Widget _appPasswordHelperText() {
+    return GestureDetector(
+      onTap: () {
+        _showHelperDialog();
+      },
+      child: RichText(
+        key: const Key("app_password_helper_text"),
+        text: TextSpan(
+          style: Theme.of(context).textTheme.bodySmall,
+          children: [
+            TextSpan(
+              text: "نحوه ایجاد رمز عبور برنامه",
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: ColorPallet.midBlue,
+                    fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }

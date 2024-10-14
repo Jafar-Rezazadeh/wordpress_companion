@@ -21,7 +21,10 @@ class WordpressCompanion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      child: _materialApp(),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: _materialApp(),
+      ),
     );
   }
 
@@ -42,6 +45,7 @@ class WordpressCompanion extends StatelessWidget {
 
   Widget _loaderOverlayWidget(BuildContext context) {
     return BackdropFilter(
+      key: const Key("loading_overlay"),
       filter: ImageFilter.blur(
         sigmaX: 3,
         sigmaY: 3,

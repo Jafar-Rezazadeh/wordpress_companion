@@ -1,3 +1,5 @@
+//coverage:ignore-file
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
@@ -13,7 +15,7 @@ const String mainScreen = "/mainScreen";
 
 final goRouter = GoRouter(
   // FIXME: change it to login when testing ends
-  initialLocation: mainScreen,
+  initialLocation: loginScreen,
   routes: [
     ShellRoute(
       builder: (context, state, child) => MultiBlocProvider(

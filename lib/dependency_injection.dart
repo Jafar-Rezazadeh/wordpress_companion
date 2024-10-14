@@ -1,3 +1,4 @@
+//coverage:ignore-file
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/core/utils/dio_generator.dart';
 import 'package:wordpress_companion/features/login/login_dependency_inj.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/utils/http_status_helper.dart';
+import 'package:wordpress_companion/core/utils/string_formatter.dart';
 
 import '../errors/failures.dart';
 
@@ -32,16 +33,19 @@ class FailureWidget extends StatelessWidget {
   }
 
   Widget _showServerFailureMessage(ServerFailure failure) {
-    return Column(
-      children: [
-        const Text("خطای سرور"),
-        const Gap(10),
-        Text("کد: " "${failure.response?.statusCode ?? "0"}"),
-        const Gap(10),
-        _responseMessage(failure),
-        const Gap(10),
-        _dioInformation(failure),
-      ],
+    return Container(
+      key: const Key("server_failure"),
+      child: Column(
+        children: [
+          const Text("خطای سرور"),
+          const Gap(10),
+          Text("کد: " "${failure.response?.statusCode ?? "0"}"),
+          const Gap(10),
+          _responseMessage(failure),
+          const Gap(10),
+          _dioInformation(failure),
+        ],
+      ),
     );
   }
 
@@ -83,20 +87,21 @@ class FailureWidget extends StatelessWidget {
   }
 
   Widget _showInternalFailureMessage(InternalFailure failure) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text("خطای ناشناخته"),
-        const Gap(10),
-        Text(failure.message),
-        const Gap(10),
-        Text(
-          failure.stackTrace.toString().length >= 300
-              ? failure.stackTrace.toString().substring(0, 300)
-              : failure.stackTrace.toString(),
-          textAlign: TextAlign.left,
-        ),
-      ],
+    return Container(
+      key: const Key("internal_failure"),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("خطای ناشناخته"),
+          const Gap(10),
+          Text(failure.message),
+          const Gap(10),
+          Text(
+            StringFormatter.shortenText(failure.stackTrace.toString(), 300),
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
     );
   }
 }

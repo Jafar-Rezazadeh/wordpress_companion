@@ -17,5 +17,7 @@ export 'package:wordpress_companion/features/login/domain/use_cases/clear_cached
 //presentation
 export 'package:wordpress_companion/features/login/presentation/logic_holder/authentication_cubit/authentication_cubit.dart';
 export 'package:wordpress_companion/features/login/presentation/logic_holder/login_credentials/login_credentials_cubit.dart';
+export 'package:wordpress_companion/features/login/presentation/utils/authentication_listener.dart';
 export 'package:wordpress_companion/features/login/presentation/screens/login_screen.dart';
 export 'package:wordpress_companion/features/login/presentation/widgets/steps_of_creating_app_password.dart';
+export 'package:wordpress_companion/features/login/presentation/widgets/login_screen/login_header.dart';
