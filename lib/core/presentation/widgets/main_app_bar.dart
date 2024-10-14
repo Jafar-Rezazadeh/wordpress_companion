@@ -53,7 +53,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _profileAvatar() {
     return InkWell(
       onTap: () {},
-      borderRadius: BorderRadius.circular(100),
       child: const CircleAvatar(
         radius: 20,
         backgroundImage: NetworkImage(
@@ -65,10 +64,16 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _menu() {
-    return IconButton(
-      onPressed: () {},
+    return PopupMenuButton(
       iconSize: 30,
-      icon: const Icon(Icons.menu),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: const Text("تنظیمات سایت"),
+          onTap: () {
+            // TODO: navigate to settings page
+          },
+        ),
+      ],
     );
   }
 
