@@ -39,7 +39,7 @@ class WordpressCompanion extends StatelessWidget {
         duration: Durations.medium1,
         child: child ?? Container(),
       ),
-      routerConfig: goRouter,
+      routerConfig: goRouterConfig,
     );
   }
 

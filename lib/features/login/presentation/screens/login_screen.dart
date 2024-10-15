@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _authenticationListener({required Widget child}) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (_, state) =>
-          AuthenticationStateListener(context: context, state: state).listen(),
+          AuthenticationStateListener(context: context, state: state).when(),
       child: child,
     );
   }
