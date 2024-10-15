@@ -78,95 +78,104 @@ void main() {
 
   group("Main Behaviors -", () {
     group("loginCredentialsCubit -", () {
-      testWidgets(
-          "should show empty Container when LoginCredentials state is initial",
-          (tester) async {
-        //act
-        await tester.pumpWidget(loginScreenWidget);
+      group("builder -", () {
+        testWidgets(
+            "should show empty Container when LoginCredentials state is initial",
+            (tester) async {
+          //act
+          await tester.pumpWidget(loginScreenWidget);
 
-        //assert
-        expect(find.byType(Container), findsOneWidget);
+          //assert
+          expect(find.byType(Container), findsOneWidget);
+        });
+
+        testWidgets(
+            "should show LoadingWidget when LoginCredentialsState is gettingCredentials ",
+            (tester) async {
+          //arrange
+          when(
+            () => loginCredentialsCubit.state,
+          ).thenReturn(const LoginCredentialsState.gettingCredentials());
+
+          //act
+          await tester.pumpWidget(loginScreenWidget);
+
+          //assert
+          expect(find.byType(LoadingWidget), findsOneWidget);
+        });
+
+        testWidgets(
+            "should show credentials_contents when loginCredentialsState is credentialsReceived",
+            (tester) async {
+          //arrange
+          when(
+            () => loginCredentialsCubit.state,
+          ).thenAnswer(
+            (invocation) => LoginCredentialsState.credentialsReceived(
+                FakeLoginCredentialsEntity()),
+          );
+
+          //act
+          await tester.pumpWidget(loginScreenWidget);
+
+          //assert
+          expect(find.byKey(const Key("credentials_contents")), findsOne);
+        });
+
+        testWidgets(
+            "should show FailureWidget when LoginCredentialsState is error",
+            (tester) async {
+          //arrange
+          when(
+            () => loginCredentialsCubit.state,
+          ).thenAnswer(
+            (_) => LoginCredentialsState.error(
+              InternalFailure(
+                  message: "message",
+                  stackTrace: StackTrace.fromString("stackTraceString")),
+            ),
+          );
+
+          //act
+          await tester.pumpWidget(loginScreenWidget);
+
+          //assert
+          expect(find.byType(FailureWidget), findsOneWidget);
+        });
       });
 
-      testWidgets(
-          "should show LoadingWidget when LoginCredentialsState is gettingCredentials ",
-          (tester) async {
-        //arrange
-        when(
-          () => loginCredentialsCubit.state,
-        ).thenReturn(const LoginCredentialsState.gettingCredentials());
-
-        //act
-        await tester.pumpWidget(loginScreenWidget);
-
-        //assert
-        expect(find.byType(LoadingWidget), findsOneWidget);
-      });
-
-      testWidgets(
-          "should show credentials_contents when loginCredentialsState is credentialsReceived",
-          (tester) async {
-        //arrange
-        when(
-          () => loginCredentialsCubit.state,
-        ).thenAnswer(
-          (invocation) => LoginCredentialsState.credentialsReceived(
-              FakeLoginCredentialsEntity()),
-        );
-
-        //act
-        await tester.pumpWidget(loginScreenWidget);
-
-        //assert
-        expect(find.byKey(const Key("credentials_contents")), findsOne);
-      });
-
-      testWidgets(
-          "should show FailureWidget when LoginCredentialsState is error",
-          (tester) async {
-        //arrange
-        when(
-          () => loginCredentialsCubit.state,
-        ).thenAnswer(
-          (_) => LoginCredentialsState.error(
-            InternalFailure(
-                message: "message",
-                stackTrace: StackTrace.fromString("stackTraceString")),
-          ),
-        );
-
-        //act
-        await tester.pumpWidget(loginScreenWidget);
-
-        //assert
-        expect(find.byType(FailureWidget), findsOneWidget);
-      });
-
-      testWidgets("should  when ", (tester) async {
-        //arrange
-        whenListen(
-            loginCredentialsCubit,
-            Stream.fromIterable([
-              const LoginCredentialsState.gettingCredentials(),
-              const LoginCredentialsState.credentialsReceived(
-                LoginCredentialsEntity(
-                  userName: "user",
-                  applicationPassword: "pass",
-                  domain: "domain",
-                  rememberMe: true,
+      group("listener -", () {
+        testWidgets(
+            "should add the received credentials to inputs when state is credentialsReceived",
+            (tester) async {
+          //arrange
+          whenListen(
+              loginCredentialsCubit,
+              Stream.fromIterable([
+                const LoginCredentialsState.gettingCredentials(),
+                const LoginCredentialsState.credentialsReceived(
+                  LoginCredentialsEntity(
+                    userName: "jafar",
+                    applicationPassword: "pass",
+                    domain: "domain",
+                    rememberMe: false,
+                  ),
                 ),
-              ),
-            ]));
+              ]));
 
-        await tester.pumpWidget(loginScreenWidget);
-        await tester.pumpAndSettle();
+          await tester.pumpWidget(loginScreenWidget);
+          await tester.pumpAndSettle();
 
-        //act
+          //act
+          final rememberMeCheckbox =
+              tester.widget<Checkbox>(find.byType(Checkbox));
 
-        //assert
-        expect(find.text("user"), findsOneWidget);
-        expect(find.text("pass"), findsOneWidget);
-        expect(find.text("domain"), findsOneWidget);
+          //assert
+          expect(find.text("jafar"), findsOneWidget);
+          expect(find.text("pass"), findsOneWidget);
+          expect(find.text("domain"), findsOneWidget);
+          expect(rememberMeCheckbox.value, false);
+        });
       });
     });
   });
