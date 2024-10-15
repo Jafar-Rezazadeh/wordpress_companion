@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key});
+  final ImageProvider? imageProviderTest;
+  const MainAppBar({super.key, this.imageProviderTest});
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _profileAvatar() {
     return InkWell(
       onTap: () {},
-      child: const CircleAvatar(
+      child: CircleAvatar(
         radius: 20,
-        backgroundImage: NetworkImage(
-          // TODO: get the url of profile
-          "https://anjammidam.com/media/cache/thumb8_out/uploads/user/images/f2bf07bedcc23e4ca4a7a60c21df2a35.jpg",
-        ),
+        backgroundImage: imageProviderTest ??
+            const NetworkImage(
+              // TODO: get the url of profile
+              "https://anjammidam.com/media/cache/thumb8_out/uploads/user/images/f2bf07bedcc23e4ca4a7a60c21df2a35.jpg",
+            ),
       ),
     );
   }

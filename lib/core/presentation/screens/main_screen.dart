@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final ImageProvider? imageProviderTest;
+  const MainScreen({super.key, this.imageProviderTest});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -22,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(),
+      appBar: MainAppBar(imageProviderTest: widget.imageProviderTest),
       body: _bodyLayout(),
       bottomNavigationBar: _bottomNavBar(),
     );
@@ -43,60 +44,50 @@ class _MainScreenState extends State<MainScreen> {
       reverse: true,
       controller: pageController,
       onPageChanged: (value) => setState(() => _selectedPageIndex = value),
-      children: const [
-        Center(child: Icon(Icons.list_alt)),
-        Center(child: Icon(Icons.category)),
-        Center(child: Icon(Icons.video_library_rounded)),
-        Center(child: Icon(Icons.comment)),
-      ],
+      children: _pages,
     );
+  }
+
+  List<Widget> get _pages {
+    return [
+      Container(
+        key: const Key("posts_page"),
+        child: const Center(child: Icon(Icons.list_alt)),
+      ),
+      Container(
+        key: const Key("categories_page"),
+        child: const Center(child: Icon(Icons.category)),
+      ),
+      Container(
+        key: const Key("media_page"),
+        child: const Center(child: Icon(Icons.video_library_rounded)),
+      ),
+      Container(
+        key: const Key("comments_page"),
+        child: const Center(child: Icon(Icons.comment)),
+      ),
+    ];
   }
 
   Widget _bottomNavBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _selectedPageIndex,
-      showUnselectedLabels: false,
-      selectedItemColor: ColorPallet.midBlue,
-      unselectedItemColor: ColorPallet.text,
-      onTap: _onBottomNavSelect,
-      items: _bottomBavItems,
+    return SizedBox(
+      height: 80,
+      child: CustomizedBottomNavBar(
+        currentIndex: _selectedPageIndex,
+        onTap: _onBottomNavTap,
+      ),
     );
   }
 
-  void _onBottomNavSelect(value) {
+  void _onBottomNavTap(int value) {
     setState(() {
       _selectedPageIndex = value;
+
       pageController.animateToPage(
         _selectedPageIndex,
         duration: Durations.short4,
         curve: Curves.easeInOut,
       );
     });
-  }
-
-  List<BottomNavigationBarItem> get _bottomBavItems {
-    return [
-      BottomNavigationBarItem(
-        activeIcon: Container(
-          color: Colors.red,
-          child: const Icon(Icons.list_alt),
-        ),
-        icon: const Icon(Icons.list_alt),
-        label: "پست ها",
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.category),
-        label: "دسته بندی",
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.video_library_rounded),
-        label: "رسانه",
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.comment),
-        label: "دیدگاه ها",
-      ),
-    ];
   }
 }
