@@ -37,16 +37,6 @@ void main() {
   late Widget loginScreenWidget;
 
   setUp(() {
-    authenticationCubit = MockAuthenticationCubit();
-    loginCredentialsCubit = MockLoginCredentialsCubit();
-
-    //TODO: need to set init state of cubits
-    when(
-      () => authenticationCubit.state,
-    ).thenAnswer((_) => const AuthenticationState.initial());
-    when(
-      () => loginCredentialsCubit.state,
-    ).thenAnswer((_) => const LoginCredentialsState.initial());
     loginScreenWidget = ScreenUtilInit(
       child: MultiBlocProvider(
         providers: [
@@ -69,6 +59,16 @@ void main() {
         ),
       ),
     );
+
+    authenticationCubit = MockAuthenticationCubit();
+    loginCredentialsCubit = MockLoginCredentialsCubit();
+
+    when(
+      () => authenticationCubit.state,
+    ).thenAnswer((_) => const AuthenticationState.initial());
+    when(
+      () => loginCredentialsCubit.state,
+    ).thenAnswer((_) => const LoginCredentialsState.initial());
   });
 
   setUpAll(() {
@@ -93,12 +93,18 @@ void main() {
             "should show LoadingWidget when LoginCredentialsState is gettingCredentials ",
             (tester) async {
           //arrange
-          when(
-            () => loginCredentialsCubit.state,
-          ).thenReturn(const LoginCredentialsState.gettingCredentials());
+          whenListen(
+            loginCredentialsCubit,
+            Stream.fromIterable(
+              [
+                const LoginCredentialsState.gettingCredentials(),
+              ],
+            ),
+          );
 
           //act
           await tester.pumpWidget(loginScreenWidget);
+          await tester.pump();
 
           //assert
           expect(find.byType(LoadingWidget), findsOneWidget);
@@ -108,36 +114,51 @@ void main() {
             "should show credentials_contents when loginCredentialsState is credentialsReceived",
             (tester) async {
           //arrange
-          when(
-            () => loginCredentialsCubit.state,
-          ).thenAnswer(
-            (invocation) => LoginCredentialsState.credentialsReceived(
-                FakeLoginCredentialsEntity()),
+          whenListen(
+            loginCredentialsCubit,
+            Stream.fromIterable(
+              [
+                const LoginCredentialsState.credentialsReceived(
+                  LoginCredentialsEntity(
+                    userName: "name",
+                    applicationPassword: "pass",
+                    domain: "domain",
+                    rememberMe: true,
+                  ),
+                )
+              ],
+            ),
           );
 
           //act
           await tester.pumpWidget(loginScreenWidget);
+          await tester.pump();
 
           //assert
-          expect(find.byKey(const Key("credentials_contents")), findsOne);
+          expect(find.byKey(const Key("credentials_contents")), findsOneWidget);
         });
 
         testWidgets(
             "should show FailureWidget when LoginCredentialsState is error",
             (tester) async {
           //arrange
-          when(
-            () => loginCredentialsCubit.state,
-          ).thenAnswer(
-            (_) => LoginCredentialsState.error(
-              InternalFailure(
-                  message: "message",
-                  stackTrace: StackTrace.fromString("stackTraceString")),
+          whenListen(
+            loginCredentialsCubit,
+            Stream.fromIterable(
+              [
+                LoginCredentialsState.error(
+                  InternalFailure(
+                    message: "message",
+                    stackTrace: StackTrace.fromString("stackTraceString"),
+                  ),
+                )
+              ],
             ),
           );
 
           //act
           await tester.pumpWidget(loginScreenWidget);
+          await tester.pump();
 
           //assert
           expect(find.byType(FailureWidget), findsOneWidget);
@@ -150,18 +171,18 @@ void main() {
             (tester) async {
           //arrange
           whenListen(
-              loginCredentialsCubit,
-              Stream.fromIterable([
-                const LoginCredentialsState.gettingCredentials(),
-                const LoginCredentialsState.credentialsReceived(
-                  LoginCredentialsEntity(
-                    userName: "jafar",
-                    applicationPassword: "pass",
-                    domain: "domain",
-                    rememberMe: false,
-                  ),
+            loginCredentialsCubit,
+            Stream.fromIterable([
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "jafar",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: false,
                 ),
-              ]));
+              ),
+            ]),
+          );
 
           await tester.pumpWidget(loginScreenWidget);
           await tester.pumpAndSettle();
@@ -185,17 +206,26 @@ void main() {
       testWidgets("should show visibility icon at the beginning ",
           (tester) async {
         //arrange
-
-        when(
-          () => loginCredentialsCubit.state,
-        ).thenReturn(
-          LoginCredentialsState.credentialsReceived(
-            FakeLoginCredentialsEntity(),
+        whenListen(
+          loginCredentialsCubit,
+          Stream.fromIterable(
+            [
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "jafar",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: false,
+                ),
+              ),
+            ],
           ),
         );
 
         //act
         await tester.pumpWidget(loginScreenWidget);
+        await tester.pumpAndSettle();
+
         final input = tester.widget<CustomInputField>(
           find.byKey(const Key("application_password")),
         );
@@ -210,19 +240,29 @@ void main() {
           (tester) async {
         //arrange
 
-        when(() => loginCredentialsCubit.state).thenReturn(
-          LoginCredentialsState.credentialsReceived(
-            FakeLoginCredentialsEntity(),
+        whenListen(
+          loginCredentialsCubit,
+          Stream.fromIterable(
+            [
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "jafar",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: false,
+                ),
+              ),
+            ],
           ),
         );
 
         //act
         await tester.pumpWidget(loginScreenWidget);
-        final inputFinder = find.byKey(const Key("application_password"));
+        await tester.pump();
 
+        final inputFinder = find.byKey(const Key("application_password"));
         final inputSuffixIconDataBeforeTap =
             _getInputSuffixIconData(tester, inputFinder);
-
         await tester.tap(find.byType(IconButton));
         await tester.pump();
 
@@ -239,33 +279,54 @@ void main() {
       testWidgets("should show text ", (tester) async {
         //arrange
 
-        when(() => loginCredentialsCubit.state).thenReturn(
-          LoginCredentialsState.credentialsReceived(
-            FakeLoginCredentialsEntity(),
+        whenListen(
+          loginCredentialsCubit,
+          Stream.fromIterable(
+            [
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "jafar",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: false,
+                ),
+              ),
+            ],
           ),
         );
 
         //act
         await tester.pumpWidget(loginScreenWidget);
+        await tester.pump();
 
         //assert
         expect(
-          find.byKey(const Key("app_password_helper_text")),
-          findsOneWidget,
-        );
+            find.byKey(const Key("app_password_helper_text")), findsOneWidget);
       });
 
       testWidgets("should show a dialog when taped on text", (tester) async {
         //arrange
 
-        when(() => loginCredentialsCubit.state).thenReturn(
-          LoginCredentialsState.credentialsReceived(
-            FakeLoginCredentialsEntity(),
+        whenListen(
+          loginCredentialsCubit,
+          Stream.fromIterable(
+            [
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "jafar",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: false,
+                ),
+              ),
+            ],
           ),
         );
 
         //act
         await tester.pumpWidget(loginScreenWidget);
+        await tester.pump();
+
         final helperTextFinder =
             find.byKey(const Key("app_password_helper_text"));
         await tester.tap(helperTextFinder);
@@ -327,9 +388,6 @@ void main() {
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
           ),
-        );
-        when(() => authenticationCubit.loginAndSave(any())).thenAnswer(
-          (invocation) async {},
         );
 
         //act
