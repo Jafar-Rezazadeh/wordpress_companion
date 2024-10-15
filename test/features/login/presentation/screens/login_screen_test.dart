@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/widgets/custom_input_field.dart';
 import 'package:wordpress_companion/core/widgets/failure_widget.dart';
@@ -38,6 +39,14 @@ void main() {
   setUp(() {
     authenticationCubit = MockAuthenticationCubit();
     loginCredentialsCubit = MockLoginCredentialsCubit();
+
+    //TODO: need to set init state of cubits
+    when(
+      () => authenticationCubit.state,
+    ).thenAnswer((_) => const AuthenticationState.initial());
+    when(
+      () => loginCredentialsCubit.state,
+    ).thenAnswer((_) => const LoginCredentialsState.initial());
     loginScreenWidget = ScreenUtilInit(
       child: MultiBlocProvider(
         providers: [
@@ -64,7 +73,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(loginParams);
-    registerFallbackValue(FakeLoginCredentialsState());
+    registerFallbackValue(NoParams());
   });
 
   group("Main Behaviors -", () {
@@ -72,11 +81,6 @@ void main() {
       testWidgets(
           "should show empty Container when LoginCredentials state is initial",
           (tester) async {
-        when(
-          () => loginCredentialsCubit.state,
-        ).thenReturn(const LoginCredentialsState.initial());
-        when(() => authenticationCubit.state)
-            .thenReturn(const AuthenticationState.initial());
         //act
         await tester.pumpWidget(loginScreenWidget);
 
@@ -88,9 +92,6 @@ void main() {
           "should show LoadingWidget when LoginCredentialsState is gettingCredentials ",
           (tester) async {
         //arrange
-
-        when(() => authenticationCubit.state)
-            .thenReturn(const AuthenticationState.initial());
         when(
           () => loginCredentialsCubit.state,
         ).thenReturn(const LoginCredentialsState.gettingCredentials());
@@ -106,8 +107,6 @@ void main() {
           "should show credentials_contents when loginCredentialsState is credentialsReceived",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state)
-            .thenReturn(const AuthenticationState.initial());
         when(
           () => loginCredentialsCubit.state,
         ).thenAnswer(
@@ -126,8 +125,6 @@ void main() {
           "should show FailureWidget when LoginCredentialsState is error",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state)
-            .thenReturn(const AuthenticationState.initial());
         when(
           () => loginCredentialsCubit.state,
         ).thenAnswer(
@@ -144,6 +141,33 @@ void main() {
         //assert
         expect(find.byType(FailureWidget), findsOneWidget);
       });
+
+      testWidgets("should  when ", (tester) async {
+        //arrange
+        whenListen(
+            loginCredentialsCubit,
+            Stream.fromIterable([
+              const LoginCredentialsState.gettingCredentials(),
+              const LoginCredentialsState.credentialsReceived(
+                LoginCredentialsEntity(
+                  userName: "user",
+                  applicationPassword: "pass",
+                  domain: "domain",
+                  rememberMe: true,
+                ),
+              ),
+            ]));
+
+        await tester.pumpWidget(loginScreenWidget);
+        await tester.pumpAndSettle();
+
+        //act
+
+        //assert
+        expect(find.text("user"), findsOneWidget);
+        expect(find.text("pass"), findsOneWidget);
+        expect(find.text("domain"), findsOneWidget);
+      });
     });
   });
 
@@ -152,9 +176,7 @@ void main() {
       testWidgets("should show visibility icon at the beginning ",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(
           () => loginCredentialsCubit.state,
         ).thenReturn(
@@ -178,9 +200,7 @@ void main() {
       testWidgets("should change iconData of suffix when user tap",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -209,9 +229,7 @@ void main() {
     group("_appPasswordHelperText", () {
       testWidgets("should show text ", (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -230,9 +248,7 @@ void main() {
 
       testWidgets("should show a dialog when taped on text", (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -254,9 +270,7 @@ void main() {
     group("_rememberMe -", () {
       testWidgets("should be checked when initialized", (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -273,9 +287,7 @@ void main() {
 
       testWidgets("should be checked when use taped", (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -302,9 +314,6 @@ void main() {
           "should Not Call loginAndSave when one of the inputs is empty",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
@@ -331,9 +340,7 @@ void main() {
       testWidgets("should call loginAndSave when inputs are valid",
           (tester) async {
         //arrange
-        when(() => authenticationCubit.state).thenReturn(
-          const AuthenticationState.initial(),
-        );
+
         when(() => loginCredentialsCubit.state).thenReturn(
           LoginCredentialsState.credentialsReceived(
             FakeLoginCredentialsEntity(),
