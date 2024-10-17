@@ -11,7 +11,7 @@ class WordpressRemoteDataSourceImpl implements WordpressRemoteDataSource {
 
   WordpressRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
 
-  String myProfileRoute(String domain) => "$domain/$wpV2EndPoint/users/me";
+  String myProfileRoute(String domain) => "${domain + wpV2EndPoint}/users/me";
 
   @override
   Future<bool> authenticateUser(LoginCredentialsParams params) async {

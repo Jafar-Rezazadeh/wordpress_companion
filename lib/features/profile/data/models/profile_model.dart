@@ -46,4 +46,29 @@ class ProfileModel extends ProfileEntity {
   factory ProfileModel.fromJson(dynamic json) => _$ProfileModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
+
+  static Map<String, dynamic> toJsonFromParams(UpdateMyProfileParams params) {
+    final model = ProfileModel(
+      id: 0,
+      userName: "",
+      name: params.displayName,
+      firstName: params.firstName,
+      lastName: params.lastName,
+      email: params.email,
+      url: params.url,
+      description: params.description,
+      link: "",
+      locale: "",
+      nickName: params.nickName,
+      slug: params.slug,
+      registeredDate: DateTime(1),
+      avatarUrls: const ProfileAvatarUrlsEntity(
+        size24px: "",
+        size48px: "",
+        size96px: "",
+      ),
+    );
+
+    return model.toJson();
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
+import '../../../../dummy_params.dart';
 import '../../../../json_response_simulator.dart';
 
 void main() {
@@ -110,6 +111,37 @@ void main() {
 
       //assert
       _expectJsonEqualsToModel(json, model);
+    });
+  });
+
+  group("toJsonFromParams -", () {
+    test("should return (Map<String, dynamic>)", () {
+      //arrange
+      final params = DummyParams.updateMyProfileParams;
+
+      //act
+      final result = ProfileModel.toJsonFromParams(params);
+
+      //assert
+      expect(result, isA<Map<String, dynamic>>());
+    });
+    test("should have the correct values", () {
+      //arrange
+      final params = DummyParams.updateMyProfileParams;
+
+      //act
+      final result = ProfileModel.toJsonFromParams(params);
+
+      //assert
+      expect(result, isA<Map<String, dynamic>>());
+      expect(result["name"], params.displayName);
+      expect(result["first_name"], params.firstName);
+      expect(result["last_name"], params.lastName);
+      expect(result["email"], params.email);
+      expect(result["nickname"], params.nickName);
+      expect(result["slug"], params.slug);
+      expect(result["description"], params.description);
+      expect(result["url"], params.url);
     });
   });
 }

@@ -5,17 +5,18 @@ import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
 import 'package:wordpress_companion/dependency_injection.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
+import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
 
-const String loginScreen = "/loginScreen";
-const String mainScreen = "/mainScreen";
+const String loginScreen = "/login";
+const String mainScreen = "/main";
+const String profileScreen = "profile";
 // const String postScreen = "/post";
 // const String postsScreen = "/posts";
-// const String profileScreen = "/profile";
 // const String settingsScreen = "/settings";
 
 final goRouterConfig = GoRouter(
   // FIXME: change it to login when testing ends
-  initialLocation: loginScreen,
+  initialLocation: mainScreen,
   routes: [
     ShellRoute(
       builder: (context, state, child) => MultiBlocProvider(
@@ -39,6 +40,13 @@ final goRouterConfig = GoRouter(
           name: mainScreen,
           path: mainScreen,
           builder: (context, state) => const MainScreen(),
+          routes: [
+            GoRoute(
+              name: profileScreen,
+              path: profileScreen,
+              builder: (context, state) => const ProfileScreen(),
+            ),
+          ],
         ),
       ],
     )

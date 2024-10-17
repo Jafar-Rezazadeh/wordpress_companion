@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/profile/domain/use_cases/update_my_profile.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
 abstract class ProfileRepository {

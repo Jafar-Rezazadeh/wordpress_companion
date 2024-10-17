@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +19,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         0,
       ),
       decoration: _containerDecoration(),
-      child: _actions(),
+      child: _actions(context),
     );
   }
 
@@ -41,19 +43,20 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Row _actions() {
+  Row _actions(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _profileAvatar(),
+        _profileAvatar(context),
         _menu(),
       ],
     );
   }
 
-  Widget _profileAvatar() {
+  Widget _profileAvatar(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      key: const Key("profile_avatar"),
+      onTap: () => context.goNamed(profileScreen),
       child: CircleAvatar(
         radius: 20,
         backgroundImage: imageProviderTest ??
