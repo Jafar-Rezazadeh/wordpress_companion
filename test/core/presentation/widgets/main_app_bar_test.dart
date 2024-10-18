@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
 import 'package:wordpress_companion/core/router/go_router_config.dart';
-import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
 
 void main() {
   group("user interactions -", () {
@@ -31,7 +30,8 @@ void main() {
                     GoRoute(
                       path: profileScreen,
                       name: profileScreen,
-                      builder: (context, state) => const ProfileScreen(),
+                      builder: (context, state) =>
+                          Container(key: const Key("profile")),
                     ),
                   ],
                 ),
@@ -45,14 +45,14 @@ void main() {
       final avatarFinder = find.byKey(const Key("profile_avatar"));
       expect(avatarFinder, findsOneWidget);
       expect(find.byType(MainAppBar), findsOneWidget);
-      expect(find.byType(ProfileScreen), findsNothing);
+      expect(find.byKey(const Key("profile")), findsNothing);
 
       //act
       await tester.tap(avatarFinder);
       await tester.pumpAndSettle();
 
       //assert
-      expect(find.byType(ProfileScreen), findsOneWidget);
+      expect(find.byKey(const Key("profile")), findsOneWidget);
     });
   });
 }

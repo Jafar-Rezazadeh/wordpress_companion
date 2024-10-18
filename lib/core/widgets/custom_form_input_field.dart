@@ -13,6 +13,8 @@ class CustomFormInputField extends StatelessWidget {
   final String? hintText;
   final Function(String value)? onChanged;
   final int maxLines;
+  final String? initialValue;
+  final bool? enabled;
 
   const CustomFormInputField({
     super.key,
@@ -25,11 +27,15 @@ class CustomFormInputField extends StatelessWidget {
     this.suffixIcon,
     this.onChanged,
     this.maxLines = 1,
+    this.initialValue,
+    this.enabled,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
+      initialValue: initialValue,
       controller: controller,
       validator: validator,
       obscureText: obscureText,
