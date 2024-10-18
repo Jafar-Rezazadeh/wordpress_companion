@@ -1,11 +1,10 @@
-//coverage:ignore-file
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
-import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
-userLoginDependencyInjection() async {
+initLoginInjection(GetIt getIt) async {
   // data sources
   getIt.registerLazySingleton<WordpressRemoteDataSource>(
     () => WordpressRemoteDataSourceImpl(dio: getIt()),
