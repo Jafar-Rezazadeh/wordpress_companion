@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
@@ -13,6 +14,8 @@ class MockProfileCubit extends MockCubit<ProfileState>
     implements ProfileCubit {}
 
 class FakeProfileEntity extends Fake implements ProfileEntity {}
+
+class FakeUpdateMyProfileParams extends Fake implements UpdateMyProfileParams {}
 
 void main() {
   late ProfileCubit profileCubit;
@@ -24,7 +27,7 @@ void main() {
     name: "name",
     firstName: "firstName",
     lastName: "lastName",
-    email: "email",
+    email: "test@gmail.com",
     url: "url",
     description: "description",
     link: "link",
@@ -37,7 +40,12 @@ void main() {
       size48px: "",
       size96px: "",
     ),
+    roles: const [UserRole.administrator],
   );
+
+  setUpAll(() {
+    registerFallbackValue(FakeUpdateMyProfileParams());
+  });
 
   setUp(() {
     profileCubit = MockProfileCubit();
@@ -174,8 +182,135 @@ void main() {
   });
 
   group("user interactions -", () {
-    group("save -", () {
-      // TODO:
+    group("inputs -", () {
+      group("email input -", () {
+        testWidgets(
+            "should email input be Not Valid if value is empty or invalid email",
+            (tester) async {
+          //arrange
+          whenListen(
+            profileCubit,
+            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+          );
+          await tester.pumpWidget(simulatedTree);
+          await tester.pumpAndSettle();
+
+          //verification
+          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+
+          //act
+          final emailInput = tester.widget<TextFormField>(
+            find.descendant(
+                of: find.byKey(const Key("email_input")),
+                matching: find.byType(TextFormField)),
+          );
+
+          //assert
+          expect(emailInput.validator!("test"), isA<String>());
+          expect(emailInput.validator!(""), isA<String>());
+        });
+        testWidgets(
+            "should email input has been focused if value is invalid when submit button is tapped",
+            (tester) async {
+          //arrange
+
+          whenListen(
+            profileCubit,
+            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+          );
+          await tester.pumpWidget(simulatedTree);
+          await tester.pumpAndSettle();
+
+          //verification
+          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+
+          //act
+          final emailInput = tester.widget<CustomFormInputField>(
+            find.byKey(const Key("email_input")),
+          );
+          await tester.enterText(find.byKey(const Key("email_input")), "test");
+          emailInput.focusNode?.unfocus();
+          await tester.pump();
+          expect(emailInput.focusNode?.hasFocus, false);
+
+          await tester.tap(find.byKey(const Key("submit_button")));
+          await tester.pumpAndSettle();
+
+          //assert
+          expect(emailInput.focusNode?.hasFocus, true);
+        });
+
+        testWidgets("should email input be Valid if value is a valid email",
+            (tester) async {
+          //arrange
+          whenListen(
+            profileCubit,
+            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+          );
+          await tester.pumpWidget(simulatedTree);
+          await tester.pumpAndSettle();
+
+          //verification
+          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+
+          //act
+          final emailInput = tester.widget<TextFormField>(
+            find.descendant(
+                of: find.byKey(const Key("email_input")),
+                matching: find.byType(TextFormField)),
+          );
+
+          //assert
+          expect(emailInput.validator!("test@gmail.com"), isNull);
+        });
+      });
+    });
+    group("submit -", () {
+      testWidgets("should call the updateProfile of cubit when form is valid",
+          (tester) async {
+        //arrange
+        whenListen(
+          profileCubit,
+          Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+        );
+
+        await tester.pumpWidget(simulatedTree);
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byKey(const Key("submit_button")), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("submit_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => profileCubit.updateProfile(any()));
+      });
+
+      testWidgets(
+          "should Not call the updateProfile of cubit when form is invalid",
+          (tester) async {
+        //arrange
+        whenListen(
+          profileCubit,
+          Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+        );
+
+        await tester.pumpWidget(simulatedTree);
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byKey(const Key("submit_button")), findsOneWidget);
+
+        //act
+        await tester.enterText(find.byKey(const Key("email_input")), "test");
+        await tester.tap(find.byKey(const Key("submit_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verifyNever(() => profileCubit.updateProfile(any()));
+      });
     });
   });
 }

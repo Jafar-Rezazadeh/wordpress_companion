@@ -24,34 +24,98 @@ void main() {
     registerFallbackValue(FakeUpdateMyProfileParams());
   });
 
-  test("should return updated profile as right(ProfileEntity) when success",
-      () async {
-    //arrange
-    when(
-      () => mockProfileRepository.updateMyProfile(any()),
-    ).thenAnswer((_) async => right(FakeProfileEntity()));
+  group("useCase itself -", () {
+    test("should return updated profile as right(ProfileEntity) when success",
+        () async {
+      //arrange
+      when(
+        () => mockProfileRepository.updateMyProfile(any()),
+      ).thenAnswer((_) async => right(FakeProfileEntity()));
 
-    //act
-    final result = await updateMyProfile(FakeUpdateMyProfileParams());
-    final rightValue = result.fold((l) => null, (r) => r);
+      //act
+      final result = await updateMyProfile(FakeUpdateMyProfileParams());
+      final rightValue = result.fold((l) => null, (r) => r);
 
-    //assert
-    expect(result.isRight(), true);
-    expect(rightValue, isA<ProfileEntity>());
+      //assert
+      expect(result.isRight(), true);
+      expect(rightValue, isA<ProfileEntity>());
+    });
+
+    test("should return left(kind of Failure) when fails", () async {
+      //arrange
+      when(
+        () => mockProfileRepository.updateMyProfile(any()),
+      ).thenAnswer((_) async => left(FakeFailure()));
+
+      //act
+      final result = await updateMyProfile(FakeUpdateMyProfileParams());
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<Failure>());
+    });
   });
 
-  test("should return left(kind of Failure) when fails", () async {
-    //arrange
-    when(
-      () => mockProfileRepository.updateMyProfile(any()),
-    ).thenAnswer((_) async => left(FakeFailure()));
+  group("updateMyProfileParams -", () {
+    test("should have the expected fields in props", () {
+      //arrange
+      const updateMyProfileParams = UpdateMyProfileParams(
+        displayName: "displayName",
+        firstName: "firstName",
+        lastName: "lastName",
+        email: "email",
+        url: "url",
+        description: "description",
+        nickName: "nickName",
+        slug: "slug",
+      );
+      //act
+      final props = updateMyProfileParams.props;
 
-    //act
-    final result = await updateMyProfile(FakeUpdateMyProfileParams());
-    final leftValue = result.fold((l) => l, (r) => null);
+      //assert
+      expect(
+        props,
+        containsAll([
+          "displayName",
+          "firstName",
+          "lastName",
+          "email",
+          "url",
+          "description",
+          "nickName",
+          "slug",
+        ]),
+      );
+    });
 
-    //assert
-    expect(result.isLeft(), true);
-    expect(leftValue, isA<Failure>());
+    test(
+        "should two instance of (UpdateMyProfileParams) be same when props are the same",
+        () {
+      //arrange
+      const params1 = UpdateMyProfileParams(
+        displayName: "displayName",
+        firstName: "firstName",
+        lastName: "lastName",
+        email: "email",
+        url: "url",
+        description: "description",
+        nickName: "nickName",
+        slug: "slug",
+      );
+      const params2 = UpdateMyProfileParams(
+        displayName: "displayName",
+        firstName: "firstName",
+        lastName: "lastName",
+        email: "email",
+        url: "url",
+        description: "description",
+        nickName: "nickName",
+        slug: "slug",
+      );
+
+      //assert
+      expect(params1, params2);
+    });
   });
 }

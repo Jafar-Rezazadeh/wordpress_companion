@@ -15,6 +15,8 @@ class CustomFormInputField extends StatelessWidget {
   final int maxLines;
   final String? initialValue;
   final bool? enabled;
+  final String? helperText;
+  final FocusNode? focusNode;
 
   const CustomFormInputField({
     super.key,
@@ -29,6 +31,8 @@ class CustomFormInputField extends StatelessWidget {
     this.maxLines = 1,
     this.initialValue,
     this.enabled,
+    this.helperText,
+    this.focusNode,
   });
 
   @override
@@ -42,6 +46,7 @@ class CustomFormInputField extends StatelessWidget {
       textDirection: textDirection,
       onChanged: onChanged,
       maxLines: maxLines,
+      focusNode: focusNode,
       style: TextStyle(
         color: ColorPallet.text,
         fontSize: 12.sp,
@@ -68,6 +73,12 @@ class CustomFormInputField extends StatelessWidget {
         borderRadius: BorderRadius.circular(smallCornerRadius),
         borderSide: BorderSide(color: ColorPallet.midBlue),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(smallCornerRadius),
+        borderSide: BorderSide(color: ColorPallet.border),
+      ),
+      helperText: helperText,
+      helperStyle: const TextStyle(color: Colors.black54),
     );
   }
 }

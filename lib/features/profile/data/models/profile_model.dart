@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../../../../core/constants/enums.dart';
 import '../../profile_exports.dart';
 
 part 'profile_model.g.dart';
@@ -20,6 +21,7 @@ class ProfileModel extends ProfileEntity {
     required super.slug,
     required super.registeredDate,
     required super.avatarUrls,
+    required super.roles,
   });
 
   @override
@@ -67,6 +69,7 @@ class ProfileModel extends ProfileEntity {
         size48px: "",
         size96px: "",
       ),
+      roles: const [],
     );
 
     return model.toJson();

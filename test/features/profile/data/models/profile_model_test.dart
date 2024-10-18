@@ -98,6 +98,7 @@ void main() {
           "locale",
           "registered_date",
           "avatar_urls",
+          "roles",
         ])),
       );
     });
@@ -166,6 +167,7 @@ void _expectModelEqualsToJson(
   expect(model.avatarUrls.size24px, json["avatar_urls"]["24"]);
   expect(model.avatarUrls.size48px, json["avatar_urls"]["48"]);
   expect(model.avatarUrls.size96px, json["avatar_urls"]["96"]);
+  expect(model.roles.first.name, json["roles"][0]);
 }
 
 void _expectJsonEqualsToModel(Map<String, dynamic> json, ProfileModel model) {

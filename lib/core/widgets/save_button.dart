@@ -3,10 +3,10 @@ import 'package:wordpress_companion/core/core_export.dart';
 
 class SaveButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   const SaveButton({
     this.text = "ذخیره",
-    required this.onPressed,
+    this.onPressed,
     super.key,
   });
 

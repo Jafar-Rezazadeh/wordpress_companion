@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wordpress_companion/core/constants/enums.dart';
 
 import '../../profile_exports.dart';
 
@@ -40,6 +41,9 @@ class ProfileEntity extends Equatable {
   @JsonKey(defaultValue: "")
   final String slug;
 
+  @JsonKey(defaultValue: [], includeToJson: false)
+  final List<UserRole> roles;
+
   // implemented in model
   final ProfileAvatarUrlsEntity avatarUrls;
   final DateTime registeredDate;
@@ -59,6 +63,7 @@ class ProfileEntity extends Equatable {
     required this.slug,
     required this.registeredDate,
     required this.avatarUrls,
+    required this.roles,
   });
 
   @override

@@ -5,7 +5,6 @@ import 'package:wordpress_companion/core/utils/string_formatter.dart';
 
 import '../errors/failures.dart';
 
-// TODO: test this
 class FailureWidget extends StatelessWidget {
   final Failure failure;
   const FailureWidget({super.key, required this.failure});

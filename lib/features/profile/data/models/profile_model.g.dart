@@ -23,6 +23,10 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
           ? ProfileModel._defaultDate()
           : ProfileModel._registeredDateFromJson(json['registered_date']),
       avatarUrls: ProfileModel._avatarFromJson(json['avatar_urls']),
+      roles: (json['roles'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$UserRoleEnumMap, e))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
@@ -36,3 +40,11 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'nickname': instance.nickName,
       'slug': instance.slug,
     };
+
+const _$UserRoleEnumMap = {
+  UserRole.subscriber: 'subscriber',
+  UserRole.contributor: 'contributor',
+  UserRole.author: 'author',
+  UserRole.editor: 'editor',
+  UserRole.administrator: 'administrator',
+};
