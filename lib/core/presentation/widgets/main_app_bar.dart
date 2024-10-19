@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:wordpress_companion/core/router/go_router_config.dart';
+import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_widget.dart';
 import 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final ImageProvider? imageProviderTest;
-  const MainAppBar({super.key, this.imageProviderTest});
+  const MainAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         0,
       ),
       decoration: _containerDecoration(),
-      child: _actions(context),
+      child: _actions(),
     );
   }
 
@@ -43,28 +41,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Row _actions(BuildContext context) {
+  Row _actions() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _profileAvatar(context),
+        const ProfileAvatarWidget(),
         _menu(),
       ],
-    );
-  }
-
-  Widget _profileAvatar(BuildContext context) {
-    return InkWell(
-      key: const Key("profile_avatar"),
-      onTap: () => context.goNamed(profileScreen),
-      child: CircleAvatar(
-        radius: 20,
-        backgroundImage: imageProviderTest ??
-            const NetworkImage(
-              // TODO: get the url of profile
-              "https://anjammidam.com/media/cache/thumb8_out/uploads/user/images/f2bf07bedcc23e4ca4a7a60c21df2a35.jpg",
-            ),
-      ),
     );
   }
 

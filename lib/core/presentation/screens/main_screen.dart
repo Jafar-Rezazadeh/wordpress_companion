@@ -3,8 +3,7 @@ import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dar
 import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
 
 class MainScreen extends StatefulWidget {
-  final ImageProvider? imageProviderTest;
-  const MainScreen({super.key, this.imageProviderTest});
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -23,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(imageProviderTest: widget.imageProviderTest),
+      appBar: const MainAppBar(),
       body: _bodyLayout(),
       bottomNavigationBar: _bottomNavBar(),
     );
