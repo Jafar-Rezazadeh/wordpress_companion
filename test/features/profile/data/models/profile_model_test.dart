@@ -135,7 +135,7 @@ void main() {
 
       //assert
       expect(result, isA<Map<String, dynamic>>());
-      expect(result["name"], params.displayName);
+      expect(result["name"], params.name);
       expect(result["first_name"], params.firstName);
       expect(result["last_name"], params.lastName);
       expect(result["email"], params.email);

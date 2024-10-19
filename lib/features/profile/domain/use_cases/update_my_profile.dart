@@ -16,7 +16,7 @@ class UpdateMyProfile implements UseCase<ProfileEntity, UpdateMyProfileParams> {
 }
 
 class UpdateMyProfileParams extends Equatable {
-  final String displayName;
+  final String name;
   final String firstName;
   final String lastName;
   final String email;
@@ -26,7 +26,7 @@ class UpdateMyProfileParams extends Equatable {
   final String slug;
 
   const UpdateMyProfileParams({
-    required this.displayName,
+    required this.name,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -38,7 +38,7 @@ class UpdateMyProfileParams extends Equatable {
 
   @override
   List<Object?> get props => [
-        displayName,
+        name,
         firstName,
         lastName,
         email,

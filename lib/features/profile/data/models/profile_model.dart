@@ -53,7 +53,7 @@ class ProfileModel extends ProfileEntity {
     final model = ProfileModel(
       id: 0,
       userName: "",
-      name: params.displayName,
+      name: params.name,
       firstName: params.firstName,
       lastName: params.lastName,
       email: params.email,

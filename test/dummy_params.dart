@@ -3,7 +3,7 @@ import 'package:wordpress_companion/features/profile/domain/use_cases/update_my_
 class DummyParams {
   static UpdateMyProfileParams updateMyProfileParams =
       const UpdateMyProfileParams(
-    displayName: "displayName",
+    name: "displayName",
     firstName: "firstName",
     lastName: "lastName",
     email: "email",

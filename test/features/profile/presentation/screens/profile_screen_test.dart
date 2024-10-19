@@ -285,7 +285,7 @@ void main() {
         await tester.pumpAndSettle();
 
         //assert
-        verify(() => profileCubit.updateProfile(any()));
+        verify(() => profileCubit.updateProfile(any())).called(1);
       });
 
       testWidgets(

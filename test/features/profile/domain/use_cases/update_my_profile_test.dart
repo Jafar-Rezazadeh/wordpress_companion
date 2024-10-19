@@ -61,7 +61,7 @@ void main() {
     test("should have the expected fields in props", () {
       //arrange
       const updateMyProfileParams = UpdateMyProfileParams(
-        displayName: "displayName",
+        name: "displayName",
         firstName: "firstName",
         lastName: "lastName",
         email: "email",
@@ -94,7 +94,7 @@ void main() {
         () {
       //arrange
       const params1 = UpdateMyProfileParams(
-        displayName: "displayName",
+        name: "displayName",
         firstName: "firstName",
         lastName: "lastName",
         email: "email",
@@ -104,7 +104,7 @@ void main() {
         slug: "slug",
       );
       const params2 = UpdateMyProfileParams(
-        displayName: "displayName",
+        name: "displayName",
         firstName: "firstName",
         lastName: "lastName",
         email: "email",
