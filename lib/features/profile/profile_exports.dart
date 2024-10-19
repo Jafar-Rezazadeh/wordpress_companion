@@ -14,3 +14,6 @@ export 'package:wordpress_companion/features/profile/domain/use_cases/update_my_
 //presentation
 export 'package:wordpress_companion/features/profile/presentation/state_management/profile-cubit/profile_cubit.dart';
 export 'package:wordpress_companion/features/profile/presentation/utils/update_my_profile_params_builder.dart';
+
+// application
+export 'package:wordpress_companion/features/profile/application/profile_service_impl.dart';
