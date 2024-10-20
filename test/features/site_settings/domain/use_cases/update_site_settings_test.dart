@@ -74,7 +74,7 @@ void main() {
         timeZone: "timeZone",
         dateFormat: "dateFormat",
         timeFormat: "timeFormat",
-        startOfWeek: "startOfWeek",
+        startOfWeek: 1,
       );
 
       //act
@@ -93,7 +93,7 @@ void main() {
           "timeZone",
           "dateFormat",
           "timeFormat",
-          "startOfWeek",
+          1,
         ]),
       );
     });
@@ -110,7 +110,7 @@ void main() {
         timeZone: "timeZone",
         dateFormat: "dateFormat",
         timeFormat: "timeFormat",
-        startOfWeek: "startOfWeek",
+        startOfWeek: 0,
       );
       const params2 = UpdateSiteSettingsParams(
         title: "title",
@@ -122,7 +122,7 @@ void main() {
         timeZone: "timeZone",
         dateFormat: "dateFormat",
         timeFormat: "timeFormat",
-        startOfWeek: "startOfWeek",
+        startOfWeek: 0,
       );
 
       //assert

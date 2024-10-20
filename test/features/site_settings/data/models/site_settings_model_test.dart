@@ -4,6 +4,18 @@ import 'package:wordpress_companion/features/site_settings/site_settings_exports
 import '../../../../json_response_simulator.dart';
 
 void main() {
+  const params = UpdateSiteSettingsParams(
+    title: "title",
+    description: "description",
+    siteIcon: 0,
+    url: "url",
+    email: "email",
+    language: "language",
+    timeZone: "timeZone",
+    dateFormat: "dateFormat",
+    timeFormat: "timeFormat",
+    startOfWeek: 1,
+  );
   group("fromJson -", () {
     test("should return (SiteSettingsModel) when success to convert from json",
         () {
@@ -117,6 +129,32 @@ void main() {
           "site_logo",
         ])),
       );
+    });
+  });
+
+  group("fromParamsToJson -", () {
+    test("should return (Map<String,dynamic>) when call fromParamsToJson", () {
+      //act
+      final result = SiteSettingsModel.fromParamsToJson(params);
+
+      //assert
+      expect(result, isA<Map<String, dynamic>>());
+    });
+    test("should have correct values ", () {
+      //act
+      final json = SiteSettingsModel.fromParamsToJson(params);
+
+      //assert
+      expect(params.title, json["title"]);
+      expect(params.description, json["description"]);
+      expect(params.siteIcon, json["site_icon"]);
+      expect(params.url, json["url"]);
+      expect(params.email, json["email"]);
+      expect(params.language, json["language"]);
+      expect(params.timeZone, json["timezone"]);
+      expect(params.dateFormat, json["date_format"]);
+      expect(params.timeFormat, json["time_format"]);
+      expect(params.startOfWeek, json["start_of_week"]);
     });
   });
 }

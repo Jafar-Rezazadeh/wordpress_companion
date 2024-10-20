@@ -29,7 +29,7 @@ class UpdateSiteSettingsParams extends Equatable {
   final String timeZone;
   final String dateFormat;
   final String timeFormat;
-  final String startOfWeek;
+  final int startOfWeek;
 
   const UpdateSiteSettingsParams({
     required this.title,

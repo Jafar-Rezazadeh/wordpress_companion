@@ -32,4 +32,32 @@ class SiteSettingsModel extends SiteSettingsEntity {
       _$SiteSettingsModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SiteSettingsModelToJson(this);
+
+  static Map<String, dynamic> fromParamsToJson(
+      UpdateSiteSettingsParams params) {
+    final model = SiteSettingsModel(
+      title: params.title,
+      description: params.description,
+      url: params.url,
+      email: params.email,
+      timeZone: params.timeZone,
+      dateFormat: params.dateFormat,
+      timeFormat: params.timeFormat,
+      startOfWeek: params.startOfWeek,
+      language: params.language,
+      siteIcon: params.siteIcon,
+      useSmilies: false,
+      defaultCategory: 0,
+      defaultPostFormat: "",
+      postsPerPage: 0,
+      showOnFront: "",
+      pageOnFront: 0,
+      pageForPosts: 0,
+      defaultPingStatus: "",
+      defaultCommentStatus: "",
+      siteLogo: null,
+    );
+
+    return model.toJson();
+  }
 }
