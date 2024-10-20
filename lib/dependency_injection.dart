@@ -1,17 +1,22 @@
-//coverage:ignore-file
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/core/utils/dio_generator.dart';
 import 'package:wordpress_companion/features/login/login_dependency_inj.dart';
+import 'package:wordpress_companion/features/profile/profile_injection.dart';
 
-GetIt getIt = GetIt.instance;
+class DependencyInjection {
+  final GetIt getIt;
 
-initializeDependencyInjections() async {
-  _initDio();
-  await userLoginDependencyInjection();
-}
+  DependencyInjection({required this.getIt});
 
-_initDio() {
-  getIt.registerLazySingleton(
-    () => DioGenerator.generateDioWithDefaultSettings(),
-  );
+  Future<void> init() async {
+    _initDio();
+    await initLoginInjection(getIt);
+    await initProfileInjection(getIt);
+  }
+
+  _initDio() {
+    getIt.registerLazySingleton(
+      () => DioGenerator.generateDioWithDefaultSettings(),
+    );
+  }
 }

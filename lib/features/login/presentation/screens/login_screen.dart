@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _userName() {
-    return CustomInputField(
+    return CustomFormInputField(
       key: const Key("username"),
       label: "نام کاربری",
       controller: _userNameController,
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomInputField(
+        CustomFormInputField(
           key: const Key("application_password"),
           controller: _applicationPasswordController,
           obscureText: _obscurePassword,
@@ -219,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _domain() {
-    return CustomInputField(
+    return CustomFormInputField(
       key: const Key("domain"),
       controller: _domainController,
       validator: InputValidator.isNotEmpty,
