@@ -8,6 +8,8 @@ import '../../../../../core/errors/failures.dart';
 part 'profile_state.dart';
 part 'profile_cubit.freezed.dart';
 
+// TODO: make new state like updating and updated and apply the response of update to avoid unnecessary requests to server
+
 class ProfileCubit extends Cubit<ProfileState> {
   final GetMyProfile _getMyProfile;
   final UpdateMyProfile _updateMyProfile;

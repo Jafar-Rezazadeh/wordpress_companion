@@ -98,4 +98,28 @@ class JsonResponseSimulator {
       ]
     }
   };
+
+  static Map<String, dynamic> siteSettings = {
+    "title": "wordpress_test",
+    "description": "",
+    "url": "http://localhost/wordpress_test",
+    "email": "example@gmail.com",
+    "timezone": "Atlantic/Azores",
+    "date_format": "F j, Y",
+    "time_format": "g:i a",
+    "start_of_week": 1,
+    "language": "fa_IR",
+    "use_smilies": true,
+    "default_category": 1,
+    "default_post_format": "0",
+    "posts_per_page": 10,
+    "show_on_front": "posts",
+    "page_on_front": 0,
+    "page_for_posts": 0,
+    "default_ping_status": "open",
+    "default_comment_status": "open",
+    "site_logo": null,
+    "site_icon": 37,
+    "jwt_auth_options": {"share_data": false}
+  };
 }
