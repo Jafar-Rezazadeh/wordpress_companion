@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
@@ -102,11 +103,14 @@ void main() {
   });
 }
 
-MaterialApp _testWidget(GlobalProfileCubit globalProfileCubit) {
-  return MaterialApp(
-    home: BlocProvider(
-      create: (context) => globalProfileCubit,
-      child: const MainScreen(),
+Widget _testWidget(GlobalProfileCubit globalProfileCubit) {
+  return ScreenUtilInit(
+    designSize: const Size(600, 812),
+    child: MaterialApp(
+      home: BlocProvider(
+        create: (context) => globalProfileCubit,
+        child: const MainScreen(),
+      ),
     ),
   );
 }
