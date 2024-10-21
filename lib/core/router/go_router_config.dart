@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
+import 'package:wordpress_companion/core/services/profile_service.dart';
 
 import 'package:wordpress_companion/features/login/login_exports.dart';
 import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
@@ -21,8 +23,10 @@ final goRouter = GoRouter(
   // FIXME: change it to login when testing ends
   initialLocation: loginScreen,
   routes: [
-    ShellRoute(
-      builder: (context, state, child) => MultiBlocProvider(
+    GoRoute(
+      name: loginScreen,
+      path: loginScreen,
+      builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => getIt<AuthenticationCubit>(),
@@ -31,14 +35,21 @@ final goRouter = GoRouter(
             create: (context) => getIt<LoginCredentialsCubit>(),
           ),
         ],
+        child: const LoginScreen(),
+      ),
+    ),
+    ShellRoute(
+      builder: (context, state, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GlobalProfileCubit(
+              profileService: getIt<ProfileService>(),
+            ),
+          ),
+        ],
         child: child,
       ),
       routes: [
-        GoRoute(
-          name: loginScreen,
-          path: loginScreen,
-          builder: (context, state) => const LoginScreen(),
-        ),
         GoRoute(
           name: mainScreen,
           path: mainScreen,
@@ -55,6 +66,6 @@ final goRouter = GoRouter(
           ],
         ),
       ],
-    )
+    ),
   ],
 );

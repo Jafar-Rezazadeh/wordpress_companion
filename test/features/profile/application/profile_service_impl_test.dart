@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/core/entities/profile_avatar.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
@@ -32,33 +31,30 @@ void main() {
     profileServiceImpl = ProfileServiceImpl(getMyProfile: mockGetMyProfile);
   });
 
-  group("getProfileAvatar -", () {
-    test("should return (ProfileAvatar) when success to get data", () async {
+  group("getMyProfile -", () {
+    test("should return (ProfileEntity) when success to get data", () async {
       //arrange
       when(
         () => mockGetMyProfile.call(any()),
       ).thenAnswer((_) async => right(DummyProfileEntity()));
 
       //act
-      final result = await profileServiceImpl.getProfileAvatar();
+      final result = await profileServiceImpl.getMyProfile();
       final rightValue = result.fold((l) => null, (r) => r);
 
       //assert
-      expect(result.isRight(), isTrue);
-      expect(rightValue, isA<ProfileAvatar>());
-      expect(rightValue?.size24px, DummyProfileEntity().avatarUrls.size24px);
-      expect(rightValue?.size48px, DummyProfileEntity().avatarUrls.size48px);
-      expect(rightValue?.size96px, DummyProfileEntity().avatarUrls.size96px);
+      expect(result.isRight(), true);
+      expect(rightValue, isA<ProfileEntity>());
     });
 
-    test("should return Kind Of (Failure) when fails", () async {
+    test("should return kind of (Failure) when fails", () async {
       //arrange
       when(
         () => mockGetMyProfile.call(any()),
-      ).thenAnswer((invocation) async => left(FakeFailure()));
+      ).thenAnswer((_) async => left(FakeFailure()));
 
       //act
-      final result = await profileServiceImpl.getProfileAvatar();
+      final result = await profileServiceImpl.getMyProfile();
       final leftValue = result.fold((l) => l, (r) => null);
 
       //assert

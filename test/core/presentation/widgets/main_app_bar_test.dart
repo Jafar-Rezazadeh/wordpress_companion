@@ -1,40 +1,31 @@
-import 'package:dartz/dartz.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/entities/profile_avatar.dart';
+import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
 import 'package:wordpress_companion/core/router/go_router_config.dart';
-import 'package:wordpress_companion/core/services/profile_service.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
-class MockProfileServiceImpl extends Mock implements ProfileServiceImpl {}
+class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
+    implements GlobalProfileCubit {}
 
 void main() {
-  late MockProfileServiceImpl mockProfileServiceImpl;
-  final GetIt getIt = GetIt.instance;
+  late GlobalProfileCubit globalProfileCubit;
 
-  setUp(() async {
-    await getIt.reset();
-    mockProfileServiceImpl = MockProfileServiceImpl();
-    getIt.registerLazySingleton<ProfileService>(() => mockProfileServiceImpl);
+  setUp(() {
+    globalProfileCubit = MockGlobalProfileCubit();
+    when(
+      () => globalProfileCubit.state,
+    ).thenAnswer((_) => const GlobalProfileState.initial());
   });
 
   group("user interactions -", () {
     testWidgets(
         "should navigate to ProfileScreen when profile avatar is clicked",
         (tester) async {
-      when(
-        () => mockProfileServiceImpl.getProfileAvatar(),
-      ).thenAnswer(
-        (_) async => right(
-          const ProfileAvatar(size24px: "", size48px: "", size96px: ""),
-        ),
-      );
-
       //arrange
       await tester.pumpWidget(
         ScreenUtilInit(
@@ -44,8 +35,11 @@ void main() {
               routes: [
                 GoRoute(
                   path: "/",
-                  builder: (context, state) => const Scaffold(
-                    appBar: MainAppBar(),
+                  builder: (context, state) => BlocProvider(
+                    create: (context) => globalProfileCubit,
+                    child: const Scaffold(
+                      appBar: MainAppBar(),
+                    ),
                   ),
                   routes: [
                     GoRoute(

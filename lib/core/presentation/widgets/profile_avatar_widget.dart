@@ -1,32 +1,15 @@
-import 'package:dartz/dartz.dart' show Either;
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wordpress_companion/core/entities/profile_avatar.dart';
+import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
-import '../../errors/failures.dart';
 import '../../router/go_router_config.dart';
-import '../../services/profile_service.dart';
+import '../cubits/global_profile_cubit/global_profile_cubit.dart';
 
-class ProfileAvatarWidget extends StatefulWidget {
-  const ProfileAvatarWidget({super.key});
-
-  @override
-  State<ProfileAvatarWidget> createState() => _ProfileAvatarWidgetState();
-}
-
-class _ProfileAvatarWidgetState extends State<ProfileAvatarWidget> {
-  Future<Either<Failure, ProfileAvatar>>? getAvatarFuture;
-
-  @override
-  void initState() {
-    _getAvatar();
-    super.initState();
-  }
-
-  _getAvatar() {
-    getAvatarFuture = GetIt.instance.get<ProfileService>().getProfileAvatar();
-  }
+class ProfileAvatarWidget extends StatelessWidget {
+  final double? radius;
+  const ProfileAvatarWidget({super.key, this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -37,31 +20,26 @@ class _ProfileAvatarWidgetState extends State<ProfileAvatarWidget> {
     );
   }
 
+  // TODO: improve test coverage
   Widget _avatarBuilder() {
-    return FutureBuilder(
-      future: getAvatarFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else {
-          return _renderAvatarWidget(snapshot.data);
-        }
+    return BlocBuilder<GlobalProfileCubit, GlobalProfileState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => Container(),
+          loading: () => const LoadingWidget(),
+          loaded: (profile) => _renderAvatarWidget(profile),
+          error: (failure) => Container(),
+        );
       },
     );
   }
 
-  Widget _renderAvatarWidget(Either<Failure, ProfileAvatar>? data) {
+  Widget _renderAvatarWidget(ProfileEntity profile) {
     return CircleAvatar(
-      radius: 20,
-      foregroundImage: _avatarImage(data),
+      foregroundImage: NetworkImage(profile.avatarUrls.size96px),
       onForegroundImageError: (exception, stackTrace) {},
+      maxRadius: radius,
       child: const Icon(Icons.person),
-    );
-  }
-
-  ImageProvider _avatarImage(Either<Failure, ProfileAvatar>? data) {
-    return NetworkImage(
-      data?.fold((l) => " ", (r) => r.size96px) ?? " ",
     );
   }
 }
