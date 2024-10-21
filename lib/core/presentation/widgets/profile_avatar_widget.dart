@@ -20,7 +20,6 @@ class ProfileAvatarWidget extends StatelessWidget {
     );
   }
 
-  // TODO: improve test coverage
   Widget _avatarBuilder() {
     return BlocBuilder<GlobalProfileCubit, GlobalProfileState>(
       builder: (context, state) {
@@ -28,7 +27,7 @@ class ProfileAvatarWidget extends StatelessWidget {
           initial: () => Container(),
           loading: () => const LoadingWidget(),
           loaded: (profile) => _renderAvatarWidget(profile),
-          error: (failure) => Container(),
+          error: (failure) => _errorWidget(),
         );
       },
     );
@@ -36,10 +35,18 @@ class ProfileAvatarWidget extends StatelessWidget {
 
   Widget _renderAvatarWidget(ProfileEntity profile) {
     return CircleAvatar(
+      key: const Key("avatar_widget"),
       foregroundImage: NetworkImage(profile.avatarUrls.size96px),
       onForegroundImageError: (exception, stackTrace) {},
       maxRadius: radius,
       child: const Icon(Icons.person),
+    );
+  }
+
+  Container _errorWidget() {
+    return Container(
+      key: const Key("error_avatar_widget"),
+      child: const Icon(Icons.error),
     );
   }
 }

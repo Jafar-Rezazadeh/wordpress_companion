@@ -7,6 +7,7 @@ import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_wid
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
+  // TODO: design and and add settings and contact us buttons
   @override
   Widget build(BuildContext context) {
     return Drawer(
