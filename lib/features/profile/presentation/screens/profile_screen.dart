@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/utils/enum_translator.dart';
-import 'package:wordpress_companion/core/widgets/pushed_page_app_bar.dart';
-import 'package:wordpress_companion/core/widgets/save_button.dart';
+import '../../../../core/core_export.dart';
+import '../../../../core/utils/enum_translator.dart';
 
 import '../../profile_exports.dart';
 
@@ -98,6 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _profileStateListener(BuildContext _, ProfileState state) {
+    // TODO: show a modal Bottom sheet on error state
     state.whenOrNull(
       loaded: (profile) => setState(() {
         initialProfileData = profile;

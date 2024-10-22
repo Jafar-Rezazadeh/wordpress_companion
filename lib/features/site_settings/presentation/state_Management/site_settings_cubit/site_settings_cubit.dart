@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
+import '../../../../../core/contracts/use_case.dart';
+import '../../../../../core/errors/failures.dart';
+import '../../../site_settings_exports.dart';
 
 part 'site_settings_state.dart';
 part 'site_settings_cubit.freezed.dart';

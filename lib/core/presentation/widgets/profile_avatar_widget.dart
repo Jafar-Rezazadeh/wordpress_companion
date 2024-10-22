@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../core_export.dart';
+import '../../../features/profile/profile_exports.dart';
 
 import '../../router/go_router_config.dart';
 import '../cubits/global_profile_cubit/global_profile_cubit.dart';

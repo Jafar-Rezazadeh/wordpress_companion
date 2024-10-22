@@ -21,7 +21,6 @@ class DummyParams {
     siteIcon: 0,
     url: "url",
     email: "email",
-    language: "language",
     timeZone: "timeZone",
     dateFormat: "dateFormat",
     timeFormat: "timeFormat",

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/utils/http_status_helper.dart';
-import 'package:wordpress_companion/core/utils/string_formatter.dart';
+import '../utils/http_status_helper.dart';
+import '../utils/string_formatter.dart';
 
 import '../errors/failures.dart';
 

@@ -1,4 +1,4 @@
-import 'package:wordpress_companion/core/constants/enums.dart';
+import '../constants/enums.dart';
 
 class EnumTranslator {
   static String translateUserRole(UserRole role) {

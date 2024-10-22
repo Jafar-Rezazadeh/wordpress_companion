@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
+import '../../../errors/failures.dart';
 
 import '../../../../features/profile/profile_exports.dart';
 import '../../../services/profile_service.dart';

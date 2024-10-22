@@ -66,19 +66,20 @@ void main() {
       final json = model.toJson();
 
       //assert
-      expect(
-        json.keys,
-        containsAll([
-          "name",
-          "first_name",
-          "last_name",
-          "email",
-          "url",
-          "description",
-          "nickname",
-          "slug",
-        ]),
-      );
+      final keysToCheck = [
+        "name",
+        "first_name",
+        "last_name",
+        "email",
+        "url",
+        "description",
+        "nickname",
+        "slug",
+      ];
+
+      for (var key in keysToCheck) {
+        expect(json.keys, contains(key));
+      }
     });
 
     test("should Not include below field ", () {
@@ -89,18 +90,18 @@ void main() {
       final json = model.toJson();
 
       //assert
-      expect(
-        json.keys,
-        isNot(containsAll([
-          "id",
-          "username",
-          "link",
-          "locale",
-          "registered_date",
-          "avatar_urls",
-          "roles",
-        ])),
-      );
+      final keysToCheck = [
+        "id",
+        "username",
+        "link",
+        "locale",
+        "registered_date",
+        "avatar_urls",
+        "roles",
+      ];
+      for (var key in keysToCheck) {
+        expect(json.keys, isNot(contains(key)));
+      }
     });
 
     test("should have the correct values", () {

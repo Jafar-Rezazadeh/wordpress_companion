@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_widget.dart';
-import 'package:wordpress_companion/core/theme/color_pallet.dart';
+import 'profile_avatar_widget.dart';
+import '../../theme/color_pallet.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MainAppBar({super.key});

@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:wordpress_companion/core/utils/dio_generator.dart';
-import 'package:wordpress_companion/features/login/login_dependency_inj.dart';
-import 'package:wordpress_companion/features/profile/profile_injection.dart';
+import 'core/utils/dio_generator.dart';
+import 'features/login/login_dependency_inj.dart';
+import 'features/profile/profile_injection.dart';
 
 class DependencyInjection {
   final GetIt getIt;

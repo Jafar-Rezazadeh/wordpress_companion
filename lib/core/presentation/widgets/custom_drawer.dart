@@ -4,11 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_widget.dart';
-import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
-import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
+import '../../core_export.dart';
+import '../cubits/global_profile_cubit/global_profile_cubit.dart';
+import 'profile_avatar_widget.dart';
+import '../../utils/custom_url_launcher.dart';
+import '../../../features/profile/domain/entities/profile_entity.dart';
 
 import '../../router/go_router_config.dart';
 
@@ -56,15 +56,20 @@ class CustomDrawer extends StatelessWidget {
       child: UserAccountsDrawerHeader(
         accountName: Text(
           "${profile.firstName} ${profile.lastName}",
-          style: TextStyle(color: ColorPallet.text),
+          style: TextStyle(color: ColorPallet.white),
         ),
         accountEmail: Text(
           profile.email,
-          style: TextStyle(color: ColorPallet.text),
+          style: TextStyle(color: ColorPallet.white),
         ),
         currentAccountPicture: const ProfileAvatarWidget(),
         decoration: BoxDecoration(
-          color: ColorPallet.white,
+          gradient: LinearGradient(
+            colors: [
+              ColorPallet.lightBlue,
+              ColorPallet.midBlue,
+            ],
+          ),
         ),
       ),
     );

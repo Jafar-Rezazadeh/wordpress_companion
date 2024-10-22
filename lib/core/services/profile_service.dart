@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../features/profile/profile_exports.dart';
 
 import '../errors/failures.dart';
 

@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
-import 'package:wordpress_companion/core/services/profile_service.dart';
+import '../presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
+import '../presentation/screens/main_screen.dart';
+import '../services/profile_service.dart';
 
-import 'package:wordpress_companion/features/login/login_exports.dart';
-import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
+import '../../features/login/login_exports.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 
 import '../../features/profile/profile_exports.dart';
 import '../../features/site_settings/presentation/screens/site_settings_screen.dart';

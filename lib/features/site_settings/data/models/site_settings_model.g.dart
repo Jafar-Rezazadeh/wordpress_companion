@@ -36,7 +36,6 @@ Map<String, dynamic> _$SiteSettingsModelToJson(SiteSettingsModel instance) =>
       'description': instance.description,
       'url': instance.url,
       'email': instance.email,
-      'language': instance.language,
       'timezone': instance.timeZone,
       'date_format': instance.dateFormat,
       'time_format': instance.timeFormat,

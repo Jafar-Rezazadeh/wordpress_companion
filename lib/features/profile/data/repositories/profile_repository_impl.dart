@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../../core/errors/failures.dart';
+import '../../profile_exports.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _profileRemoteDataSource;

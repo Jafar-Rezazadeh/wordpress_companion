@@ -10,7 +10,6 @@ void main() {
     siteIcon: 0,
     url: "url",
     email: "email",
-    language: "language",
     timeZone: "timeZone",
     dateFormat: "dateFormat",
     timeFormat: "timeFormat",
@@ -70,7 +69,6 @@ void main() {
       expect(json["site_icon"], model.siteIcon);
       expect(json["url"], model.url);
       expect(json["email"], model.email);
-      expect(json["language"], model.language);
       expect(json["timezone"], model.timeZone);
       expect(json["date_format"], model.dateFormat);
       expect(json["time_format"], model.timeFormat);
@@ -87,21 +85,20 @@ void main() {
       final json = model.toJson();
 
       //assert
-      expect(
-        json.keys,
-        containsAll([
-          "title",
-          "description",
-          "site_icon",
-          "url",
-          "email",
-          "language",
-          "timezone",
-          "date_format",
-          "time_format",
-          "start_of_week",
-        ]),
-      );
+      final keysToCheck = [
+        "title",
+        "description",
+        "site_icon",
+        "url",
+        "email",
+        "timezone",
+        "date_format",
+        "time_format",
+        "start_of_week",
+      ];
+      for (var key in keysToCheck) {
+        expect(json.keys, contains(key));
+      }
     });
 
     test("should Not include the expected properties ", () {
@@ -114,21 +111,22 @@ void main() {
       final json = model.toJson();
 
       //assert
-      expect(
-        json.keys,
-        isNot(containsAll([
-          "use_smilies",
-          "default_category",
-          "default_post_format",
-          "posts_per_page",
-          "show_on_front",
-          "page_on_front",
-          "page_for_posts",
-          "default_ping_status",
-          "default_comment_status",
-          "site_logo",
-        ])),
-      );
+      final keysToCheck = [
+        "use_smilies",
+        "language",
+        "default_category",
+        "default_post_format",
+        "posts_per_page",
+        "show_on_front",
+        "page_on_front",
+        "page_for_posts",
+        "default_ping_status",
+        "default_comment_status",
+        "site_logo",
+      ];
+      for (var key in keysToCheck) {
+        expect(json.keys, isNot(contains(key)));
+      }
     });
   });
 
@@ -150,7 +148,6 @@ void main() {
       expect(params.siteIcon, json["site_icon"]);
       expect(params.url, json["url"]);
       expect(params.email, json["email"]);
-      expect(params.language, json["language"]);
       expect(params.timeZone, json["timezone"]);
       expect(params.dateFormat, json["date_format"]);
       expect(params.timeFormat, json["time_format"]);

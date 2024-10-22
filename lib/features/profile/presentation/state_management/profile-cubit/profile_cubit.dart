@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../../../core/contracts/use_case.dart';
+import '../../../profile_exports.dart';
 
 import '../../../../../core/errors/failures.dart';
 

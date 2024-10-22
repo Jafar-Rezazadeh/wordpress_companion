@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
+import '../../../site_settings_exports.dart';
 
 import '../../../../../core/core_export.dart';
 

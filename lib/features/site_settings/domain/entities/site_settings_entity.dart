@@ -14,9 +14,6 @@ class SiteSettingsEntity extends Equatable {
   @JsonKey(defaultValue: "")
   final String email;
 
-  @JsonKey(defaultValue: "")
-  final String language;
-
   @JsonKey(defaultValue: "", name: "timezone")
   final String timeZone;
 
@@ -29,8 +26,12 @@ class SiteSettingsEntity extends Equatable {
   @JsonKey(defaultValue: 1, name: "start_of_week")
   final int startOfWeek;
 
+  // TODO: modification needed this can be null
   @JsonKey(defaultValue: 0, name: "site_icon")
   final int siteIcon;
+
+  @JsonKey(defaultValue: "", includeToJson: false)
+  final String language;
 
   @JsonKey(defaultValue: false, name: "use_smilies", includeToJson: false)
   final bool useSmilies;

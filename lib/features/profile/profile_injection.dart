@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:wordpress_companion/core/services/profile_service.dart';
-import 'package:wordpress_companion/features/profile/data/repositories/profile_repository_impl.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../core/services/profile_service.dart';
+import 'data/repositories/profile_repository_impl.dart';
+import 'profile_exports.dart';
 
 initProfileInjection(GetIt getIt) {
   // data sources

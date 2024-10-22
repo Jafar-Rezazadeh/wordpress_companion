@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
+import '../../site_settings_exports.dart';
 
 part 'site_settings_model.g.dart';
 
@@ -44,8 +44,8 @@ class SiteSettingsModel extends SiteSettingsEntity {
       dateFormat: params.dateFormat,
       timeFormat: params.timeFormat,
       startOfWeek: params.startOfWeek,
-      language: params.language,
       siteIcon: params.siteIcon,
+      language: "",
       useSmilies: false,
       defaultCategory: 0,
       defaultPostFormat: "",

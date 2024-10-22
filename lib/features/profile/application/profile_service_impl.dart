@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/services/profile_service.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../core/errors/failures.dart';
+import '../../../core/services/profile_service.dart';
+import '../profile_exports.dart';
 
 import '../../../core/contracts/use_case.dart';
 

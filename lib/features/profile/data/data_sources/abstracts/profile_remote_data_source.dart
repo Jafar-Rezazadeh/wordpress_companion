@@ -1,4 +1,4 @@
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../profile_exports.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getMyProfile();

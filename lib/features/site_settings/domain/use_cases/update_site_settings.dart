@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
+import '../../../../core/contracts/use_case.dart';
+import '../../../../core/errors/failures.dart';
+import '../../site_settings_exports.dart';
 
 class UpdateSiteSettings
     implements UseCase<SiteSettingsEntity, UpdateSiteSettingsParams> {
@@ -25,7 +25,6 @@ class UpdateSiteSettingsParams extends Equatable {
   final int siteIcon;
   final String url;
   final String email;
-  final String language;
   final String timeZone;
   final String dateFormat;
   final String timeFormat;
@@ -37,7 +36,6 @@ class UpdateSiteSettingsParams extends Equatable {
     required this.siteIcon,
     required this.url,
     required this.email,
-    required this.language,
     required this.timeZone,
     required this.dateFormat,
     required this.timeFormat,
@@ -51,7 +49,6 @@ class UpdateSiteSettingsParams extends Equatable {
         siteIcon,
         url,
         email,
-        language,
         timeZone,
         dateFormat,
         timeFormat,

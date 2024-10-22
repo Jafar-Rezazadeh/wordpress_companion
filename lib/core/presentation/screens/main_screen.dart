@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dart';
-import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
-import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
-import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
+import '../cubits/global_profile_cubit/global_profile_cubit.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/custom_drawer.dart';
+import '../widgets/main_app_bar.dart';
+import '../../utils/custom_url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
