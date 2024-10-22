@@ -9,23 +9,22 @@ import 'package:wordpress_companion/features/login/login_exports.dart';
 import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
 
 import '../../features/profile/profile_exports.dart';
+import '../../features/site_settings/presentation/screens/site_settings_screen.dart';
 
-const String loginScreen = "/login";
-const String mainScreen = "/main";
-const String profileScreen = "profile";
-// const String postScreen = "/post";
-// const String postsScreen = "/posts";
-// const String settingsScreen = "/settings";
+const String loginScreenRoute = "/login";
+const String mainScreenRoute = "/main";
+const String profileScreenRoute = "profile";
+const String siteSettingsScreenRoute = "siteSettings";
 
 final GetIt getIt = GetIt.instance;
 
 final goRouter = GoRouter(
   // FIXME: change it to login when testing ends
-  initialLocation: loginScreen,
+  initialLocation: loginScreenRoute,
   routes: [
     GoRoute(
-      name: loginScreen,
-      path: loginScreen,
+      name: loginScreenRoute,
+      path: loginScreenRoute,
       builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -51,18 +50,23 @@ final goRouter = GoRouter(
       ),
       routes: [
         GoRoute(
-          name: mainScreen,
-          path: mainScreen,
+          name: mainScreenRoute,
+          path: mainScreenRoute,
           builder: (context, state) => const MainScreen(),
           routes: [
             GoRoute(
-              name: profileScreen,
-              path: profileScreen,
+              name: profileScreenRoute,
+              path: profileScreenRoute,
               builder: (context, state) => BlocProvider(
                 create: (context) => getIt<ProfileCubit>(),
                 child: const ProfileScreen(),
               ),
             ),
+            GoRoute(
+              name: siteSettingsScreenRoute,
+              path: siteSettingsScreenRoute,
+              builder: (context, state) => const SiteSettingsScreen(),
+            )
           ],
         ),
       ],

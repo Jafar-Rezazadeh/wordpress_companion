@@ -3,13 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_widget.dart';
+import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
 import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
 
+import '../../router/go_router_config.dart';
+
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final CustomUrlLauncher _customUrlLauncher;
+  const CustomDrawer({
+    super.key,
+    required CustomUrlLauncher customUrlLauncher,
+  }) : _customUrlLauncher = customUrlLauncher;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,7 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           children: [
             _header(),
-            _listOfTiles(),
+            _navigationItems(context),
             _bottomSection(),
           ],
         ),
@@ -62,21 +70,24 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Widget _listOfTiles() {
+  Widget _navigationItems(BuildContext context) {
     return Expanded(
       flex: 2,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          ListTile(
-            leading: const Icon(Icons.settings),
-            onTap: () {
-              // TODO: navigate to settings screen
-            },
-            title: const Text("تنظیمات سایت"),
-          )
+          _siteSettingsNav(context),
         ],
       ),
+    );
+  }
+
+  ListTile _siteSettingsNav(BuildContext context) {
+    return ListTile(
+      key: const Key("site_settings_nav"),
+      leading: const Icon(Icons.settings),
+      onTap: () => context.goNamed(siteSettingsScreenRoute),
+      title: const Text("تنظیمات سایت"),
     );
   }
 
@@ -127,7 +138,6 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  // TODO: add social links
   Widget _socialLinks() {
     return Expanded(
       child: Row(
@@ -140,15 +150,26 @@ class CustomDrawer extends StatelessWidget {
                 style: TextStyle(color: ColorPallet.text, fontSize: 0.03.sw)),
           ),
           _bottomBarItem(
+            key: const Key("telegram_button"),
             icon: FontAwesomeIcons.telegram,
-            onPressed: () {},
+            onPressed: () async {
+              await _customUrlLauncher.openInBrowser("https://t.me/jafar_rzzd");
+            },
           ),
           _bottomBarItem(
-            onPressed: () {},
+            key: const Key("github_button"),
+            onPressed: () async {
+              await _customUrlLauncher
+                  .openInBrowser("https://github.com/Jafar-Rezazadeh");
+            },
             icon: FontAwesomeIcons.github,
           ),
           _bottomBarItem(
-            onPressed: () {},
+            key: const Key("email_button"),
+            onPressed: () async {
+              await _customUrlLauncher
+                  .openInBrowser("https://mailto:jafarrezazadeh76@gmail.com");
+            },
             icon: FontAwesomeIcons.envelope,
           )
         ],
@@ -157,10 +178,12 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _bottomBarItem({
+    Key? key,
     required Function()? onPressed,
     required IconData icon,
   }) {
     return Expanded(
+      key: key,
       child: IconButton(
         onPressed: onPressed,
         icon: Icon(icon),

@@ -43,8 +43,8 @@ void main() {
                   ),
                   routes: [
                     GoRoute(
-                      path: profileScreen,
-                      name: profileScreen,
+                      path: profileScreenRoute,
+                      name: profileScreenRoute,
                       builder: (context, state) =>
                           Container(key: const Key("profile")),
                     ),

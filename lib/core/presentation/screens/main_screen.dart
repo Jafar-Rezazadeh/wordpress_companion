@@ -4,6 +4,7 @@ import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubi
 import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
 import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
+import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -28,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: const MainAppBar(),
       body: _bodyLayout(),
-      endDrawer: const CustomDrawer(),
+      endDrawer: CustomDrawer(customUrlLauncher: CustomUrlLauncher()),
       bottomNavigationBar: _bottomNavBar(),
     );
   }

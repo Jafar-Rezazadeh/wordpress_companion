@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
+import 'package:wordpress_companion/core/router/go_router_config.dart';
+import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
 import 'package:wordpress_companion/features/profile/domain/entities/profile_avatar_urls.dart';
 import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
+import 'package:wordpress_companion/features/site_settings/presentation/screens/site_settings_screen.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
     implements GlobalProfileCubit {}
+
+class MockCustomUrlLauncher extends Mock implements CustomUrlLauncher {}
 
 class FakeProfileEntity extends Fake implements ProfileEntity {
   @override
@@ -34,13 +40,27 @@ class FakeProfileEntity extends Fake implements ProfileEntity {
 
 void main() {
   late GlobalProfileCubit globalProfileCubit;
+  late MockCustomUrlLauncher mockCustomUrlLauncher;
 
   setUp(() {
     globalProfileCubit = MockGlobalProfileCubit();
+    mockCustomUrlLauncher = MockCustomUrlLauncher();
     when(
       () => globalProfileCubit.state,
     ).thenAnswer((_) => const GlobalProfileState.initial());
   });
+
+  Widget testWidgetTree = ScreenUtilInit(
+    child: MaterialApp(
+      home: BlocProvider(
+        create: (context) => globalProfileCubit,
+        child: Builder(builder: (context) {
+          context.read<GlobalProfileCubit>().getMyProfile();
+          return CustomDrawer(customUrlLauncher: mockCustomUrlLauncher);
+        }),
+      ),
+    ),
+  );
 
   group("header -", () {
     group("globalProfileCubit -", () {
@@ -54,7 +74,7 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(_testWidgetTree(globalProfileCubit));
+        await tester.pumpWidget(testWidgetTree);
         await tester.pump();
 
         //assert
@@ -72,7 +92,7 @@ void main() {
             const GlobalProfileState.loading(),
           ]),
         );
-        await tester.pumpWidget(_testWidgetTree(globalProfileCubit));
+        await tester.pumpWidget(testWidgetTree);
         await tester.pump();
 
         //assert
@@ -88,7 +108,7 @@ void main() {
           globalProfileCubit,
           Stream.fromIterable([GlobalProfileState.loaded(FakeProfileEntity())]),
         );
-        await tester.pumpWidget(_testWidgetTree(globalProfileCubit));
+        await tester.pumpWidget(testWidgetTree);
         await tester.pump();
 
         //assert
@@ -110,7 +130,7 @@ void main() {
             ),
           ]),
         );
-        await tester.pumpWidget(_testWidgetTree(globalProfileCubit));
+        await tester.pumpWidget(testWidgetTree);
         await tester.pump();
 
         //assert
@@ -122,31 +142,111 @@ void main() {
   });
 
   group("user interaction -", () {
-    group("bottom menu -", () {
-      testWidgets("should launch the specified url when on tap",
+    group("navigationItems -", () {
+      testWidgets(
+          "should go to route (SiteSettingsScreen) when taped on site_settings_nav",
           (tester) async {
         //arrange
-// TODO:
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: GoRouter(
+              initialLocation: "/",
+              routes: [
+                GoRoute(
+                  path: "/",
+                  builder: (context, state) => testWidgetTree,
+                  routes: [
+                    GoRoute(
+                      name: siteSettingsScreenRoute,
+                      path: siteSettingsScreenRoute,
+                      builder: (context, state) => const SiteSettingsScreen(),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
         //verification
+        expect(find.byKey(const Key("site_settings_nav")), findsOneWidget);
 
         //act
+        await tester.tap(find.byKey(const Key("site_settings_nav")));
+        await tester.pumpAndSettle();
 
         //assert
+        expect(find.byType(SiteSettingsScreen), findsOneWidget);
+      });
+    });
+    group("bottom menu -", () {
+      testWidgets(
+          "should launch the telegram url when tap on telegram the button",
+          (tester) async {
+        //arrange
+        when(
+          () => mockCustomUrlLauncher.openInBrowser(any()),
+        ).thenAnswer((_) async => true);
+
+        await tester.pumpWidget(testWidgetTree);
+
+        //verification
+        expect(find.byType(Drawer), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("telegram_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() =>
+                mockCustomUrlLauncher.openInBrowser("https://t.me/jafar_rzzd"))
+            .called(1);
+      });
+
+      testWidgets("should launch the github url when tap on the github button",
+          (tester) async {
+        //arrange
+        when(
+          () => mockCustomUrlLauncher.openInBrowser(any()),
+        ).thenAnswer((_) async => true);
+        await tester.pumpWidget(testWidgetTree);
+
+        //verification
+        expect(find.byKey(const Key("github_button")), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("github_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(
+          () => mockCustomUrlLauncher
+              .openInBrowser("https://github.com/Jafar-Rezazadeh"),
+        ).called(1);
+      });
+
+      testWidgets("should launch the gmail url when tap on the email button",
+          (tester) async {
+        //arrange
+        when(
+          () => mockCustomUrlLauncher.openInBrowser(any()),
+        ).thenAnswer((_) async => true);
+        await tester.pumpWidget(testWidgetTree);
+
+        //verification
+        expect(find.byKey(const Key("email_button")), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("email_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(
+          () => mockCustomUrlLauncher
+              .openInBrowser("https://mailto:jafarrezazadeh76@gmail.com"),
+        ).called(1);
       });
     });
   });
-}
-
-Widget _testWidgetTree(GlobalProfileCubit globalProfileCubit) {
-  return ScreenUtilInit(
-    child: MaterialApp(
-      home: BlocProvider(
-        create: (context) => globalProfileCubit,
-        child: Builder(builder: (context) {
-          context.read<GlobalProfileCubit>().getMyProfile();
-          return const CustomDrawer();
-        }),
-      ),
-    ),
-  );
 }

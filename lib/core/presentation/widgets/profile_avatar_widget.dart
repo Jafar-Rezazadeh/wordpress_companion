@@ -15,7 +15,7 @@ class ProfileAvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       key: const Key("profile_avatar"),
-      onTap: () => context.goNamed(profileScreen),
+      onTap: () => context.goNamed(profileScreenRoute),
       child: _avatarBuilder(),
     );
   }
