@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/site_settings/data/repositories/site_settings_repository_impl.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockSiteSettingsDataSource extends Mock

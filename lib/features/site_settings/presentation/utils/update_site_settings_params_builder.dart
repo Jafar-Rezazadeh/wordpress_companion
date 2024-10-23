@@ -6,7 +6,7 @@ class UpdateSiteSettingsParamsBuilder {
   int _siteIcon = 0;
   String _url = "";
   String _email = "";
-  String _timeZone = "";
+  String _timeZone = "Asia/Tehran";
   String _dateFormat = "";
   String _timeFormat = "";
   int _startOfWeek = 1;

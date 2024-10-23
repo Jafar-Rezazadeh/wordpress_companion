@@ -4,7 +4,7 @@ import '../../../../core/core_export.dart';
 
 class StartOfWeekInput extends StatefulWidget {
   final int? initialValue;
-  final Function(int? value) onSelect;
+  final Function(int value) onSelect;
   const StartOfWeekInput({
     super.key,
     required this.onSelect,
@@ -35,6 +35,9 @@ class _StartOfWeekInputState extends State<StartOfWeekInput> {
             value: selectedValue,
             items: _listOfWeekDays,
             onChanged: (value) {
+              if (value == null) {
+                return;
+              }
               setState(() => selectedValue = value);
               widget.onSelect(value);
             },

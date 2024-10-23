@@ -6,7 +6,7 @@ class TimezoneDropdown extends StatefulWidget {
   final String? initialTimeZone;
   final String selectHint;
   final String searchHint;
-  final Function(String? timeZone) onTimezoneSelected;
+  final Function(String timeZone) onTimezoneSelected;
 
   const TimezoneDropdown({
     super.key,
@@ -84,7 +84,10 @@ class TimezoneDropdownState extends State<TimezoneDropdown> {
     );
   }
 
-  void _onChanged(value) {
+  void _onChanged(String? value) {
+    if (value == null) {
+      return;
+    }
     widget.onTimezoneSelected(value);
     setState(() => selectedZone = value);
   }

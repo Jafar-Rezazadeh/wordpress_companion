@@ -5,7 +5,12 @@ import '../../../../core/core_export.dart';
 // TODO: make media feature and use it here
 class SiteIconInput extends StatelessWidget {
   final int? initialValue;
-  const SiteIconInput({super.key, this.initialValue});
+  final Function(int value) onSelect;
+  const SiteIconInput({
+    super.key,
+    this.initialValue,
+    required this.onSelect,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +20,14 @@ class SiteIconInput extends StatelessWidget {
       children: [
         const Text("نمادک سایت:"),
         const Gap(10),
-        _imageInput(),
+        _imageInput(context),
       ],
     );
   }
 
-  Widget _imageInput() {
+  Widget _imageInput(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => _openSelectMedialDialog(context),
       borderRadius: BorderRadius.circular(smallCornerRadius),
       child: Container(
         decoration: BoxDecoration(
@@ -38,6 +43,15 @@ class SiteIconInput extends StatelessWidget {
             color: ColorPallet.text,
           ),
         ),
+      ),
+    );
+  }
+
+  void _openSelectMedialDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const Dialog(
+        key: Key("select_media_dialog"),
       ),
     );
   }

@@ -68,7 +68,7 @@ final goRouter = GoRouter(
               path: siteSettingsScreenRoute,
               builder: (context, state) => BlocProvider(
                 create: (context) => getIt<SiteSettingsCubit>(),
-                child: const SiteSettingsScreen(),
+                child: SiteSettingsScreen(),
               ),
             )
           ],

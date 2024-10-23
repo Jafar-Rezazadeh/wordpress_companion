@@ -9,7 +9,7 @@ typedef FormatInputPredefine = ({String title, String secondary, String value});
 class SiteSettingsFormatInputWidget extends StatefulWidget {
   final String? initialValue;
   final String title;
-  final void Function(String?) onChanged;
+  final void Function(String) onChanged;
   final List<FormatInputPredefine> predefinedValues;
 
   const SiteSettingsFormatInputWidget({
@@ -57,7 +57,7 @@ class _SiteSettingsFormatInputWidgetState
             child: GroupedRadioButton<String>(
               initialGroupValue: widget.initialValue,
               items: _listOfRadioTiles,
-              onChanged: (value) => widget.onChanged(value),
+              onChanged: (value) => widget.onChanged(value ?? ""),
             ),
           )
         ],

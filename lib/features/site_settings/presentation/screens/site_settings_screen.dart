@@ -10,7 +10,12 @@ import '../../../../core/widgets/time_zone_selector.dart';
 import '../widgets/start_of_week_input.dart';
 
 class SiteSettingsScreen extends StatefulWidget {
-  const SiteSettingsScreen({super.key});
+  final UpdateSiteSettingsParamsBuilder updateSiteSettingsParamsBuilder;
+  SiteSettingsScreen({
+    super.key,
+    UpdateSiteSettingsParamsBuilder? updateSiteSettingsParamsBuilder,
+  }) : updateSiteSettingsParamsBuilder = updateSiteSettingsParamsBuilder ??
+            UpdateSiteSettingsParamsBuilder();
 
   @override
   State<SiteSettingsScreen> createState() => _SiteSettingsScreenState();
@@ -40,18 +45,34 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       listener: _siteSettingsStateListener,
       builder: (context, state) {
         return state.maybeWhen(
-          loading: () => const Center(child: LoadingWidget()),
-          updating: () => const Center(child: LoadingWidget()),
+          loading: () => _loadingWidget(),
+          updating: () => _loadingWidget(),
           orElse: () => _body(),
         );
       },
     );
   }
 
+  Widget _loadingWidget() {
+    return Container(
+      padding: const EdgeInsets.only(top: 100),
+      width: double.infinity,
+      child: const LoadingWidget(),
+    );
+  }
+
   _siteSettingsStateListener(_, SiteSettingsState state) {
     state.whenOrNull(
-      loaded: (settings) => settingData = settings,
-      updated: (settings) => settingData = settings,
+      loaded: (settings) {
+        widget.updateSiteSettingsParamsBuilder.fromExistingObject(settings);
+        settingData = settings;
+        return;
+      },
+      updated: (settings) {
+        widget.updateSiteSettingsParamsBuilder.fromExistingObject(settings);
+        settingData = settings;
+        return;
+      },
       error: (failure) => CustomBottomSheet.showFailureBottomSheet(
         context: context,
         failure: failure,
@@ -64,15 +85,20 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       context: context,
       title: "تنظیمات سایت",
       bottomActionWidgets: [
-        SaveButton(
-          key: const Key("save_site_settings_button"),
-          onPressed: () {
-            if (formKey.currentState?.validate() == true) {
-              // save...
-            }
-          },
-        ),
+        _submit(),
       ],
+    );
+  }
+
+  SaveButton _submit() {
+    return SaveButton(
+      key: const Key("save_site_settings_button"),
+      onPressed: () {
+        if (formKey.currentState?.validate() == true) {
+          final params = widget.updateSiteSettingsParamsBuilder.build();
+          context.read<SiteSettingsCubit>().updateSettings(params);
+        }
+      },
     );
   }
 
@@ -87,57 +113,72 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
             vertical: 30,
           ),
           children: [
-            CustomFormInputField(
-              initialValue: settingData?.title,
-              label: "عنوان سایت",
-            ),
-            CustomFormInputField(
-              initialValue: settingData?.description,
-              label: "معرفی کوتاه",
-            ),
-            SiteIconInput(
-              initialValue: settingData?.siteIcon,
-            ),
-            CustomFormInputField(
-              initialValue: settingData?.url,
-              label: "نشانی سایت",
-            ),
-            CustomFormInputField(
-              key: const Key("email_input"),
-              initialValue: settingData?.email,
-              label: "ایمیل",
-              focusNode: emailFocus,
-              validator: (value) {
-                final isValid = InputValidator.isValidEmail(value);
-                if (isValid != null) {
-                  emailFocus.requestFocus();
-                }
-                return isValid;
-              },
-            ),
+            _titleInput(),
+            _descriptionInput(),
+            _siteIconInput(),
+            _urlInput(),
+            _emailInput(),
             _timeZoneInput(),
-            DateFormatInput(
-              initialValue: settingData?.dateFormat,
-              onChanged: (value) {
-                print(value);
-              },
-            ),
-            TimeFormatInput(
-              initialValue: settingData?.timeFormat,
-              onChanged: (value) {
-                print(value);
-              },
-            ),
-            StartOfWeekInput(
-              initialValue: settingData?.startOfWeek,
-              onSelect: (value) {
-                print(value);
-              },
-            ),
+            _dateFormatInput(),
+            _timeFormatInput(),
+            _startOfWeekInput(),
             const Gap(50),
           ].withGapInBetween(25),
         ),
       ),
+    );
+  }
+
+  Widget _titleInput() {
+    return CustomFormInputField(
+      initialValue: settingData?.title,
+      label: "عنوان سایت",
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setTitle(value),
+    );
+  }
+
+  Widget _descriptionInput() {
+    return CustomFormInputField(
+      initialValue: settingData?.description,
+      label: "معرفی کوتاه",
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setDescription(value),
+    );
+  }
+
+  Widget _siteIconInput() {
+    return SiteIconInput(
+      initialValue: settingData?.siteIcon,
+      onSelect: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setIcon(value),
+    );
+  }
+
+  Widget _urlInput() {
+    return CustomFormInputField(
+      initialValue: settingData?.url,
+      label: "نشانی سایت",
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setUrl(value),
+    );
+  }
+
+  Widget _emailInput() {
+    return CustomFormInputField(
+      key: const Key("email_input"),
+      initialValue: settingData?.email,
+      label: "ایمیل",
+      focusNode: emailFocus,
+      validator: (value) {
+        final isValid = InputValidator.isValidEmail(value);
+        if (isValid != null) {
+          emailFocus.requestFocus();
+        }
+        return isValid;
+      },
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setEmail(value),
     );
   }
 
@@ -150,9 +191,36 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
           initialTimeZone: settingData?.timeZone,
           selectHint: "انتخاب زمان محلی",
           searchHint: "جستجو...",
-          onTimezoneSelected: (timeZone) {},
+          onTimezoneSelected: (timeZone) =>
+              widget.updateSiteSettingsParamsBuilder.setTimeZone(timeZone),
         ),
       ],
+    );
+  }
+
+  Widget _dateFormatInput() {
+    return DateFormatInput(
+      key: const Key("date_format_input"),
+      initialValue: settingData?.dateFormat,
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setDateFormat(value),
+    );
+  }
+
+  Widget _timeFormatInput() {
+    return TimeFormatInput(
+      key: const Key("time_format_input"),
+      initialValue: settingData?.timeFormat,
+      onChanged: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setTimeFormat(value),
+    );
+  }
+
+  Widget _startOfWeekInput() {
+    return StartOfWeekInput(
+      initialValue: settingData?.startOfWeek,
+      onSelect: (value) =>
+          widget.updateSiteSettingsParamsBuilder.setStartOfWeek(value),
     );
   }
 }

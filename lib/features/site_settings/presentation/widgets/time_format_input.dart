@@ -3,7 +3,7 @@ import 'package:wordpress_companion/features/site_settings/presentation/widgets/
 
 class TimeFormatInput extends StatefulWidget {
   final String? initialValue;
-  final Function(String? value) onChanged;
+  final Function(String value) onChanged;
   const TimeFormatInput({
     super.key,
     required this.onChanged,
