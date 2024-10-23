@@ -20,6 +20,32 @@ void main() {
     //assert
     expect(find.byType(GroupedRadioButton<String>), findsOneWidget);
   });
+  testWidgets(
+      "should add the initialValue to TextFormField if it is not one of the predefined values",
+      (tester) async {
+    //arrange
+    await tester.pumpWidget(
+      ScreenUtilInit(
+        child: MaterialApp(
+          home: Material(
+            child: TimeFormatInput(
+              initialValue: "test",
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    //act
+    final textFormField = tester.widget<TextFormField>(
+      find.byType(TextFormField),
+    );
+
+    //assert
+    expect(find.text("test"), findsOneWidget);
+    expect(textFormField.initialValue, "test");
+  });
 
   testWidgets(
       "should return the expected value when tap on a certain radio button",

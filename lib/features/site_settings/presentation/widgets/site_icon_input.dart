@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/core_export.dart';
 
+// TODO: make media feature and use it here
 class SiteIconInput extends StatelessWidget {
-  const SiteIconInput({super.key});
+  final int? initialValue;
+  const SiteIconInput({super.key, this.initialValue});
 
   @override
   Widget build(BuildContext context) {

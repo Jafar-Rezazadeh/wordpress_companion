@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/state_Management/site_settings_cubit/site_settings_cubit.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockGetSiteSettings extends Mock implements GetSiteSettings {}

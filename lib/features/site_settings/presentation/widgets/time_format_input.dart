@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/core_export.dart';
-import '../../../../core/widgets/grouped_radio_button.dart';
+import 'package:wordpress_companion/features/site_settings/presentation/widgets/site_settings_format_input.dart';
 
 class TimeFormatInput extends StatefulWidget {
   final String? initialValue;
@@ -18,77 +15,24 @@ class TimeFormatInput extends StatefulWidget {
 }
 
 class _TimeFormatInputState extends State<TimeFormatInput> {
-  final textController = TextEditingController();
+  List<FormatInputPredefine> predefinedTimeFormats = [
+    (title: "8:21 ب.ظ", secondary: "g:i a", value: "g:i a"),
+    (title: "8:21 ب.ظ", secondary: "g:i A", value: "g:i A"),
+    (title: "21:21", secondary: "H:i", value: "H:i"),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: ColorPallet.border),
-        borderRadius: BorderRadius.circular(smallCornerRadius),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Expanded(child: Text("ساختار تاریخ:")),
-          Expanded(
-            flex: 3,
-            child: GroupedRadioButton<String>(
-              initialGroupValue: widget.initialValue,
-              items: _listOfRadioTiles,
-              onChanged: (value) => widget.onChanged(value),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  List<GroupedRadioButtonTile<String>> get _listOfRadioTiles {
-    return [
-      GroupedRadioButtonTile(
-        title: const Text("8:21 ب.ظ"),
-        secondary: const Text("g:i a"),
-        value: "g:i a",
-      ),
-      GroupedRadioButtonTile(
-        title: const Text("8:21 ب.ظ"),
-        secondary: const Text("g:i A"),
-        value: "g:i A",
-      ),
-      GroupedRadioButtonTile(
-        title: const Text("20:21"),
-        secondary: const Text("H:i"),
-        value: "H:i",
-      ),
-      GroupedRadioButtonTile(
-        title: const Text("سفارشی:"),
-        secondary: SizedBox(
-          width: 0.15.sw,
-          child: _customFormatInputField(),
-        ),
-        value: textController.text,
-      )
-    ];
-  }
-
-  TextField _customFormatInputField() {
-    return TextField(
-      controller: textController,
-      textDirection: TextDirection.ltr,
-      style: Theme.of(context).textTheme.bodySmall,
-      textAlign: TextAlign.center,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: ColorPallet.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: ColorPallet.border),
-        ),
-      ),
-      onChanged: (_) => setState(() {}),
+    return SiteSettingsFormatInputWidget(
+      initialValue: widget.initialValue,
+      onChanged: widget.onChanged,
+      title: "ساختار زمان",
+      predefinedValues: predefinedTimeFormats,
     );
   }
 }

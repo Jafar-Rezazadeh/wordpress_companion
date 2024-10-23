@@ -14,9 +14,13 @@ import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
 import 'package:wordpress_companion/features/profile/domain/entities/profile_avatar_urls.dart';
 import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
 import 'package:wordpress_companion/features/site_settings/presentation/screens/site_settings_screen.dart';
+import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
     implements GlobalProfileCubit {}
+
+class MockSiteSettingsCubit extends MockCubit<SiteSettingsState>
+    implements SiteSettingsCubit {}
 
 class MockCustomUrlLauncher extends Mock implements CustomUrlLauncher {}
 
@@ -40,14 +44,19 @@ class FakeProfileEntity extends Fake implements ProfileEntity {
 
 void main() {
   late GlobalProfileCubit globalProfileCubit;
+  late SiteSettingsCubit siteSettingsCubit;
   late MockCustomUrlLauncher mockCustomUrlLauncher;
 
   setUp(() {
     globalProfileCubit = MockGlobalProfileCubit();
+    siteSettingsCubit = MockSiteSettingsCubit();
     mockCustomUrlLauncher = MockCustomUrlLauncher();
     when(
       () => globalProfileCubit.state,
     ).thenAnswer((_) => const GlobalProfileState.initial());
+    when(
+      () => siteSettingsCubit.state,
+    ).thenAnswer((_) => const SiteSettingsState.initial());
   });
 
   Widget testWidgetTree = ScreenUtilInit(
@@ -159,7 +168,10 @@ void main() {
                     GoRoute(
                       name: siteSettingsScreenRoute,
                       path: siteSettingsScreenRoute,
-                      builder: (context, state) => const SiteSettingsScreen(),
+                      builder: (context, state) => BlocProvider(
+                        create: (context) => siteSettingsCubit,
+                        child: const SiteSettingsScreen(),
+                      ),
                     )
                   ],
                 )

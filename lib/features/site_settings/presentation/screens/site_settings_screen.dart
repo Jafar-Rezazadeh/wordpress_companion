@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
+import 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/core_export.dart';
 import '../../site_settings_exports.dart';
 
@@ -17,16 +19,47 @@ class SiteSettingsScreen extends StatefulWidget {
 class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
   final formKey = GlobalKey<FormState>();
   final emailFocus = FocusNode();
+  SiteSettingsEntity? settingData;
+
+  @override
+  void initState() {
+    context.read<SiteSettingsCubit>().loadSettings();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context),
-      body: _body(),
+      appBar: _appBar(),
+      body: _settingsBuilder(),
     );
   }
 
-  PushedPageAppBar _appBar(BuildContext context) {
+  Widget _settingsBuilder() {
+    return BlocConsumer<SiteSettingsCubit, SiteSettingsState>(
+      listener: _siteSettingsStateListener,
+      builder: (context, state) {
+        return state.maybeWhen(
+          loading: () => const Center(child: LoadingWidget()),
+          updating: () => const Center(child: LoadingWidget()),
+          orElse: () => _body(),
+        );
+      },
+    );
+  }
+
+  _siteSettingsStateListener(_, SiteSettingsState state) {
+    state.whenOrNull(
+      loaded: (settings) => settingData = settings,
+      updated: (settings) => settingData = settings,
+      error: (failure) => CustomBottomSheet.showFailureBottomSheet(
+        context: context,
+        failure: failure,
+      ),
+    );
+  }
+
+  PushedPageAppBar _appBar() {
     return PushedPageAppBar(
       context: context,
       title: "تنظیمات سایت",
@@ -54,12 +87,24 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
             vertical: 30,
           ),
           children: [
-            const CustomFormInputField(label: "عنوان سایت"),
-            const CustomFormInputField(label: "معرفی کوتاه"),
-            const SiteIconInput(),
-            const CustomFormInputField(label: "نشانی سایت"),
+            CustomFormInputField(
+              initialValue: settingData?.title,
+              label: "عنوان سایت",
+            ),
+            CustomFormInputField(
+              initialValue: settingData?.description,
+              label: "معرفی کوتاه",
+            ),
+            SiteIconInput(
+              initialValue: settingData?.siteIcon,
+            ),
+            CustomFormInputField(
+              initialValue: settingData?.url,
+              label: "نشانی سایت",
+            ),
             CustomFormInputField(
               key: const Key("email_input"),
+              initialValue: settingData?.email,
               label: "ایمیل",
               focusNode: emailFocus,
               validator: (value) {
@@ -72,19 +117,19 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
             ),
             _timeZoneInput(),
             DateFormatInput(
-              initialValue: "F j,Y",
+              initialValue: settingData?.dateFormat,
               onChanged: (value) {
                 print(value);
               },
             ),
             TimeFormatInput(
-              initialValue: "g:i a",
+              initialValue: settingData?.timeFormat,
               onChanged: (value) {
                 print(value);
               },
             ),
             StartOfWeekInput(
-              initialValue: 1,
+              initialValue: settingData?.startOfWeek,
               onSelect: (value) {
                 print(value);
               },
@@ -102,6 +147,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       children: [
         const Text("زمان محلی:"),
         TimezoneDropdown(
+          initialTimeZone: settingData?.timeZone,
           selectHint: "انتخاب زمان محلی",
           searchHint: "جستجو...",
           onTimezoneSelected: (timeZone) {},

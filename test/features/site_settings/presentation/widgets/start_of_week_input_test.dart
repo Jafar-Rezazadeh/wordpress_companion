@@ -16,6 +16,29 @@ void main() {
     expect(find.byType(DropdownButton2<int>), findsOneWidget);
   });
 
+  testWidgets("should select the correct value when initial value is set",
+      (tester) async {
+    //arrange
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: StartOfWeekInput(
+            initialValue: 2,
+            onSelect: (value) {},
+          ),
+        ),
+      ),
+    );
+
+    //act
+    final dropDown = tester.widget<DropdownButton2<int>>(
+      find.byType(DropdownButton2<int>),
+    );
+
+    //assert
+    expect(dropDown.value, 2);
+  });
+
   testWidgets(
       "should return the expected weekDay as int when dropdown item is selected",
       (tester) async {

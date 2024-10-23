@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wordpress_companion/features/site_settings/presentation/state_Management/site_settings_cubit/site_settings_cubit.dart';
 import '../presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../presentation/screens/main_screen.dart';
 import '../services/profile_service.dart';
@@ -65,7 +66,10 @@ final goRouter = GoRouter(
             GoRoute(
               name: siteSettingsScreenRoute,
               path: siteSettingsScreenRoute,
-              builder: (context, state) => const SiteSettingsScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (context) => getIt<SiteSettingsCubit>(),
+                child: const SiteSettingsScreen(),
+              ),
             )
           ],
         ),

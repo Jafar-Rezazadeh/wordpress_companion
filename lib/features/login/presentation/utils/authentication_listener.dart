@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 import '../../login_exports.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/router/go_router_config.dart';
-import '../../../../core/widgets/failure_widget.dart';
 
 class AuthenticationStateListener {
   final BuildContext context;
@@ -43,10 +43,9 @@ class AuthenticationStateListener {
 
   _showFailureInModalBottomSheet(Failure failure) {
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) => showModalBottomSheet(
-        isScrollControlled: true,
+      (timeStamp) => CustomBottomSheet.showFailureBottomSheet(
         context: context,
-        builder: (context) => FailureWidget(failure: failure),
+        failure: failure,
       ),
     );
   }

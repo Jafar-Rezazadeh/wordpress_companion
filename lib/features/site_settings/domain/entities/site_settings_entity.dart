@@ -26,7 +26,6 @@ class SiteSettingsEntity extends Equatable {
   @JsonKey(defaultValue: 1, name: "start_of_week")
   final int startOfWeek;
 
-  // TODO: modification needed this can be null
   @JsonKey(defaultValue: 0, name: "site_icon")
   final int siteIcon;
 

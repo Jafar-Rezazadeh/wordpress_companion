@@ -109,7 +109,7 @@ class TimezoneDropdownState extends State<TimezoneDropdown> {
       searchInnerWidget: Container(
         height: 50,
         padding: const EdgeInsets.only(top: 8, bottom: 4, right: 8, left: 8),
-        child: TextFormField(
+        child: TextField(
           expands: true,
           maxLines: null,
           controller: searchTextEditingController,
