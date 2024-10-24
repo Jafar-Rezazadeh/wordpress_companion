@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:wordpress_companion/core/core_export.dart';
+import 'core/core_export.dart';
 
 import 'core/router/go_router_config.dart';
 import 'core/theme/theme.dart';

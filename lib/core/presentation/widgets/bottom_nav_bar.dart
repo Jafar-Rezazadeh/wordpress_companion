@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wordpress_companion/core/core_export.dart';
+import '../../core_export.dart';
 
 class CustomizedBottomNavBar extends StatelessWidget {
   final int currentIndex;

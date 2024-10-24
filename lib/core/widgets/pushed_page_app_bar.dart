@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/core_export.dart';
+import '../core_export.dart';
 
 class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext context;
   final double bottomHeightSize;
+  final String? title;
   final List<Widget> bottomLeadingWidgets;
   final List<Widget> bottomActionWidgets;
 
@@ -11,6 +12,7 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.context,
     this.bottomHeightSize = 80.0,
+    this.title,
     this.bottomLeadingWidgets = const <Widget>[],
     this.bottomActionWidgets = const <Widget>[],
   });
@@ -19,6 +21,8 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 5,
+      title: title != null ? Text(title ?? "") : null,
+      centerTitle: true,
       shadowColor: Colors.black54,
       backgroundColor: ColorPallet.white,
       foregroundColor: ColorPallet.text,

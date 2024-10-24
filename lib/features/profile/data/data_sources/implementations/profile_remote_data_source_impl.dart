@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../../../core/core_export.dart';
+import '../../../profile_exports.dart';
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final Dio _dio;

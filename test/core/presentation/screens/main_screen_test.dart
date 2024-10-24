@@ -1,25 +1,24 @@
-import 'package:dartz/dartz.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/entities/profile_avatar.dart';
+import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
-import 'package:wordpress_companion/core/services/profile_service.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
 
-class MockProfileServiceImpl extends Mock implements ProfileServiceImpl {}
+class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
+    implements GlobalProfileCubit {}
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  late GlobalProfileCubit globalProfileCubit;
 
-  late MockProfileServiceImpl mockProfileServiceImpl;
-  final GetIt getIt = GetIt.instance;
-
-  setUp(() async {
-    await getIt.reset();
-    mockProfileServiceImpl = MockProfileServiceImpl();
-    getIt.registerLazySingleton<ProfileService>(() => mockProfileServiceImpl);
+  setUp(() {
+    globalProfileCubit = MockGlobalProfileCubit();
+    when(
+      () => globalProfileCubit.state,
+    ).thenAnswer((_) => const GlobalProfileState.initial());
   });
 
   group("page control -", () {
@@ -27,14 +26,7 @@ void main() {
         "should show the correct page base on use interact with bottomNavBar when ",
         (tester) async {
       //arrange
-      when(
-        () => mockProfileServiceImpl.getProfileAvatar(),
-      ).thenAnswer(
-        (_) async => right(
-          const ProfileAvatar(size24px: "", size48px: "", size96px: ""),
-        ),
-      );
-      await tester.pumpWidget(const MaterialApp(home: MainScreen()));
+      await tester.pumpWidget(_testWidget(globalProfileCubit));
       await tester.pumpAndSettle();
 
       //verification
@@ -64,14 +56,9 @@ void main() {
         "should update the bottomNavBar when user changes the page using pageViewer",
         (tester) async {
       //arrange
-      when(
-        () => mockProfileServiceImpl.getProfileAvatar(),
-      ).thenAnswer(
-        (_) async => right(
-            const ProfileAvatar(size24px: "", size48px: "", size96px: "")),
-      );
+
       BottomNavigationBar bottomNavBar;
-      await tester.pumpWidget(const MaterialApp(home: MainScreen()));
+      await tester.pumpWidget(_testWidget(globalProfileCubit));
       await tester.pumpAndSettle();
 
       //verification
@@ -95,4 +82,35 @@ void main() {
       expect(bottomNavBar.currentIndex, 2);
     });
   });
+
+  group("drawer -", () {
+    testWidgets("should open the drawer when user tap on it", (tester) async {
+      //arrange
+
+      await tester.pumpWidget(_testWidget(globalProfileCubit));
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.byKey(const Key("drawer_button")), findsOneWidget);
+
+      //act
+      await tester.tap(find.byKey(const Key("drawer_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byType(CustomDrawer), findsOneWidget);
+    });
+  });
+}
+
+Widget _testWidget(GlobalProfileCubit globalProfileCubit) {
+  return ScreenUtilInit(
+    designSize: const Size(600, 812),
+    child: MaterialApp(
+      home: BlocProvider(
+        create: (context) => globalProfileCubit,
+        child: const MainScreen(),
+      ),
+    ),
+  );
 }

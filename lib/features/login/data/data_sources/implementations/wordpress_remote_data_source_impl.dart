@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../../login_exports.dart';
 
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/utils/encoder.dart';

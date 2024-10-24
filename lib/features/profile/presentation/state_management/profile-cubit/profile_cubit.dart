@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/features/profile/profile_exports.dart';
+import '../../../../../core/contracts/use_case.dart';
+import '../../../profile_exports.dart';
 
 import '../../../../../core/errors/failures.dart';
 
 part 'profile_state.dart';
 part 'profile_cubit.freezed.dart';
+
+// TODO: make new state like updating and updated and apply the response of update to avoid unnecessary requests to server
 
 class ProfileCubit extends Cubit<ProfileState> {
   final GetMyProfile _getMyProfile;

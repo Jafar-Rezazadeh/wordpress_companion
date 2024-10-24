@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/core_export.dart';
+import '../core_export.dart';
 
 class SaveButton extends StatelessWidget {
   final String text;

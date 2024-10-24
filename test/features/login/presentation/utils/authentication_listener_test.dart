@@ -126,8 +126,8 @@ Widget _makeTestWidget(AuthenticationState state) {
           },
         ),
         GoRoute(
-          path: mainScreen,
-          name: mainScreen,
+          path: mainScreenRoute,
+          name: mainScreenRoute,
           builder: (context, state) => Scaffold(
             body: Container(
               key: const Key("main_screen"),

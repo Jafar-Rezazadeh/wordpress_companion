@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
+import '../../../../core/constants/enums.dart';
 
 import '../../profile_exports.dart';
 

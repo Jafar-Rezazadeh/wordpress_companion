@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dart';
-import 'package:wordpress_companion/core/presentation/widgets/main_app_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/global_profile_cubit/global_profile_cubit.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/custom_drawer.dart';
+import '../widgets/main_app_bar.dart';
+import '../../utils/custom_url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,6 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     pageController = PageController(initialPage: _selectedPageIndex);
+    context.read<GlobalProfileCubit>().getMyProfile();
     super.initState();
   }
 
@@ -24,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: const MainAppBar(),
       body: _bodyLayout(),
+      endDrawer: CustomDrawer(customUrlLauncher: CustomUrlLauncher()),
       bottomNavigationBar: _bottomNavBar(),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wordpress_companion/core/constants/constants.dart';
-import 'package:wordpress_companion/core/theme/color_pallet.dart';
+import '../constants/constants.dart';
+import '../theme/color_pallet.dart';
 
 class CustomFormInputField extends StatelessWidget {
   final TextEditingController? controller;

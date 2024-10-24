@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../login_exports.dart';
 
 import '../../../../core/core_export.dart';
 

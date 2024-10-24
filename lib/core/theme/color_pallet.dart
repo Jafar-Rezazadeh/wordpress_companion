@@ -1,4 +1,3 @@
-//coverage:ignore-file
 import 'dart:ui';
 
 class ColorPallet {

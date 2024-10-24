@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
+import '../../../../core/contracts/use_case.dart';
+import '../../../../core/errors/failures.dart';
 
 import '../../profile_exports.dart';
 
