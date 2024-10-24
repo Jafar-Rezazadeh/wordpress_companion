@@ -122,4 +122,89 @@ class JsonResponseSimulator {
     "site_icon": 37,
     "jwt_auth_options": {"share_data": false}
   };
+
+  static Map<String, dynamic> media = {
+    "id": 42,
+    "date": "2024-10-24T14:58:10",
+    "date_gmt": "2024-10-24T11:28:10",
+    "guid": {
+      "rendered":
+          "http://localhost/wordpress_test/wp-content/uploads/2024/10/test.zip",
+      "raw":
+          "http://localhost/wordpress_test/wp-content/uploads/2024/10/test.zip"
+    },
+    "modified": "2024-10-24T14:58:10",
+    "modified_gmt": "2024-10-24T11:28:10",
+    "slug": "test-2",
+    "status": "inherit",
+    "type": "attachment",
+    "link": "https://localhost/wordpress_test/test-2/",
+    "title": {"raw": "test", "rendered": "test"},
+    "author": 4,
+    "featured_media": 0,
+    "comment_status": "open",
+    "ping_status": "closed",
+    "template": "",
+    "meta": {"_acf_changed": false},
+    "permalink_template": "https://localhost/wordpress_test/?attachment_id=42",
+    "generated_slug": "test-2",
+    "class_list": [
+      "post-42",
+      "attachment",
+      "type-attachment",
+      "status-inherit",
+      "hentry"
+    ],
+    "acf": [],
+    "description": {
+      "raw": "",
+      "rendered":
+          "<p class=\"attachment\"><a href='https://localhost/wordpress_test/wp-content/uploads/2024/10/test.zip'>test</a></p>\n"
+    },
+    "caption": {"raw": "", "rendered": "<p>test</p>\n"},
+    "alt_text": "",
+    "media_type": "file",
+    "mime_type": "application/zip",
+    "media_details": {"filesize": 114, "sizes": {}},
+    "post": null,
+    "source_url":
+        "https://localhost/wordpress_test/wp-content/uploads/2024/10/test.zip",
+    "missing_image_sizes": [],
+    "_links": {
+      "self": [
+        {"href": "https://localhost/wordpress_test/wp-json/wp/v2/media/42"}
+      ],
+      "collection": [
+        {"href": "https://localhost/wordpress_test/wp-json/wp/v2/media"}
+      ],
+      "about": [
+        {
+          "href":
+              "https://localhost/wordpress_test/wp-json/wp/v2/types/attachment"
+        }
+      ],
+      "author": [
+        {
+          "embeddable": true,
+          "href": "https://localhost/wordpress_test/wp-json/wp/v2/users/4"
+        }
+      ],
+      "replies": [
+        {
+          "embeddable": true,
+          "href":
+              "https://localhost/wordpress_test/wp-json/wp/v2/comments?post=42"
+        }
+      ],
+      "wp:action-unfiltered-html": [
+        {"href": "https://localhost/wordpress_test/wp-json/wp/v2/media/42"}
+      ],
+      "wp:action-assign-author": [
+        {"href": "https://localhost/wordpress_test/wp-json/wp/v2/media/42"}
+      ],
+      "curies": [
+        {"name": "wp", "href": "https://api.w.org/{rel}", "templated": true}
+      ]
+    }
+  };
 }
