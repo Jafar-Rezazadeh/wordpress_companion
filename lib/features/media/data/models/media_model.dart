@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wordpress_companion/features/media/domain/use_cases/update_media.dart';
 
 import '../../media_exports.dart';
 import 'media_details_model.dart';

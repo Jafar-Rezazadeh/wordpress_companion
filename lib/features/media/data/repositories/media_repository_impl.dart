@@ -1,30 +1,59 @@
 import 'package:dartz/dartz.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/media/domain/use_cases/update_media.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 
 class MediaRepositoryImpl implements MediaRepository {
+  final MediaRemoteDataSource _mediaRemoteDataSource;
+
+  MediaRepositoryImpl({
+    required MediaRemoteDataSource mediaRemoteDataSource,
+  }) : _mediaRemoteDataSource = mediaRemoteDataSource;
+
   @override
-  Future<Either<Failure, bool>> deleteMedia(int id) {
-    // TODO: implement deleteMedia
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> deleteMedia(int id) async {
+    try {
+      final result = await _mediaRemoteDataSource.deleteMedia(id);
+
+      return right(result);
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
+    }
   }
 
   @override
-  Future<Either<Failure, List<MediaEntity>>> getAllMedia() {
-    // TODO: implement getAllMedia
-    throw UnimplementedError();
+  Future<Either<Failure, CurrentPageMediasEntity>> getMediaPerPage(
+      GetMediaPerPageParams params) async {
+    try {
+      final result = await _mediaRemoteDataSource.getMediasPerPage(params);
+
+      return right(result);
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
+    }
   }
 
   @override
-  Future<Either<Failure, MediaEntity>> updateMedia(UpdateMediaParams params) {
-    // TODO: implement updateMedia
-    throw UnimplementedError();
+  Future<Either<Failure, MediaEntity>> updateMedia(
+      UpdateMediaParams params) async {
+    try {
+      final result = await _mediaRemoteDataSource.updateMedia(params);
+
+      return right(result);
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
+    }
   }
 
   @override
-  Future<Either<Failure, MediaEntity>> uploadMedia(String pathToFile) {
-    // TODO: implement uploadMedia
-    throw UnimplementedError();
+  Future<Either<Failure, Stream<double>>> uploadMediaFile(
+    String pathToFile,
+  ) async {
+    try {
+      final result = _mediaRemoteDataSource.uploadMediaFile(pathToFile);
+
+      return right(result);
+    } catch (e) {
+      return left(FailureFactory.createFailure(e));
+    }
   }
 }

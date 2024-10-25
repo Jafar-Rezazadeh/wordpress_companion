@@ -5,3 +5,11 @@ enum UserRole {
   editor,
   administrator,
 }
+
+enum MediaType {
+  image,
+  video,
+  text,
+  application,
+  audio,
+}

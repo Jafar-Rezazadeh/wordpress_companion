@@ -20,12 +20,12 @@ void main() {
   });
 
   test(
-      "should return the uploaded media as (MediaEntity) when success to upload",
+      "should return the progress of upload as (Stream<double>) when uploading",
       () async {
     //arrange
     when(
-      () => mockMediaRepository.uploadMedia(any()),
-    ).thenAnswer((_) async => right(FakeMediaEntity()));
+      () => mockMediaRepository.uploadMediaFile(any()),
+    ).thenAnswer((_) async => right(const Stream<double>.empty()));
 
     //act
     final result = await uploadMedia.call("path");
@@ -33,13 +33,13 @@ void main() {
 
     //assert
     expect(result.isRight(), true);
-    expect(rightValue, isA<MediaEntity>());
+    expect(rightValue, isA<Stream<double>>());
   });
 
   test("should return kind of (Failure) when fails to upload", () async {
     //arrange
     when(
-      () => mockMediaRepository.uploadMedia(any()),
+      () => mockMediaRepository.uploadMediaFile(any()),
     ).thenAnswer((_) async => left(FakeFailure()));
 
     //act

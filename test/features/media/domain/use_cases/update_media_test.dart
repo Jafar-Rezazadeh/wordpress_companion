@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/media/domain/use_cases/update_media.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 
 class MockMediaRepository extends Mock implements MediaRepository {}

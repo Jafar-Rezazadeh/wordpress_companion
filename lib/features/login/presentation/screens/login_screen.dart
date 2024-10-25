@@ -219,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _domain() {
+    // TODO: remove the [/] at the end of the value on change
     return CustomFormInputField(
       key: const Key("domain"),
       controller: _domainController,
