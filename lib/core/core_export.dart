@@ -10,3 +10,6 @@ export 'package:wordpress_companion/core/widgets/save_button.dart';
 export 'package:wordpress_companion/core/widgets/custom_form_input_field.dart';
 export 'package:wordpress_companion/core/widgets/failure_widget.dart';
 export 'package:wordpress_companion/core/widgets/loading_widget.dart';
+export 'package:wordpress_companion/core/widgets/filter_button.dart';
+export 'package:wordpress_companion/core/widgets/page_header_layout.dart';
+export 'package:wordpress_companion/core/widgets/custom_search_input.dart';

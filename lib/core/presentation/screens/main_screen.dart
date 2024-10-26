@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
 import '../cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/custom_drawer.dart';
@@ -38,13 +40,18 @@ class _MainScreenState extends State<MainScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: _bodySections(),
+        padding: const EdgeInsets.fromLTRB(
+          edgeToEdgePaddingHorizontal,
+          20,
+          edgeToEdgePaddingHorizontal,
+          5,
+        ),
+        child: _pageView(),
       ),
     );
   }
 
-  Widget _bodySections() {
+  Widget _pageView() {
     return PageView(
       reverse: true,
       controller: pageController,
@@ -65,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       Container(
         key: const Key("media_page"),
-        child: const Center(child: Icon(Icons.video_library_rounded)),
+        child: const MediaPage(),
       ),
       Container(
         key: const Key("comments_page"),
