@@ -9,6 +9,10 @@ export 'package:wordpress_companion/features/media/domain/repositories/media_rep
 export 'package:wordpress_companion/features/media/domain/entities/media_details_entity.dart';
 export 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
 export 'package:wordpress_companion/features/media/domain/entities/current_page_medias_entity.dart';
+export 'package:wordpress_companion/features/media/domain/use_cases/delete_media.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/update_media.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/get_media_per_page.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/upload_media.dart';
+
+// presentation
+export 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/media_cubit/media_cubit.dart';

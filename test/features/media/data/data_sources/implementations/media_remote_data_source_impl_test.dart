@@ -17,6 +17,7 @@ class MockDio extends Mock implements Dio {
 }
 
 void main() {
+  const dummyAssetFileForUpload = "assets/fonts/Vazir.ttf";
   late Dio dio;
   late DioAdapter dioAdapter;
   late MediaRemoteDataSourceImpl mediaRemoteDataSourceImpl;
@@ -388,6 +389,7 @@ void main() {
         () => dio.post(
           "$wpV2EndPoint/media",
           data: any(named: 'data'),
+          options: any(named: 'options'),
           onSendProgress: any(named: 'onSendProgress'),
         ),
       ).thenAnswer((invocation) async {
@@ -406,13 +408,43 @@ void main() {
 
       // act
       final result = await mediaRemoteDataSourceImpl
-          .uploadMediaFile("assets/fonts/Vazir.ttf")
+          .uploadMediaFile(dummyAssetFileForUpload)
           .toList();
 
       // assert
       expect(result, [0.5, 1.0]);
     });
+    test("should include expected headers ", () async {
+      //arrange
+      var headers = {};
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            headers = options.headers;
+            handler.next(options);
+          },
+        ),
+      );
+      dioAdapter.onPost(
+        "$wpV2EndPoint/media",
+        data: Matchers.any,
+        (server) => server.reply(
+          HttpStatus.ok,
+          JsonResponseSimulator.media,
+        ),
+      );
 
-    // TODO: test failure
+      //act
+      await mediaRemoteDataSourceImpl
+          .uploadMediaFile(dummyAssetFileForUpload)
+          .toList();
+
+      //assert
+      expect(headers.keys, contains("content-type"));
+      expect(
+        headers["content-type"].toString(),
+        contains("multipart/form-data"),
+      );
+    });
   });
 }

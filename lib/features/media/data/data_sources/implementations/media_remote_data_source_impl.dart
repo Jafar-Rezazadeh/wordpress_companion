@@ -73,6 +73,11 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
     _dio.post(
       "$wpV2EndPoint/media",
       data: fileData,
+      options: Options(
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      ),
       onSendProgress: (count, total) {
         controller.add(count / total);
       },
