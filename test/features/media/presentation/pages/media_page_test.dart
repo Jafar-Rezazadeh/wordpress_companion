@@ -41,7 +41,7 @@ void main() {
         (tester) async {
       //arrange
       await tester.pumpWidget(_testWidget(mediaCubit));
-      await tester.pumpAndSettle();
+      await tester.pump(Durations.short1);
 
       //assert
       verify(() => mediaCubit.getMediaPerPage(any())).called(1);
@@ -54,13 +54,13 @@ void main() {
         (tester) async {
       //arrange
       await tester.pumpWidget(_testWidget(mediaCubit));
-      await tester.pumpAndSettle();
+      await tester.pump(Durations.short1);
 
       //assert
       expect(find.byType(ListView), findsNothing);
     });
 
-    testWidgets("should show a infoText when listView is empty",
+    testWidgets("should show a infoText when listView is empty when ",
         (tester) async {
       //arrange
       whenListen(
@@ -68,20 +68,21 @@ void main() {
         Stream.fromIterable(
           [
             MediaState.loaded(
-              CurrentPageMediasEntity(hasMore: false, medias: []),
+              CurrentPageMediasEntity(hasMoreMedias: false, medias: []),
             )
           ],
         ),
       );
       await tester.pumpWidget(_testWidget(mediaCubit));
-      await tester.pumpAndSettle();
+      await tester.pump(Durations.short1);
 
       //assert
       expect(find.byKey(const Key("no_media_info_text")), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
     });
 
-    testWidgets("should show loadingWidget when state is loading",
+    testWidgets(
+        "should show full_screen_loading when (state is loading && page == 1 && listOfMedias.isEmpty)",
         (tester) async {
       //arrange
       whenListen(
@@ -99,6 +100,37 @@ void main() {
 
   group("mediaStateListener -", () {
     testWidgets(
+        "should show an snackbar when (state is loading && listOfMedias.isNotEmpty)",
+        (tester) async {
+      //arrange
+      whenListen(
+        mediaCubit,
+        Stream.fromIterable([
+          MediaState.loaded(CurrentPageMediasEntity(
+            hasMoreMedias: true,
+            medias: [
+              FakeMediaEntity(),
+              FakeMediaEntity(),
+              FakeMediaEntity(),
+              FakeMediaEntity(),
+              FakeMediaEntity(),
+            ],
+          )),
+          const MediaState.loading(),
+        ]),
+      );
+      await tester.pumpWidget(_testWidget(mediaCubit));
+      await tester.pump(Durations.short1);
+
+      //act
+      await tester.drag(find.byType(ListView), const Offset(0, -5000));
+      await tester.pump();
+
+      //assert
+      expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
+    });
+
+    testWidgets(
         "should assign the received data to listView when state is loaded",
         (tester) async {
       //arrange
@@ -107,7 +139,7 @@ void main() {
         Stream.fromIterable([
           MediaState.loaded(
             CurrentPageMediasEntity(
-              hasMore: false,
+              hasMoreMedias: false,
               medias: [FakeMediaEntity()],
             ),
           )
@@ -147,9 +179,110 @@ void main() {
       expect(find.byKey(const Key("failure_bottom_sheet")), findsOneWidget);
     });
   });
+
+  group("user interaction -", () {
+    testWidgets("should refresh when user drag scroll to top ", (tester) async {
+      //arrange
+      whenListen(
+        mediaCubit,
+        Stream.fromIterable([
+          MediaState.loaded(CurrentPageMediasEntity(
+            hasMoreMedias: false,
+            medias: [FakeMediaEntity()],
+          ))
+        ]),
+      );
+      await tester.pumpWidget(_testWidget(mediaCubit));
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.byType(ListView), findsOneWidget);
+
+      //act
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+
+      //assert
+      verify(
+        () => mediaCubit.getMediaPerPage(
+          any(
+            that: isA<GetMediaPerPageParams>()
+                .having((params) => params.page == 1, "is page 1", true),
+          ),
+        ),
+      ).called(1);
+    });
+
+    testWidgets(
+        "should increase the page index of params when listView is scrolled to bottom and hasMore is true",
+        (tester) async {
+      //arrange
+      _setMediaStateLoaded(mediaCubit);
+      await tester.pumpWidget(_testWidget(mediaCubit));
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.byType(ListView), findsOneWidget);
+      verify(
+        () => mediaCubit.getMediaPerPage(
+          any(
+            that: isA<GetMediaPerPageParams>().having(
+              (params) => params.page == 1,
+              "is page 1",
+              true,
+            ),
+          ),
+        ),
+      ).called(1);
+
+      //act
+      await tester.scrollUntilVisible(
+        find.text("title").last,
+        500,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.drag(find.byType(ListView), const Offset(0, -5000));
+
+      //assert
+      verify(
+        () => mediaCubit.getMediaPerPage(
+          any(
+            that: isA<GetMediaPerPageParams>().having(
+              (params) => params.page == 2,
+              "is page 2",
+              true,
+            ),
+          ),
+        ),
+      ).called(1);
+    });
+  });
 }
 
-BlocProvider<MediaCubit> _testWidget(MediaCubit mediaCubit) {
+void _setMediaStateLoaded(MediaCubit mediaCubit) {
+  return whenListen(
+    mediaCubit,
+    Stream.fromIterable([
+      MediaState.loaded(CurrentPageMediasEntity(
+        hasMoreMedias: true,
+        medias: [
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+          FakeMediaEntity(),
+        ],
+      ))
+    ]),
+  );
+}
+
+Widget _testWidget(MediaCubit mediaCubit) {
   return BlocProvider(
     create: (context) => mediaCubit,
     child: const MaterialApp(

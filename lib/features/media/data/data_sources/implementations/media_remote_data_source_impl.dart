@@ -44,7 +44,7 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
     final hasMore = listOfMedias.length >= params.perPage;
 
     return CurrentPageMediasEntity(
-      hasMore: hasMore,
+      hasMoreMedias: hasMore,
       medias: listOfMedias.map((e) => MediaModel.fromJson(e)).toList(),
     );
   }

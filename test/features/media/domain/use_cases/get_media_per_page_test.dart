@@ -25,26 +25,47 @@ void main() {
   });
 
   group("params -", () {
-    test("should params has expected default value on create ", () {
-      //arrange
-      final params = GetMediaPerPageParams();
+    group("when create", () {
+      test("should params has expected default value on create ", () {
+        //arrange
+        final params = GetMediaPerPageParams();
 
-      //assert
-      expect(params.page, 1);
-      expect(params.perPage, 10);
-      expect(params.search, null);
-      expect(params.after, null);
-      expect(params.before, null);
-      expect(params.type, null);
+        //assert
+        expect(params.page, 1);
+        expect(params.perPage, 10);
+        expect(params.search, null);
+        expect(params.after, null);
+        expect(params.before, null);
+        expect(params.type, null);
+      });
+      test("should throw (AssertionError) when page is less than 1 ", () {
+        //assert
+        expect(() => GetMediaPerPageParams(page: 0), throwsAssertionError);
+        expect(() => GetMediaPerPageParams(page: -2), throwsAssertionError);
+      });
+      test("should throw (AssertionError) when perPage is less than 10 ", () {
+        //assert
+        expect(() => GetMediaPerPageParams(perPage: 9), throwsAssertionError);
+      });
     });
-    test("should throw (AssertionError) when page is less than 1 ", () {
-      //assert
-      expect(() => GetMediaPerPageParams(page: 0), throwsAssertionError);
-      expect(() => GetMediaPerPageParams(page: -2), throwsAssertionError);
-    });
-    test("should throw (AssertionError) when perPage is less than 10 ", () {
-      //assert
-      expect(() => GetMediaPerPageParams(perPage: 9), throwsAssertionError);
+    group("copyWith -", () {
+      test(
+          "should copy the properties and return (GetMediaPerPageParams) with given new properties",
+          () {
+        //arrange
+        final params = GetMediaPerPageParams();
+
+        //act
+        final pageChangedParams = params.copyWith(page: 2);
+
+        //assert
+        expect(pageChangedParams.page, 2);
+        expect(pageChangedParams.perPage, 10);
+        expect(pageChangedParams.search, null);
+        expect(pageChangedParams.after, null);
+        expect(pageChangedParams.before, null);
+        expect(pageChangedParams.type, null);
+      });
     });
   });
 

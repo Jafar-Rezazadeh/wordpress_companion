@@ -38,4 +38,22 @@ class GetMediaPerPageParams {
     this.type,
   })  : assert(page > 0, 'page must be greater than 0'),
         assert(perPage >= 10, 'perPage must be greater than or equal to 10');
+
+  GetMediaPerPageParams copyWith({
+    int? page,
+    int? perPage,
+    String? search,
+    String? after,
+    String? before,
+    MediaType? type,
+  }) {
+    return GetMediaPerPageParams(
+      page: page ?? this.page,
+      perPage: perPage ?? this.perPage,
+      search: search ?? this.search,
+      after: after ?? this.after,
+      before: before ?? this.before,
+      type: type ?? this.type,
+    );
+  }
 }

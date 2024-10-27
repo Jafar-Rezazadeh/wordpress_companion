@@ -272,7 +272,7 @@ void main() {
       );
 
       //assert
-      expect(result.hasMore, false);
+      expect(result.hasMoreMedias, false);
     });
 
     test(
@@ -297,7 +297,7 @@ void main() {
       );
 
       //assert
-      expect(result.hasMore, true);
+      expect(result.hasMoreMedias, true);
     });
   });
 
