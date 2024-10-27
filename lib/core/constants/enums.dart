@@ -13,3 +13,9 @@ enum MediaType {
   application,
   audio,
 }
+
+enum MimeType {
+  image,
+  video,
+  file,
+}

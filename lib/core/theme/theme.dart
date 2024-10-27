@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'color_pallet.dart';
 
 class CustomTheme {
-  lightTheme() {
-    return ThemeData(
+  lightTheme() => ThemeData(
         fontFamily: "Vazir",
         colorScheme: ColorScheme(
           brightness: Brightness.light,
@@ -16,6 +15,6 @@ class CustomTheme {
           surface: ColorPallet.white,
           onSurface: ColorPallet.text,
         ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData());
-  }
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
+      );
 }

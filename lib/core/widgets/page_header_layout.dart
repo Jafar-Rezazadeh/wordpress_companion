@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/core_export.dart';
 
 class PageHeaderLayout extends StatelessWidget {
   final Widget? leftWidget;
@@ -17,9 +16,9 @@ class PageHeaderLayout extends StatelessWidget {
       height: 70,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: ColorPallet.border),
+          bottom: BorderSide(color: Colors.black26),
         ),
       ),
       child: Row(

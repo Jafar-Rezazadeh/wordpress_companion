@@ -8,8 +8,8 @@ class DeleteMedia implements UseCase<bool, int> {
   final MediaRepository _repository;
 
   DeleteMedia({
-    required MediaRepository deleteRepository,
-  }) : _repository = deleteRepository;
+    required MediaRepository mediaRepository,
+  }) : _repository = mediaRepository;
 
   @override
   Future<Either<Failure, bool>> call(int id) {

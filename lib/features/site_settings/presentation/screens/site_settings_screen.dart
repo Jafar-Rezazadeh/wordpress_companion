@@ -73,7 +73,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
         settingData = settings;
         return;
       },
-      error: (failure) => CustomBottomSheet.showFailureBottomSheet(
+      error: (failure) => CustomBottomSheets.showFailureBottomSheet(
         context: context,
         failure: failure,
       ),

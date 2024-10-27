@@ -43,7 +43,7 @@ class AuthenticationStateListener {
 
   _showFailureInModalBottomSheet(Failure failure) {
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) => CustomBottomSheet.showFailureBottomSheet(
+      (timeStamp) => CustomBottomSheets.showFailureBottomSheet(
         context: context,
         failure: failure,
       ),

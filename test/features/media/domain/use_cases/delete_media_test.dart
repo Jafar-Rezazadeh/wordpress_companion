@@ -14,7 +14,7 @@ void main() {
 
   setUp(() {
     mockMediaRepository = MockMediaRepository();
-    deleteMedia = DeleteMedia(deleteRepository: mockMediaRepository);
+    deleteMedia = DeleteMedia(mediaRepository: mockMediaRepository);
   });
 
   test("should return right(bool) when deletion is successful", () async {
