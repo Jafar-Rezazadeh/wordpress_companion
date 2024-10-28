@@ -149,9 +149,9 @@ void main() {
     });
   });
 
-  group("onChanged (TextField) -", () {
+  group("user interactions -", () {
     testWidgets(
-        "should set the value of text to onChanged method when user interact with TextField",
+        "should set the value of textField to onSubmit method when user tapped on prefixIcon",
         (tester) async {
       //arrange
       String? text;
@@ -159,7 +159,8 @@ void main() {
         MaterialApp(
           home: Material(
             child: CustomSearchInput(
-              onChanged: (value) => text = value,
+              onSubmit: (value) => text = value,
+              onClear: () {},
             ),
           ),
         ),
@@ -168,11 +169,45 @@ void main() {
       //verification
       expect(text, null);
 
+      expect(find.byKey(const Key("prefix_button")), findsOneWidget);
+
       //act
       await tester.enterText(find.byType(TextField), "test");
+      await tester.pump(Durations.short1);
+      await tester.tap(find.byKey(const Key("prefix_button")));
+      await tester.pumpAndSettle();
 
       //assert
       expect(text, "test");
+    });
+
+    testWidgets("should invoke the onClear when user tapped on suffixIcon",
+        (tester) async {
+      //arrange
+      String? text;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: CustomSearchInput(
+              onSubmit: (value) {},
+              onClear: () => text = "clear",
+            ),
+          ),
+        ),
+      );
+
+      //verification
+      expect(text, null);
+      await tester.enterText(find.byType(TextField), "test");
+      await tester.pump(Durations.short1);
+      expect(find.byKey(const Key("suffix_button")), findsOneWidget);
+
+      //act
+      await tester.tap(find.byKey(const Key("suffix_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(text, "clear");
     });
   });
 }
@@ -182,7 +217,8 @@ Future<void> _pumpTestWidget(WidgetTester tester) async {
     MaterialApp(
       home: Material(
         child: CustomSearchInput(
-          onChanged: (value) {},
+          onSubmit: (value) {},
+          onClear: () {},
         ),
       ),
     ),

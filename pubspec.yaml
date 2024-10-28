@@ -57,6 +57,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   persian_number_utility: ^1.1.4
   loadmore: ^2.1.0
+  persian_datetime_picker: ^3.0.2
 
 dev_dependencies:
   flutter_test:

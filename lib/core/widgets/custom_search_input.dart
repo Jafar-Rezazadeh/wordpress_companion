@@ -3,8 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 
 class CustomSearchInput extends StatefulWidget {
-  final Function(String? value) onChanged;
-  const CustomSearchInput({super.key, required this.onChanged});
+  final Function(String? value) onSubmit;
+  final Function() onClear;
+  const CustomSearchInput({
+    super.key,
+    required this.onSubmit,
+    required this.onClear,
+  });
 
   @override
   State<CustomSearchInput> createState() => _CustomSearchInputState();
@@ -27,7 +32,6 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
         decoration: _inputDecoration(),
         onChanged: (value) {
           setState(() => playAnimation = value.isNotEmpty ? true : false);
-          widget.onChanged(value);
         },
       ),
     );
@@ -51,6 +55,7 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
       onPressed: () {
         setState(() => playAnimation = false);
         focusNode.unfocus();
+        widget.onSubmit(_controller.text);
       },
     ).animate(
       onComplete: (cont) => playAnimation == true ? cont.repeat() : null,
@@ -75,6 +80,7 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
         _controller.clear();
         setState(() => playAnimation = false);
         focusNode.unfocus();
+        widget.onClear();
       },
     );
   }

@@ -5,8 +5,8 @@ import 'package:wordpress_companion/core/core_export.dart';
 
 class FilterButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  final int? numberOfFilters;
-  const FilterButton({super.key, this.onPressed, this.numberOfFilters});
+  final int? numberOfAppliedFilters;
+  const FilterButton({super.key, this.onPressed, this.numberOfAppliedFilters});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class FilterButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _iconAndLabel(),
-            if (numberOfFilters != null) _numberOfFilters(),
+            if (numberOfAppliedFilters != null) _numberOfFilters(),
           ],
         ),
       ),
@@ -50,7 +50,7 @@ class FilterButton extends StatelessWidget {
         color: ColorPallet.white,
         fontSize: 10.sp,
       ),
-      count: numberOfFilters ?? 0,
+      count: numberOfAppliedFilters ?? 0,
     );
   }
 }

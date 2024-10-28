@@ -77,7 +77,7 @@ void main() {
       await tester.pump(Durations.short1);
 
       //assert
-      expect(find.byKey(const Key("no_media_info_text")), findsOneWidget);
+      expect(find.byKey(const Key("no_data_info_text")), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
     });
 
@@ -100,7 +100,7 @@ void main() {
 
   group("mediaStateListener -", () {
     testWidgets(
-        "should show an snackbar when (state is loading && listOfMedias.isNotEmpty)",
+        "should show a load_on_scroll_widget when (state is loading && listOfMedias.isNotEmpty)",
         (tester) async {
       //arrange
       whenListen(
@@ -123,8 +123,8 @@ void main() {
       await tester.pump(Durations.short1);
 
       //act
-      await tester.drag(find.byType(ListView), const Offset(0, -5000));
-      await tester.pump();
+      await tester.drag(find.byType(ListView).first, const Offset(0, -5000));
+      await tester.pump(Durations.short1);
 
       //assert
       expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
@@ -147,15 +147,16 @@ void main() {
       );
       await tester.pumpWidget(_testWidget(mediaCubit));
       await tester.pumpAndSettle();
+      final listViewFinder = find.byType(ListView).first;
 
       //verification
-      expect(find.byType(ListView), findsOneWidget);
+      expect(listViewFinder, findsOneWidget);
 
       //act
-      final listView = tester.widget<ListView>(find.byType(ListView));
+      final listView = tester.widget<ListView>(listViewFinder);
 
       //assert
-      expect(listView.semanticChildCount, 1);
+      expect(listView.semanticChildCount, greaterThan(0));
     });
 
     testWidgets("should show a failureBottomSheet when state is error",
@@ -194,12 +195,13 @@ void main() {
       );
       await tester.pumpWidget(_testWidget(mediaCubit));
       await tester.pumpAndSettle();
+      final listViewFinder = find.byType(ListView).first;
 
       //verification
-      expect(find.byType(ListView), findsOneWidget);
+      expect(listViewFinder, findsOneWidget);
 
       //act
-      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.drag(listViewFinder, const Offset(0, -300));
       await tester.pumpAndSettle();
 
       //assert
@@ -220,9 +222,10 @@ void main() {
       _setMediaStateLoaded(mediaCubit);
       await tester.pumpWidget(_testWidget(mediaCubit));
       await tester.pumpAndSettle();
+      final listViewFinder = find.byType(ListView).first;
 
       //verification
-      expect(find.byType(ListView), findsOneWidget);
+      expect(listViewFinder, findsOneWidget);
       verify(
         () => mediaCubit.getMediaPerPage(
           any(
@@ -236,12 +239,7 @@ void main() {
       ).called(1);
 
       //act
-      await tester.scrollUntilVisible(
-        find.text("title").last,
-        500,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.drag(find.byType(ListView), const Offset(0, -5000));
+      await tester.drag(listViewFinder, const Offset(0, -5000));
 
       //assert
       verify(

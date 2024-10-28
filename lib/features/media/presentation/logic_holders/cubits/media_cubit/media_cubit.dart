@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
@@ -46,6 +47,8 @@ class MediaCubit extends Cubit<MediaState> {
   getMediaPerPage(GetMediaPerPageParams params) async {
     emit(const MediaState.loading());
 
+    // FIXME: remove the delay
+    await Future.delayed(Durations.extralong4);
     final result = await _getMediaPerPage(params);
 
     result.fold(

@@ -44,7 +44,7 @@ void main() {
           child: MaterialApp(
             home: Material(
               child: FilterButton(
-                numberOfFilters: null,
+                numberOfAppliedFilters: null,
               ),
             ),
           ),
@@ -63,7 +63,7 @@ void main() {
           child: MaterialApp(
             home: Material(
               child: FilterButton(
-                numberOfFilters: 5,
+                numberOfAppliedFilters: 5,
               ),
             ),
           ),
