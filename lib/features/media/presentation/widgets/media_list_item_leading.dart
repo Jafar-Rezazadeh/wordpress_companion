@@ -45,22 +45,9 @@ class MediaListItemLeading extends StatelessWidget {
       // FIXME: remove replace on production it is just for local host
       sourceUrl.replaceAll("https://localhost", "http://192.168.1.2"),
       fit: BoxFit.cover,
-      loadingBuilder: _imageLoadingProgress,
       errorBuilder: (context, error, stackTrace) {
         return const Icon(Icons.error);
       },
-    );
-  }
-
-  Widget _imageLoadingProgress(context, child, loadingProgress) {
-    if (loadingProgress == null) return child;
-    return Center(
-      child: CircularProgressIndicator(
-        value: loadingProgress.expectedTotalBytes != null
-            ? loadingProgress.cumulativeBytesLoaded /
-                loadingProgress.expectedTotalBytes!
-            : null,
-      ),
     );
   }
 

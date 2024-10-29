@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
 
 class MockMediaCubit extends MockCubit<MediaState> implements MediaCubit {}
 
@@ -255,6 +257,197 @@ void main() {
       ).called(1);
     });
   });
+
+  group("headerWidget -", () {
+    group("searchInput -", () {
+      testWidgets(
+          "should set the value to search prop of params and call getMedias when onSubmit invoked",
+          (tester) async {
+        //arrange
+        _setMediaStateLoaded(mediaCubit);
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
+        final searchInputFinder = find.byType(CustomSearchInput);
+
+        //verification
+        expect(searchInputFinder, findsOneWidget);
+
+        //act
+        final customSearchInput = tester.widget<CustomSearchInput>(
+          searchInputFinder,
+        );
+        customSearchInput.onSubmit("test");
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(
+          () => mediaCubit.getMediaPerPage(
+            any(
+              that: isA<GetMediaPerPageParams>().having(
+                (params) => params.search == "test",
+                "is params.search = test",
+                true,
+              ),
+            ),
+          ),
+        ).called(1);
+      });
+
+      testWidgets(
+          "should clear props of params and call the getMedias when onClear invoked",
+          (tester) async {
+        //arrange
+        _setMediaStateLoaded(mediaCubit);
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
+        final searchInputFinder = find.byType(CustomSearchInput);
+
+        //verification
+        expect(searchInputFinder, findsOneWidget);
+        _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit);
+
+        //act
+        final customSearchInput =
+            tester.widget<CustomSearchInput>(searchInputFinder);
+        customSearchInput.onClear();
+        await tester.pumpAndSettle();
+
+        //assert
+        _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit);
+      });
+    });
+
+    group("mediaFilterButton -", () {
+      testWidgets(
+          "should set filters to params when onApply invoked and getMedias ",
+          (tester) async {
+        //arrange
+        _setMediaStateLoaded(mediaCubit);
+        await tester.pumpWidget(_testWidget(mediaCubit));
+
+        //verification
+        final mediaFilterButtonFinder = find.byType(MediaFilterButton);
+        expect(mediaFilterButtonFinder, findsOneWidget);
+
+        //act
+        final mediaFilterButton = tester.widget<MediaFilterButton>(
+          mediaFilterButtonFinder,
+        );
+        mediaFilterButton.onApply(
+          (after: "after-date", before: "before-date", type: MediaType.image),
+        );
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(
+          () => mediaCubit.getMediaPerPage(
+            any(
+              that: isA<GetMediaPerPageParams>().having(
+                (params) =>
+                    params.after == "after-date" &&
+                    params.before == "before-date" &&
+                    params.type == MediaType.image,
+                "is params set",
+                true,
+              ),
+            ),
+          ),
+        ).called(1);
+      });
+
+      testWidgets(
+          "should set params to default and call getMedias when onClear invoked",
+          (tester) async {
+        //arrange
+        _setMediaStateLoaded(mediaCubit);
+        await tester.pumpWidget(_testWidget(mediaCubit));
+
+        //verification
+        final mediaFilterButtonFinder = find.byType(MediaFilterButton);
+        expect(mediaFilterButtonFinder, findsOneWidget);
+        _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit);
+
+        //act
+        final mediaFilterButton = tester.widget<MediaFilterButton>(
+          mediaFilterButtonFinder,
+        );
+        mediaFilterButton.onClear();
+        await tester.pumpAndSettle();
+
+        //assert
+        _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit);
+      });
+    });
+  });
+
+  group("infiniteListView -", () {
+    testWidgets(
+        "should set (page = 1 and search=null) of params and call getMedias when onRefresh invoked",
+        (tester) async {
+      //arrange
+      _setMediaStateLoaded(mediaCubit);
+      await tester.pumpWidget(_testWidget(mediaCubit));
+
+      //verification
+      final infiniteListViewFinder = find.byType(InfiniteListView<MediaEntity>);
+      expect(infiniteListViewFinder, findsOneWidget);
+
+      // setting the other params
+      final mediaFilterButton = tester.widget<MediaFilterButton>(
+        find.byType(MediaFilterButton),
+      );
+      mediaFilterButton.onApply(
+        (after: "after-date", before: "before-date", type: MediaType.video),
+      );
+      await tester.pumpAndSettle();
+
+      //act
+      final infiniteListView = tester.widget<InfiniteListView<MediaEntity>>(
+        infiniteListViewFinder,
+      );
+      infiniteListView.onRefresh();
+      await tester.pumpAndSettle();
+
+      //assert
+      verify(
+        () => mediaCubit.getMediaPerPage(
+          any(
+            that: isA<GetMediaPerPageParams>().having(
+              (params) =>
+                  params.page == 1 &&
+                  params.search == null &&
+                  params.type == MediaType.video,
+              "is params set",
+              true,
+            ),
+          ),
+        ),
+      ).called(2);
+    });
+  });
+}
+
+void _verifyGetMediaPerPageCalledWithDefaultParams(MediaCubit mediaCubit) {
+  return verify(
+    () => mediaCubit.getMediaPerPage(
+      any(
+        that: isA<GetMediaPerPageParams>().having(
+          (params) => _defaultParams(params),
+          "is params default",
+          true,
+        ),
+      ),
+    ),
+  ).called(1);
+}
+
+bool _defaultParams(GetMediaPerPageParams params) {
+  return params.search == null &&
+      params.page == 1 &&
+      params.perPage == 10 &&
+      params.after == null &&
+      params.before == null &&
+      params.type == null;
 }
 
 void _setMediaStateLoaded(MediaCubit mediaCubit) {

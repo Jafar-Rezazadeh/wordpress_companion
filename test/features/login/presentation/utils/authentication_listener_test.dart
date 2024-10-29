@@ -65,7 +65,7 @@ void main() {
     });
 
     testWidgets(
-        "should (hide the loaderOverlay) and (goNamed route mainScree) and (show an snack bar) when state is authenticated",
+        "should (hide the loaderOverlay) and (goNamed route mainScree) when state is authenticated",
         (tester) async {
       //arrange
       await tester.pumpWidget(
@@ -88,7 +88,6 @@ void main() {
       expect(dummyElement.loaderOverlay.visible, false);
       expect(find.byKey(const Key("main_screen")), findsOneWidget);
       expect(find.byKey(const Key("dummy_element")), findsNothing);
-      expect(find.byType(SnackBar), findsOneWidget);
     });
 
     testWidgets(

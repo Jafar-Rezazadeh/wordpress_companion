@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:wordpress_companion/core/extensions/extensions.dart';
 
 import '../../../../core/constants/enums.dart';
@@ -36,8 +36,8 @@ class _MediaFilterButtonState extends State<MediaFilterButton> {
       onPressed: () {
         CustomBottomSheets.showFilterBottomSheet(
           context: context,
-          onApply: () => _onApply(context),
-          onClear: () => _onClear(context),
+          onApply: () => _onApply(),
+          onClear: () => _onClear(),
           children: [
             _typeFilterWidget(),
             _dateFilterWidget(),
@@ -47,18 +47,16 @@ class _MediaFilterButtonState extends State<MediaFilterButton> {
     );
   }
 
-  void _onClear(BuildContext context) {
-    setState(() {
-      filtersBuilder.clearAll();
-    });
-    context.pop();
-    widget.onClear();
+  void _onApply() {
+    setState(() {});
+    Navigator.of(context).pop();
+    widget.onApply(filtersBuilder.build());
   }
 
-  void _onApply(BuildContext context) {
-    setState(() {});
-    context.pop();
-    widget.onApply(filtersBuilder.build());
+  void _onClear() {
+    setState(() => filtersBuilder.clearAll());
+    Navigator.of(context).pop();
+    widget.onClear();
   }
 
   SizedBox _typeFilterWidget() {
@@ -94,14 +92,31 @@ class _MediaFilterButtonState extends State<MediaFilterButton> {
         child: Text("تاریخ"),
       ),
       children: [
-        PersianDateSelector(
-          // TODO: improve date selector (initial date )
-          label: ":از",
-          onSelected: (value) {
-            print(value);
-          },
-        ),
-      ],
+        _after(),
+        _before(),
+      ].withGapInBetween(20),
+    );
+  }
+
+  CustomPersianDateSelector _after() {
+    return CustomPersianDateSelector(
+      key: const Key("after_date_selector"),
+      initialDate: DateTime.tryParse(filtersBuilder.after ?? ""),
+      label: ":بعد از",
+      onSelected: (value) {
+        filtersBuilder.setAfter = value?.toIso8601String();
+      },
+    );
+  }
+
+  CustomPersianDateSelector _before() {
+    return CustomPersianDateSelector(
+      key: const Key("before_date_selector"),
+      initialDate: DateTime.tryParse(filtersBuilder.before ?? ""),
+      label: ":قبل از",
+      onSelected: (value) {
+        filtersBuilder.setBefore = value?.toIso8601String();
+      },
     );
   }
 }

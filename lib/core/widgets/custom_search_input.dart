@@ -31,6 +31,9 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
         textAlignVertical: TextAlignVertical.center,
         decoration: _inputDecoration(),
         onChanged: (value) {
+          if (value.isEmpty) {
+            widget.onClear();
+          }
           setState(() => playAnimation = value.isNotEmpty ? true : false);
         },
       ),

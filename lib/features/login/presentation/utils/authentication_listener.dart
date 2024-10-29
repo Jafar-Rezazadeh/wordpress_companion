@@ -30,7 +30,7 @@ class AuthenticationStateListener {
         WidgetsBinding.instance.addPostFrameCallback(
           (timeStamp) => context.goNamed(mainScreenRoute, extra: credentials),
         );
-        _showSnackBar(content: "ورود با موفقیت انجام شد");
+
         return;
       },
       notValidUser: () {

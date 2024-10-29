@@ -39,6 +39,8 @@ class CustomBottomSheets {
 }
 
 class _FilterBottomSheetWidget extends StatelessWidget {
+  @override
+  Key? get key => const Key("filter_bottom_sheet");
   final Function() onApply;
   final Function() onClear;
   final List<Widget> children;
@@ -51,7 +53,6 @@ class _FilterBottomSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: const Key("filter_bottom_sheet"),
       padding: const EdgeInsets.symmetric(
         vertical: 20,
         horizontal: edgeToEdgePaddingHorizontal,

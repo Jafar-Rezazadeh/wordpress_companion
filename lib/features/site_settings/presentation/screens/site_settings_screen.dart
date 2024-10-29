@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/core_export.dart';
 import '../../site_settings_exports.dart';
 
