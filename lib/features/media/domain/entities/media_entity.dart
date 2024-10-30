@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_details_entity.dart';
 
 class MediaEntity extends Equatable {
+  //TODO: add new filed author name
   final int id;
   final DateTime date;
   final String guid;

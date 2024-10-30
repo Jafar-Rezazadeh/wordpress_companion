@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/site_settings/presentation/state_Management/site_settings_cubit/site_settings_cubit.dart';
+import '../../features/media/presentation/screens/edit_media_screen.dart';
 import '../presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../presentation/screens/main_screen.dart';
 import '../services/profile_service.dart';
@@ -18,6 +19,7 @@ const String loginScreenRoute = "/login";
 const String mainScreenRoute = "/main";
 const String profileScreenRoute = "profile";
 const String siteSettingsScreenRoute = "siteSettings";
+const String editMediaScreenRoute = "editMediaScreen";
 
 final GetIt getIt = GetIt.instance;
 
@@ -63,6 +65,14 @@ ShellRoute _mainScreenRoute() {
               create: (context) => getIt<ProfileCubit>(),
               child: const ProfileScreen(),
             ),
+          ),
+          GoRoute(
+            name: editMediaScreenRoute,
+            path: editMediaScreenRoute,
+            builder: (context, state) {
+              final media = state.extra as MediaEntity;
+              return EditMediaScreen(mediaEntity: media);
+            },
           ),
           GoRoute(
             name: siteSettingsScreenRoute,

@@ -56,6 +56,7 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      textDirection: TextDirection.rtl,
       children: [
         _leadings(),
         _secondaryActions(),

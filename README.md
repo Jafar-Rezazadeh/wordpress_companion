@@ -2,6 +2,12 @@
 
 This is a Flutter application that interacts with the WordPress REST API to display and manage WordPress content, such as posts, categories, tags, comments, users, media, pages, and menus.
 
+## used Design patterns
+
+- [Builder](lib\features\profile\presentation\utils\update_my_profile_params_builder.dart)
+- [Factory Method](lib\core\errors\failures.dart)
+- [Chain of Responsibility](lib/features/media/presentation/widgets/media_show_box.dart)
+
 ## Features
 
 - Display list of posts

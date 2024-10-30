@@ -45,6 +45,7 @@ class MediaListItemLeading extends StatelessWidget {
       // FIXME: remove replace on production it is just for local host
       sourceUrl.replaceAll("https://localhost", "http://192.168.1.2"),
       fit: BoxFit.cover,
+
       errorBuilder: (context, error, stackTrace) {
         return const Icon(Icons.error);
       },

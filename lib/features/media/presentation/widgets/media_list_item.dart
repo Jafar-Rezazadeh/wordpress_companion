@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/features/media/presentation/widgets/media_list_item_leading.dart';
 
 import '../../media_exports.dart';
@@ -62,20 +64,23 @@ class _MediaListItemState extends State<MediaListItem> {
     );
   }
 
-  PopupMenuItem<String> _editMenuItem() {
+  PopupMenuItem _editMenuItem() {
     return PopupMenuItem(
+      key: const Key("edit_media"),
       value: "edit",
       onTap: () {
-        //TODO: go to media edit screen
+        context.goNamed(editMediaScreenRoute, extra: widget.media);
       },
       child: const Row(
         textDirection: TextDirection.rtl,
-        children: [Text("ویرایش", textAlign: TextAlign.right)],
+        children: [
+          Text("ویرایش", textAlign: TextAlign.right),
+        ],
       ),
     );
   }
 
-  PopupMenuItem<String> _deleteMenuItem() {
+  PopupMenuItem _deleteMenuItem() {
     return PopupMenuItem(
       value: "delete",
       onTap: () {

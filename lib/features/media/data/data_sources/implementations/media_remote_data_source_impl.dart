@@ -27,6 +27,7 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
   Future<CurrentPageMediasEntity> getMediasPerPage(
     GetMediaPerPageParams params,
   ) async {
+    // TODO: add _embed=author to get author name
     final response = await _dio.get(
       "$wpV2EndPoint/media",
       queryParameters: {

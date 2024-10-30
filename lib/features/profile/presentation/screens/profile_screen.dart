@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PushedPageAppBar _appBar() {
     return PushedPageAppBar(
       context: context,
-      bottomActionWidgets: [
+      bottomLeadingWidgets: [
         SaveButton(
           key: const Key("submit_button"),
           onPressed: _isLoadedState() ? _performSubmitAction : null,
