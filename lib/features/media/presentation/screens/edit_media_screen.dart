@@ -8,6 +8,7 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart'
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/utils/file_size.dart';
 import 'package:wordpress_companion/core/utils/mime_type_recognizer.dart';
+import 'package:wordpress_companion/core/widgets/custom_dialogs.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/media/presentation/widgets/media_show_box.dart';
 
@@ -38,14 +39,21 @@ class _EditMediaScreenState extends State<EditMediaScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MediaCubit, MediaState>(
-      listener: (context, state) {
-        // TODO: pop the context when state is updated
-        // and disable the save button when it's loading
-      },
+      listener: _mediaStateListener,
       child: Scaffold(
         appBar: _appBar(context),
         body: _body(context),
       ),
+    );
+  }
+
+  void _mediaStateListener(_, MediaState state) {
+    state.whenOrNull(
+      updated: () {
+        if (Navigator.of(context).canPop()) {
+          Navigator.pop(context);
+        }
+      },
     );
   }
 
@@ -58,29 +66,49 @@ class _EditMediaScreenState extends State<EditMediaScreen> {
         _deleteButton(),
         _downloadButton(),
       ],
+      showLoading: _isLoadingState(),
     );
   }
 
   SaveButton _submitButton() {
     return SaveButton(
       key: const Key("save_button"),
-      onPressed: () {
-        context.read<MediaCubit>().updateMedia(
-              UpdateMediaParams(
-                id: widget.mediaEntity.id,
-                altText: altTextValue,
-                title: titleValue,
-                caption: captionValue,
-                description: descriptionValue,
-              ),
-            );
-      },
+      onPressed: () => _updateMedia(),
     );
   }
 
+  bool _isLoadingState() {
+    return context.watch<MediaCubit>().state.whenOrNull(loading: () => true) ==
+        true;
+  }
+
+  void _updateMedia() {
+    context.read<MediaCubit>().updateMedia(
+          UpdateMediaParams(
+            id: widget.mediaEntity.id,
+            altText: altTextValue,
+            title: titleValue,
+            caption: captionValue,
+            description: descriptionValue,
+          ),
+        );
+  }
+
   IconButton _deleteButton() {
+    // TODO : write some test for this
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        CustomDialogs.showAreYouSureDialog(
+          context: context,
+          title: "حذف رسانه",
+          content:
+              "آیا مطمئن هستید که میخواهید (${widget.mediaEntity.title}) را برای همیشه حذف کنید؟",
+          onConfirm: () {
+            context.read<MediaCubit>().deleteMedia(widget.mediaEntity.id);
+            Navigator.of(context).pop();
+          },
+        );
+      },
       color: ColorPallet.crimson,
       icon: const Icon(Icons.delete_outline),
     );

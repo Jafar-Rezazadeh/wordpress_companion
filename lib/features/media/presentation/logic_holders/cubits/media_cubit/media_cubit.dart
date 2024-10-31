@@ -36,6 +36,9 @@ class MediaCubit extends Cubit<MediaState> {
   updateMedia(UpdateMediaParams params) async {
     emit(const MediaState.loading());
 
+    // FIXME: remove this in production
+    await Future.delayed(const Duration(seconds: 3));
+
     final result = await _updateMedia(params);
 
     result.fold(

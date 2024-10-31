@@ -108,6 +108,7 @@ class _MediaPageState extends State<MediaPage> {
 
   void _mediaStateListener(_, MediaState state) {
     state.whenOrNull(
+      // TODO: refresh when updated and deleted state
       loaded: (data) {
         hasMoreMedias = data.hasMoreMedias;
         listOfMedias.addAll(data.medias);

@@ -7,12 +7,14 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget> bottomLeadingWidgets;
   final List<Widget> bottomActionWidgets;
+  final bool? showLoading;
 
   const PushedPageAppBar({
     super.key,
     required this.context,
     this.bottomHeightSize = 80.0,
     this.title,
+    this.showLoading = false,
     this.bottomLeadingWidgets = const <Widget>[],
     this.bottomActionWidgets = const <Widget>[],
   });
@@ -47,7 +49,12 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: edgeToEdgePaddingHorizontal,
         ),
-        child: _bottomSectionContents(),
+        child: showLoading == true
+            ? const Center(
+                key: Key("is_loading"),
+                child: CircularProgressIndicator(),
+              )
+            : _bottomSectionContents(),
       ),
     );
   }

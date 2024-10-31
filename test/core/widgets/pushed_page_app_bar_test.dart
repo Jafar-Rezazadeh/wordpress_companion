@@ -62,6 +62,28 @@ void main() {
 
   group("bottom -", () {
     testWidgets(
+        "should show progressIndicator when showLoading is true and has some widget in bottom",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              appBar: PushedPageAppBar(
+                context: context,
+                bottomActionWidgets: [Container()],
+                showLoading: true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      //assert
+      expect(find.byKey(const Key("is_loading")), findsOneWidget);
+    });
+
+    testWidgets(
         "should bottom of abbBar be not null when one of the (bottomActionWidgets or bottomLeadingWidgets) is not empty",
         (tester) async {
       //arrange

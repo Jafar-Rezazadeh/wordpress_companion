@@ -11,6 +11,10 @@ class MockMediaCubit extends MockCubit<MediaState> implements MediaCubit {}
 
 class FakeUpdateMediaParams extends Fake implements UpdateMediaParams {}
 
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
+class MockRoute extends Mock implements Route<dynamic> {}
+
 void main() {
   final mediaEntity = MediaEntity(
     id: 2,
@@ -45,15 +49,44 @@ void main() {
     authorName: "authorName",
   );
   late MediaCubit mediaCubit;
+  late MockNavigatorObserver mockNavigatorObserver;
 
   setUpAll(() {
     registerFallbackValue(FakeUpdateMediaParams());
+    registerFallbackValue(MockRoute());
   });
 
   setUp(() {
     mediaCubit = MockMediaCubit();
     when(() => mediaCubit.state).thenAnswer((_) => const MediaState.initial());
+    mockNavigatorObserver = MockNavigatorObserver();
   });
+
+  group("mediaCubit -", () {
+    testWidgets("should pop the context when state is updated", (tester) async {
+      //arrange
+
+      whenListen(
+        mediaCubit,
+        Stream.fromIterable([const MediaState.updated()]),
+      );
+      await tester.pumpWidget(
+        _pushedOnStackTest(mediaCubit, mediaEntity, mockNavigatorObserver),
+      );
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.text("Push"), findsOneWidget);
+
+      // act
+      await tester.tap(find.text('Push'));
+      await tester.pumpAndSettle();
+
+      //assert
+      verify(() => mockNavigatorObserver.didPop(any(), any())).called(1);
+    });
+  });
+
   group("user interaction -", () {
     testWidgets(
         "should show a snackBar that says link copied when user tap on copy_link_button",
@@ -145,7 +178,39 @@ void main() {
   });
 }
 
-Widget _makeTestWidget(MediaCubit mediaCubit, MediaEntity mediaEntity) {
+Widget _pushedOnStackTest(MediaCubit mediaCubit, MediaEntity mediaEntity,
+    MockNavigatorObserver mockNavigatorObserver) {
+  return ScreenUtilInit(
+    child: BlocProvider(
+      create: (context) => mediaCubit,
+      child: MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditMediaScreen(mediaEntity: mediaEntity),
+                    ),
+                  );
+                },
+                child: const Text('Push'),
+              );
+            },
+          ),
+        ),
+        navigatorObservers: [mockNavigatorObserver],
+      ),
+    ),
+  );
+}
+
+Widget _makeTestWidget(
+  MediaCubit mediaCubit,
+  MediaEntity mediaEntity,
+) {
   return BlocProvider(
     create: (context) => mediaCubit,
     child: ScreenUtilInit(
