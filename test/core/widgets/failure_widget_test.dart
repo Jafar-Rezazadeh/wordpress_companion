@@ -32,13 +32,18 @@ void main() {
       (tester) async {
     //arrange
     await tester.pumpWidget(
-      FailureWidget(
-        failure: InternalFailure(
-          message: "message",
-          stackTrace: StackTrace.fromString("stackTraceString"),
+      MaterialApp(
+        home: Material(
+          child: FailureWidget(
+            failure: InternalFailure(
+              message: "message",
+              stackTrace: StackTrace.fromString("stackTraceString"),
+            ),
+          ),
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     //assert
     expect(internalFailureMessage, findsOneWidget);

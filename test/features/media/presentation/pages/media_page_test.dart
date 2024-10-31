@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/constants/enums.dart';
@@ -476,8 +477,10 @@ void _setMediaStateLoaded(MediaCubit mediaCubit) {
 Widget _testWidget(MediaCubit mediaCubit) {
   return BlocProvider(
     create: (context) => mediaCubit,
-    child: const MaterialApp(
-      home: Scaffold(body: MediaPage()),
+    child: const ScreenUtilInit(
+      child: MaterialApp(
+        home: Scaffold(body: MediaPage()),
+      ),
     ),
   );
 }

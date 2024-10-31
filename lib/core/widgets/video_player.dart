@@ -62,6 +62,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   Widget _showError() {
     return Container(
+      key: const Key("error_video_box"),
       decoration: BoxDecoration(
         border: Border.all(color: ColorPallet.border),
         borderRadius: BorderRadius.circular(smallCornerRadius),

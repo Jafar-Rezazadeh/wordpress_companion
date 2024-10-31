@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart'
@@ -7,18 +8,44 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart'
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/utils/file_size.dart';
 import 'package:wordpress_companion/core/utils/mime_type_recognizer.dart';
-import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
+import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/media/presentation/widgets/media_show_box.dart';
 
-class EditMediaScreen extends StatelessWidget {
+class EditMediaScreen extends StatefulWidget {
   final MediaEntity mediaEntity;
+
   const EditMediaScreen({super.key, required this.mediaEntity});
 
   @override
+  State<EditMediaScreen> createState() => _EditMediaScreenState();
+}
+
+class _EditMediaScreenState extends State<EditMediaScreen> {
+  late String altTextValue;
+  late String titleValue;
+  late String captionValue;
+  late String descriptionValue;
+
+  @override
+  void initState() {
+    altTextValue = widget.mediaEntity.altText;
+    titleValue = widget.mediaEntity.title;
+    captionValue = widget.mediaEntity.caption;
+    descriptionValue = widget.mediaEntity.description;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      body: _body(context),
+    return BlocListener<MediaCubit, MediaState>(
+      listener: (context, state) {
+        // TODO: pop the context when state is updated
+        // and disable the save button when it's loading
+      },
+      child: Scaffold(
+        appBar: _appBar(context),
+        body: _body(context),
+      ),
     );
   }
 
@@ -26,17 +53,28 @@ class EditMediaScreen extends StatelessWidget {
     return PushedPageAppBar(
       context: context,
       title: "ویرایش رسانه",
-      bottomLeadingWidgets: [
-        SaveButton(
-          onPressed: () {
-            //TODO: get input values and update the media
-          },
-        )
-      ],
+      bottomLeadingWidgets: [_submitButton()],
       bottomActionWidgets: [
         _deleteButton(),
         _downloadButton(),
       ],
+    );
+  }
+
+  SaveButton _submitButton() {
+    return SaveButton(
+      key: const Key("save_button"),
+      onPressed: () {
+        context.read<MediaCubit>().updateMedia(
+              UpdateMediaParams(
+                id: widget.mediaEntity.id,
+                altText: altTextValue,
+                title: titleValue,
+                caption: captionValue,
+                description: descriptionValue,
+              ),
+            );
+      },
     );
   }
 
@@ -83,13 +121,12 @@ class EditMediaScreen extends StatelessWidget {
         nextBuilder: VideoBoxBuilder(nextBuilder: null),
       ),
     ).build(
-        mimetype: MimeTypeRecognizer.fromString(mediaEntity.mimeType),
-        sourceUrl: mediaEntity.sourceUrl
-            .replaceAll("https://localhost", "http://192.168.1.2"),
-        label: mediaEntity.title
-
-        //FIXME: remove this replace on production
-        );
+      mimetype: MimeTypeRecognizer.fromString(widget.mediaEntity.mimeType),
+      sourceUrl: widget.mediaEntity.sourceUrl
+          .replaceAll("https://localhost", "http://192.168.1.2"),
+      //FIXME: remove this replace on production
+      label: widget.mediaEntity.title,
+    );
   }
 
   Widget _detailsInfo() {
@@ -97,30 +134,30 @@ class EditMediaScreen extends StatelessWidget {
       children: [
         _littleInfo(
           label: "تاریخ بارگذاری:",
-          value: mediaEntity.date.toJalali().formatFullDate(),
+          value: widget.mediaEntity.date.toJalali().formatFullDate(),
         ),
         _littleInfo(
           label: "بارگذاری شده توسط:",
-          value: mediaEntity.author.toString(),
+          value: widget.mediaEntity.authorName ?? "نامشخص",
         ),
         _littleInfo(
           label: "نام:",
-          value: mediaEntity.sourceUrl.substring(
-            mediaEntity.sourceUrl.lastIndexOf("/") + 1,
+          value: widget.mediaEntity.sourceUrl.substring(
+            widget.mediaEntity.sourceUrl.lastIndexOf("/") + 1,
           ),
         ),
-        _littleInfo(label: "نوع:", value: mediaEntity.mimeType),
+        _littleInfo(label: "نوع پرونده:", value: widget.mediaEntity.mimeType),
         _littleInfo(
           label: "اندازه:",
-          value: filesize(mediaEntity.mediaDetails.fileSize),
+          value: filesize(widget.mediaEntity.mediaDetails.fileSize),
         ),
-        if (mediaEntity.mediaDetails.height != null)
+        if (widget.mediaEntity.mediaDetails.height != null)
           _littleInfo(
             label: "ابعاد:",
             value:
-                "${mediaEntity.mediaDetails.width ?? ""} در ${mediaEntity.mediaDetails.height ?? ""} پیکسل",
+                "${widget.mediaEntity.mediaDetails.width ?? ""} در ${widget.mediaEntity.mediaDetails.height ?? ""} پیکسل",
           ),
-      ].withGapInBetween(5),
+      ].withGapInBetween(10),
     );
   }
 
@@ -143,19 +180,23 @@ class EditMediaScreen extends StatelessWidget {
         children: [
           CustomFormInputField(
             label: "متن جایگزین",
-            initialValue: mediaEntity.altText,
+            initialValue: altTextValue,
+            onChanged: (value) => altTextValue = value,
           ),
           CustomFormInputField(
             label: "عنوان",
-            initialValue: mediaEntity.title,
+            initialValue: titleValue,
+            onChanged: (value) => titleValue = value,
           ),
           CustomFormInputField(
             label: "توضیحات کوتاه",
-            initialValue: mediaEntity.caption,
+            initialValue: captionValue,
+            onChanged: (value) => captionValue = value,
           ),
           CustomFormInputField(
             label: "توضیحات",
-            initialValue: mediaEntity.description,
+            initialValue: descriptionValue,
+            onChanged: (value) => descriptionValue = value,
             maxLines: 5,
           ),
         ].withGapInBetween(20),
@@ -167,8 +208,9 @@ class EditMediaScreen extends StatelessWidget {
     return Align(
       alignment: Alignment.topRight,
       child: FilledButton(
-        onPressed: () {
-          Clipboard.setData(ClipboardData(text: mediaEntity.sourceUrl));
+        key: const Key("copy_link_button"),
+        onPressed: () async {
+          Clipboard.setData(ClipboardData(text: widget.mediaEntity.sourceUrl));
           _showSnackBar(context);
         },
         child: const Text(

@@ -16,7 +16,8 @@ void main() {
       );
 
       //act
-      final result = FailureFactory.createFailure(object);
+      final result = FailureFactory.createFailure(
+          object, StackTrace.fromString("stackTraceString"));
 
       //assert
       expect(result, isA<ServerFailure>());
@@ -27,7 +28,8 @@ void main() {
         "should return (InternalFailure) when object is Not (DioException) anything else",
         () {
       //act
-      final result = FailureFactory.createFailure(TypeError());
+      final result = FailureFactory.createFailure(
+          TypeError(), StackTrace.fromString("stackTraceString"));
 
       //assert
       expect(result, isA<InternalFailure>());

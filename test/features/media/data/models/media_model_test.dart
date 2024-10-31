@@ -124,4 +124,5 @@ void _expectEqual(MediaModel model, Map<String, dynamic> json) {
   expect(model.mediaDetails.fileSize, json["media_details"]["filesize"]);
   expect(model.post, json["post"]);
   expect(model.sourceUrl, json["source_url"]);
+  expect(model.authorName, json["_embedded"]["author"][0]["name"]);
 }

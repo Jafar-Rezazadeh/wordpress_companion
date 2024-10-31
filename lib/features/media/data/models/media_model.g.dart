@@ -34,4 +34,5 @@ MediaModel _$MediaModelFromJson(Map<String, dynamic> json) => MediaModel(
       mediaDetails: MediaModel._mediaDetailsFromJson(json['media_details']),
       post: (json['post'] as num?)?.toInt(),
       sourceUrl: json['source_url'] as String,
+      authorName: MediaModel._readAuthorName(json, 'authorName') as String?,
     );

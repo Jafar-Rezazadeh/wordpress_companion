@@ -13,6 +13,9 @@ class CustomBottomSheets {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: 0.8.sh,
+      ),
       builder: (_) => Container(
         key: const Key("failure_bottom_sheet"),
         child: FailureWidget(failure: failure),
@@ -29,6 +32,9 @@ class CustomBottomSheets {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: 0.8.sh,
+      ),
       builder: (_) => _FilterBottomSheetWidget(
         onApply: onApply,
         onClear: onClear,

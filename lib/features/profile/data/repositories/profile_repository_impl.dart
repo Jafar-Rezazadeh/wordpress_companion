@@ -15,8 +15,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final result = await _profileRemoteDataSource.getMyProfile();
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -27,8 +27,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final result = await _profileRemoteDataSource.updateMyProfile(params);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 }

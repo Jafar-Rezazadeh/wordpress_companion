@@ -45,15 +45,18 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   getMediaPerPage(GetMediaPerPageParams params) async {
-    emit(const MediaState.loading());
+    if (_isNotInLoadingState()) {
+      emit(const MediaState.loading());
+      // FIXME: remove the delay
+      await Future.delayed(Durations.extralong4);
+      final result = await _getMediaPerPage(params);
 
-    // FIXME: remove the delay
-    await Future.delayed(Durations.extralong4);
-    final result = await _getMediaPerPage(params);
-
-    result.fold(
-      (failure) => emit(MediaState.error(failure)),
-      (currentPageData) => emit(MediaState.loaded(currentPageData)),
-    );
+      result.fold(
+        (failure) => emit(MediaState.error(failure)),
+        (currentPageData) => emit(MediaState.loaded(currentPageData)),
+      );
+    }
   }
+
+  bool _isNotInLoadingState() => state.whenOrNull(loading: () => true) != true;
 }

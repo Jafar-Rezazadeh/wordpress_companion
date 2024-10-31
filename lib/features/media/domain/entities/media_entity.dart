@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_details_entity.dart';
 
 class MediaEntity extends Equatable {
-  //TODO: add new filed author name
   final int id;
   final DateTime date;
   final String guid;
@@ -28,6 +27,7 @@ class MediaEntity extends Equatable {
   final MediaDetailsEntity mediaDetails;
   final int? post;
   final String sourceUrl;
+  final String? authorName;
 
   const MediaEntity({
     required this.id,
@@ -55,6 +55,7 @@ class MediaEntity extends Equatable {
     required this.mediaDetails,
     required this.post,
     required this.sourceUrl,
+    required this.authorName,
   });
 
   @override

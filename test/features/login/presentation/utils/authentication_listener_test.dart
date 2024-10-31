@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -113,27 +114,29 @@ Element _getDummyElement(WidgetTester tester) =>
     tester.element(find.byKey(const Key("dummy_element")));
 
 Widget _makeTestWidget(AuthenticationState state) {
-  return MaterialApp.router(
-    routerConfig: GoRouter(
-      initialLocation: "/login",
-      routes: [
-        GoRoute(
-          path: "/login",
-          name: "/login",
-          builder: (context, _) {
-            return _loginScreenSimulation(state);
-          },
-        ),
-        GoRoute(
-          path: mainScreenRoute,
-          name: mainScreenRoute,
-          builder: (context, state) => Scaffold(
-            body: Container(
-              key: const Key("main_screen"),
-            ),
+  return ScreenUtilInit(
+    child: MaterialApp.router(
+      routerConfig: GoRouter(
+        initialLocation: "/login",
+        routes: [
+          GoRoute(
+            path: "/login",
+            name: "/login",
+            builder: (context, _) {
+              return _loginScreenSimulation(state);
+            },
           ),
-        )
-      ],
+          GoRoute(
+            path: mainScreenRoute,
+            name: mainScreenRoute,
+            builder: (context, state) => Scaffold(
+              body: Container(
+                key: const Key("main_screen"),
+              ),
+            ),
+          )
+        ],
+      ),
     ),
   );
 }

@@ -15,8 +15,8 @@ class SiteSettingsRepositoryImpl implements SiteSettingsRepository {
       final result = await _siteSettingsDataSource.getSettings();
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -27,8 +27,8 @@ class SiteSettingsRepositoryImpl implements SiteSettingsRepository {
       final result = await _siteSettingsDataSource.updateSettings(params);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 }

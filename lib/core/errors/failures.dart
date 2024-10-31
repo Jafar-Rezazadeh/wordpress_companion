@@ -40,7 +40,7 @@ class InternalFailure extends Failure {
 }
 
 class FailureFactory {
-  static Failure createFailure(Object object) {
+  static Failure createFailure(Object object, StackTrace stackTrace) {
     if (object is DioException) {
       return ServerFailure(
         message: object.message.toString(),
@@ -50,7 +50,7 @@ class FailureFactory {
     } else {
       return InternalFailure(
         message: object.toString(),
-        stackTrace: StackTrace.current,
+        stackTrace: stackTrace,
       );
     }
   }

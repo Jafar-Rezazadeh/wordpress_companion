@@ -10,23 +10,25 @@ void main() {
         (tester) async {
       //arrange
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return FilledButton(
-                  onPressed: () {
-                    CustomBottomSheets.showFailureBottomSheet(
-                      context: context,
-                      failure: InternalFailure(
-                        message: "message",
-                        stackTrace: StackTrace.fromString("stackTraceString"),
-                      ),
-                    );
-                  },
-                  child: const Text("test"),
-                );
-              },
+        ScreenUtilInit(
+          child: MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return FilledButton(
+                    onPressed: () {
+                      CustomBottomSheets.showFailureBottomSheet(
+                        context: context,
+                        failure: InternalFailure(
+                          message: "message",
+                          stackTrace: StackTrace.fromString("stackTraceString"),
+                        ),
+                      );
+                    },
+                    child: const Text("test"),
+                  );
+                },
+              ),
             ),
           ),
         ),

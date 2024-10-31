@@ -15,8 +15,8 @@ class MediaRepositoryImpl implements MediaRepository {
       final result = await _mediaRemoteDataSource.deleteMedia(id);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -27,8 +27,8 @@ class MediaRepositoryImpl implements MediaRepository {
       final result = await _mediaRemoteDataSource.getMediasPerPage(params);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -39,8 +39,8 @@ class MediaRepositoryImpl implements MediaRepository {
       final result = await _mediaRemoteDataSource.updateMedia(params);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -52,8 +52,8 @@ class MediaRepositoryImpl implements MediaRepository {
       final result = _mediaRemoteDataSource.uploadMediaFile(pathToFile);
 
       return right(result);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 }

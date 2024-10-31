@@ -33,6 +33,7 @@ class MediaModel extends MediaEntity {
     required super.mediaDetails,
     required super.post,
     required super.sourceUrl,
+    required super.authorName,
   });
 
   @override
@@ -101,6 +102,16 @@ class MediaModel extends MediaEntity {
   @override
   @JsonKey(name: "source_url")
   String get sourceUrl => super.sourceUrl;
+
+  @override
+  @JsonKey(readValue: _readAuthorName)
+  String? get authorName => super.authorName;
+
+  static _readAuthorName(Map<dynamic, dynamic> json, String? key) {
+    return json['_embedded']?['author']?[0]?['name'];
+  }
+
+  //
 
   factory MediaModel.fromJson(dynamic json) => _$MediaModelFromJson(json);
 

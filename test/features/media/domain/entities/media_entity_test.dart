@@ -27,7 +27,8 @@ void main() {
       mimeType: "mimeType",
       mediaDetails: const MediaDetailsEntity(fileSize: 120),
       post: 1,
-      sourceUrl: "sourceUrl");
+      sourceUrl: "sourceUrl",
+      authorName: "authorName");
 
   test("should include the id in props ", () {
     //arrange

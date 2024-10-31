@@ -157,147 +157,193 @@ void main() {
       expect(result.medias, isNotEmpty);
     });
 
-    test("should include the perPage and page to queryParameters ", () async {
-      //arrange
-      dioAdapter.onGet(
-        "$wpV2EndPoint/media",
-        queryParameters: {
-          "per_page": Matchers.any,
-          "page": Matchers.any,
-        },
-        (server) => server.reply(
-          HttpStatus.ok,
-          JsonResponseSimulator.mediaList,
-        ),
-      );
+    group("queryParameters -", () {
+      test("should include _embed=author to queryParams ", () async {
+        //arrange
+        Map<String, dynamic>? queryParams;
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (options, handler) {
+              queryParams = options.queryParameters;
+              handler.next(options);
+            },
+          ),
+        );
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          (server) => server.reply(
+            HttpStatus.ok,
+            JsonResponseSimulator.mediaList,
+          ),
+        );
 
-      //act
-      await mediaRemoteDataSourceImpl.getMediasPerPage(
-        GetMediaPerPageParams(),
-      );
-      final queryParams = dioAdapter.history.first.request.queryParameters;
+        //act
+        await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(),
+        );
 
-      //assert
-      expect(queryParams?.keys, containsAll(["per_page", "page"]));
-    });
+        //assert
+        expect(queryParams?.keys, contains("_embed"));
+        expect(queryParams?["_embed"], "author");
+      });
 
-    test("should include nullable params in queryParams when they are not null",
-        () async {
-      //arrange
-      dioAdapter.onGet(
-        "$wpV2EndPoint/media",
-        queryParameters: {
-          "per_page": Matchers.any,
-          "page": Matchers.any,
-          "search": Matchers.any,
-          "after": Matchers.any,
-          "before": Matchers.any,
-          "media_type": Matchers.any,
-        },
-        (server) => server.reply(
-          HttpStatus.ok,
-          JsonResponseSimulator.mediaList,
-        ),
-      );
+      test("should include the perPage and page to queryParameters ", () async {
+        //arrange
+        Map<String, dynamic>? queryParams;
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (options, handler) {
+              queryParams = options.queryParameters;
+              handler.next(options);
+            },
+          ),
+        );
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          (server) => server.reply(
+            HttpStatus.ok,
+            JsonResponseSimulator.mediaList,
+          ),
+        );
 
-      //act
-      await mediaRemoteDataSourceImpl.getMediasPerPage(
-        GetMediaPerPageParams(
-          search: "search",
-          after: "after",
-          before: "before",
-          type: MediaType.text,
-        ),
-      );
-      final queryParams = dioAdapter.history.first.request.queryParameters;
+        //act
+        await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(),
+        );
 
-      //assert
-      expect(
-        queryParams?.keys,
-        containsAll([
+        //assert
+        for (var param in ["per_page", "page"]) {
+          expect(queryParams?.keys, contains(param));
+        }
+      });
+
+      test(
+          "should include nullable params in queryParams when they are not null",
+          () async {
+        //arrange
+        Map<String, dynamic>? queryParams;
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (options, handler) {
+              queryParams = options.queryParameters;
+              handler.next(options);
+            },
+          ),
+        );
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          (server) => server.reply(
+            HttpStatus.ok,
+            JsonResponseSimulator.mediaList,
+          ),
+        );
+
+        //act
+        await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(
+            search: "search",
+            after: "after",
+            before: "before",
+            type: MediaType.text,
+          ),
+        );
+
+        //assert
+        final expectedParams = [
           "per_page",
           "page",
           "search",
           "after",
           "before",
           "media_type",
-        ]),
-      );
+        ];
+        for (var param in expectedParams) {
+          expect(queryParams?.keys, contains(param));
+        }
+      });
+
+      test("should NOT include any null param in queryParams ", () async {
+        //arrange
+        Map<String, dynamic>? queryParams;
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (options, handler) {
+              queryParams = options.queryParameters;
+              return handler.next(options);
+            },
+          ),
+        );
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          (server) => server.reply(
+            HttpStatus.ok,
+            JsonResponseSimulator.mediaList,
+          ),
+        );
+
+        //act
+        await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(),
+        );
+
+        //assert
+        for (var param in ["per_page", "page", "_embed"]) {
+          expect(queryParams?.keys, contains(param));
+        }
+        expect(queryParams?.length, 3);
+      });
     });
 
-    test("should NOT include any null param in queryParams ", () async {
-      //arrange
-      dioAdapter.onGet(
-        "$wpV2EndPoint/media",
-        queryParameters: {
-          "per_page": Matchers.any,
-          "page": Matchers.any,
-        },
-        (server) => server.reply(
-          HttpStatus.ok,
-          JsonResponseSimulator.mediaList,
-        ),
-      );
+    group("hasMoreMedias -", () {
+      test(
+          "should CurrentPageMediasEntity (hasMoreMedias = false) when the length of received medias is less than perPage",
+          () async {
+        //arrange
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          queryParameters: {
+            "per_page": Matchers.any,
+            "page": Matchers.any,
+          },
+          (server) => server.reply(
+            HttpStatus.ok,
+            List.generate(3, (index) => JsonResponseSimulator.media),
+          ),
+        );
 
-      //act
-      await mediaRemoteDataSourceImpl.getMediasPerPage(
-        GetMediaPerPageParams(),
-      );
-      final queryParams = dioAdapter.history.first.request.queryParameters;
+        //act
+        final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(perPage: 10),
+        );
 
-      //assert
-      expect(queryParams?.keys, containsAll(["per_page", "page"]));
-      expect(queryParams?.length, 2);
-    });
+        //assert
+        expect(result.hasMoreMedias, false);
+      });
 
-    test(
-        "should CurrentPageMediasEntity (hasMore = false) when the length of received medias is less than perPage",
-        () async {
-      //arrange
-      dioAdapter.onGet(
-        "$wpV2EndPoint/media",
-        queryParameters: {
-          "per_page": Matchers.any,
-          "page": Matchers.any,
-        },
-        (server) => server.reply(
-          HttpStatus.ok,
-          List.generate(3, (index) => JsonResponseSimulator.media),
-        ),
-      );
+      test(
+          "should currentPageMediasEntity (hasMoreMedias = true) when the length of received medias is equal or grater than perPage",
+          () async {
+        //arrange
+        dioAdapter.onGet(
+          "$wpV2EndPoint/media",
+          queryParameters: {
+            "per_page": Matchers.any,
+            "page": Matchers.any,
+          },
+          (server) => server.reply(
+            HttpStatus.ok,
+            List.generate(10, (index) => JsonResponseSimulator.media),
+          ),
+        );
 
-      //act
-      final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
-        GetMediaPerPageParams(perPage: 10),
-      );
+        //act
+        final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
+          GetMediaPerPageParams(perPage: 10),
+        );
 
-      //assert
-      expect(result.hasMoreMedias, false);
-    });
-
-    test(
-        "should currentPageMediasEntity (hasMore = true) when the length of received medias is equal or grater than perPage",
-        () async {
-      //arrange
-      dioAdapter.onGet(
-        "$wpV2EndPoint/media",
-        queryParameters: {
-          "per_page": Matchers.any,
-          "page": Matchers.any,
-        },
-        (server) => server.reply(
-          HttpStatus.ok,
-          List.generate(10, (index) => JsonResponseSimulator.media),
-        ),
-      );
-
-      //act
-      final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
-        GetMediaPerPageParams(perPage: 10),
-      );
-
-      //assert
-      expect(result.hasMoreMedias, true);
+        //assert
+        expect(result.hasMoreMedias, true);
+      });
     });
   });
 

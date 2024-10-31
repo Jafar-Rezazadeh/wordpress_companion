@@ -31,7 +31,8 @@ class UploadMediaCubit extends Cubit<UploadMediaState> {
       onDone: () => emit(const UploadMediaState.uploaded()),
       cancelOnError: true,
       onError: (error) => emit(
-        UploadMediaState.error(FailureFactory.createFailure(error)),
+        UploadMediaState.error(
+            FailureFactory.createFailure(error, StackTrace.current)),
       ),
     );
   }
