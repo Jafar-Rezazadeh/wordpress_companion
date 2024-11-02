@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wordpress_companion/core/constants/enums.dart';
 
 import '../../../../core/core_export.dart';
-import '../../../../core/utils/mime_type_recognizer.dart';
 
 class MediaListItemLeading extends StatelessWidget {
   final String mimeType;
@@ -42,7 +41,7 @@ class MediaListItemLeading extends StatelessWidget {
   Widget _imageBox() {
     return Image.network(
       key: const Key("image_box"),
-      // FIXME: remove replace on production it is just for local host
+      // HACK: remove replace on production it is just for local host
       sourceUrl.replaceAll("https://localhost", "http://192.168.1.2"),
       fit: BoxFit.cover,
 

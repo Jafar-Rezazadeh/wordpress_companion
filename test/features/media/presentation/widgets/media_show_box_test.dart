@@ -8,7 +8,33 @@ void main() {
   final imageBoxFinder = find.byKey(const Key("image_show_box"));
   final videoBoxFinder = find.byKey(const Key("video_show_box"));
   final fileBoxFinder = find.byKey(const Key("file_show_box"));
-  testWidgets("should return image_box when MimeType is image", (tester) async {
+
+  testWidgets(
+      "should build empty container when current builder can't handle and the is no next builder",
+      (tester) async {
+    //arrange
+    final mediaBoxBuilder = FileBoxBuilder(nextBuilder: null);
+    await mockNetworkImagesFor(
+      () async => await tester.pumpWidget(
+        Builder(builder: (context) {
+          return mediaBoxBuilder.build(
+            mimetype: MimeType.image,
+            sourceUrl: "sourceUrl",
+            label: "label",
+          );
+        }),
+      ),
+    );
+
+    //assert
+    expect(find.byType(Container), findsOneWidget);
+
+    expect(imageBoxFinder, findsNothing);
+    expect(videoBoxFinder, findsNothing);
+    expect(fileBoxFinder, findsNothing);
+  });
+
+  testWidgets("should build image_box when MimeType is image", (tester) async {
     //arrange
     await _buildTestWidget(tester, MimeType.image, "sourceUrl");
 

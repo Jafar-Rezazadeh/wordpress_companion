@@ -89,6 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: LoadingWidget(),
           ),
           loaded: (profile) => _contents(),
+          // TODO: show a modal Bottom sheet on error state and remove this from builder
           error: (failure) => FailureWidget(failure: failure),
         );
       },
@@ -96,7 +97,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _profileStateListener(BuildContext _, ProfileState state) {
-    // TODO: show a modal Bottom sheet on error state
     state.whenOrNull(
       loaded: (profile) => setState(() {
         initialProfileData = profile;

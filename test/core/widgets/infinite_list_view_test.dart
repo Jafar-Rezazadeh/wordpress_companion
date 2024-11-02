@@ -3,36 +3,79 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wordpress_companion/core/widgets/infinite_list_view.dart';
 
 void main() {
-  testWidgets(
-      "should show full_screen_loading widget when showFullScreenLoading is true",
-      (tester) async {
-    //arrange
-    await tester.pumpWidget(
-      const _TestWidget(
-        showFullScreenLoading: true,
-      ),
-    );
+  group("loading Widget -", () {
+    testWidgets(
+        "should show full_screen_loading widget when showFullScreenLoading is true",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        const _TestWidget(
+          showFullScreenLoading: true,
+        ),
+      );
 
-    //assert
-    expect(find.byKey(const Key("full_screen_loading")), findsOneWidget);
-    expect(find.byType(ListView), findsNothing);
+      //assert
+      expect(find.byKey(const Key("full_screen_loading")), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+    });
+
+    testWidgets(
+        "should show load_on_scroll_widget when showBottomLoading is true",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        const _TestWidget(
+          showBottomLoading: true,
+          data: ["hello"],
+        ),
+      );
+      await tester.pump(Durations.short1);
+      //assert
+      expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
+    });
   });
 
-  testWidgets(
-      "should show no_data_info_text when fullScreenLoading is false and data is empty",
-      (tester) async {
-    //arrange
-    await tester.pumpWidget(
-      const _TestWidget(
-        showFullScreenLoading: false,
-        data: [],
-      ),
-    );
+  group("no data info -", () {
+    testWidgets(
+        "should show no_data_widget when fullScreenLoading is false and data is empty",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        const _TestWidget(
+          showFullScreenLoading: false,
+          data: [],
+        ),
+      );
 
-    //assert
-    expect(find.byKey(const Key("no_data_info_text")), findsOneWidget);
-    expect(find.byKey(const Key("full_screen_loading")), findsNothing);
-    expect(find.byType(ListView), findsNothing);
+      //assert
+      expect(find.byKey(const Key("no_data_widget")), findsOneWidget);
+      expect(find.byKey(const Key("full_screen_loading")), findsNothing);
+      expect(find.byType(ListView), findsNothing);
+    });
+
+    testWidgets(
+        "should invoke the onRefresh when (no_data_refresh_button) button is tapped ",
+        (tester) async {
+      //arrange
+      bool onRefreshInvoked = false;
+      await tester.pumpWidget(_TestWidget(
+        onRefresh: () async {
+          onRefreshInvoked = true;
+        },
+        showFullScreenLoading: false,
+        data: const [],
+      ));
+
+      //verification
+      expect(find.byKey(const Key("no_data_refresh_button")), findsOneWidget);
+
+      //act
+      await tester.tap(find.byKey(const Key("no_data_refresh_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(onRefreshInvoked, true);
+    });
   });
 
   testWidgets("should invoke the onRefresh method when dragged top",
@@ -87,21 +130,6 @@ void main() {
 
     //assert
     expect(invoked, true);
-  });
-
-  testWidgets(
-      "should show load_on_scroll_widget when showBottomLoading is true",
-      (tester) async {
-    //arrange
-    await tester.pumpWidget(
-      const _TestWidget(
-        showBottomLoading: true,
-        data: ["hello"],
-      ),
-    );
-    await tester.pump(Durations.short1);
-    //assert
-    expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
   });
 }
 

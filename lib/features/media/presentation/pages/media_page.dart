@@ -39,6 +39,7 @@ class _MediaPageState extends State<MediaPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      // TODO: add upload media button (hint use an scaffold)
       children: [
         _header(),
         _mediaBuilder(),
@@ -59,11 +60,19 @@ class _MediaPageState extends State<MediaPage> {
         _reinitializeVariables(params: GetMediaPerPageParams(search: value));
         _getMedias();
       },
-      onClear: () {
-        _reinitializeVariables();
-        _getMedias();
-      },
+      onClear: () => _reset(),
     );
+  }
+
+  void _reset() {
+    _reinitializeVariables();
+    _getMedias();
+  }
+
+  void _reinitializeVariables({GetMediaPerPageParams? params}) {
+    this.params = params ?? GetMediaPerPageParams();
+    hasMoreMedias = false;
+    listOfMedias.clear();
   }
 
   Widget _filterButton() {
@@ -78,10 +87,7 @@ class _MediaPageState extends State<MediaPage> {
         );
         _getMedias();
       },
-      onClear: () {
-        _reinitializeVariables();
-        _getMedias();
-      },
+      onClear: () => _reset(),
     );
   }
 
@@ -108,7 +114,8 @@ class _MediaPageState extends State<MediaPage> {
 
   void _mediaStateListener(_, MediaState state) {
     state.whenOrNull(
-      // TODO: refresh when updated and deleted state
+      updated: () => _reset(),
+      deleted: (_) => _reset(),
       loaded: (data) {
         hasMoreMedias = data.hasMoreMedias;
         listOfMedias.addAll(data.medias);
@@ -127,12 +134,6 @@ class _MediaPageState extends State<MediaPage> {
       params: params.copyWith(page: 1, search: null),
     );
     _getMedias();
-  }
-
-  void _reinitializeVariables({GetMediaPerPageParams? params}) {
-    this.params = params ?? GetMediaPerPageParams();
-    hasMoreMedias = false;
-    listOfMedias.clear();
   }
 
   bool _isLoadingState(MediaState state) =>

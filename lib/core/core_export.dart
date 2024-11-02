@@ -3,6 +3,9 @@ export 'package:wordpress_companion/core/theme/color_pallet.dart';
 
 export 'package:wordpress_companion/core/utils/validator.dart';
 export 'package:wordpress_companion/core/utils/api_response_handler.dart';
+export 'package:wordpress_companion/core/utils/file_size.dart';
+export 'package:wordpress_companion/core/utils/mime_type_recognizer.dart';
+export 'package:wordpress_companion/core/utils/downloader.dart';
 
 // widgets
 export 'package:wordpress_companion/core/widgets/pushed_page_app_bar.dart';
@@ -16,3 +19,4 @@ export 'package:wordpress_companion/core/widgets/custom_search_input.dart';
 export 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 export 'package:wordpress_companion/core/widgets/custom_drop_down_button.dart';
 export 'package:wordpress_companion/core/widgets/infinite_list_view.dart';
+export 'package:wordpress_companion/core/widgets/custom_dialogs.dart';

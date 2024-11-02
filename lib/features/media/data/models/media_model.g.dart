@@ -23,9 +23,10 @@ MediaModel _$MediaModelFromJson(Map<String, dynamic> json) => MediaModel(
       template: json['template'] as String,
       permalinkTemplate: json['permalink_template'] as String,
       generatedSlug: json['generated_slug'] as String,
-      classList: (json['class_list'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      classList: (json['class_list'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       description: MediaModel._descriptionFromJson(json['description']),
       caption: MediaModel._captionFromJson(json['caption']),
       altText: json['alt_text'] as String,

@@ -80,7 +80,7 @@ void main() {
       await tester.pump(Durations.short1);
 
       //assert
-      expect(find.byKey(const Key("no_data_info_text")), findsOneWidget);
+      expect(find.byKey(const Key("no_data_widget")), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
     });
 
@@ -134,7 +134,7 @@ void main() {
     });
 
     testWidgets(
-        "should assign the received data to listView when state is loaded",
+        "should assign the received data to listView when (state is loaded)",
         (tester) async {
       //arrange
       whenListen(
@@ -162,7 +162,7 @@ void main() {
       expect(listView.semanticChildCount, greaterThan(0));
     });
 
-    testWidgets("should show a failureBottomSheet when state is error",
+    testWidgets("should show a failureBottomSheet when (state is error)",
         (tester) async {
       //arrange
       whenListen(
@@ -181,6 +181,35 @@ void main() {
 
       //assert
       expect(find.byKey(const Key("failure_bottom_sheet")), findsOneWidget);
+    });
+
+    testWidgets(
+        "should invoke the getMediaPerPage with default params when (state is updated)",
+        (tester) async {
+      //arrange
+      whenListen(
+        mediaCubit,
+        Stream.fromIterable([const MediaState.updated()]),
+      );
+      await tester.pumpWidget(_testWidget(mediaCubit));
+      await tester.pumpAndSettle();
+
+      //verification
+      _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit, count: 2);
+    });
+    testWidgets(
+        "should invoke the getMediaPerPage with default params when (state is deleted)",
+        (tester) async {
+      //arrange
+      whenListen(
+        mediaCubit,
+        Stream.fromIterable([const MediaState.deleted(true)]),
+      );
+      await tester.pumpWidget(_testWidget(mediaCubit));
+      await tester.pumpAndSettle();
+
+      //verification
+      _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit, count: 2);
     });
   });
 
@@ -428,7 +457,8 @@ void main() {
   });
 }
 
-void _verifyGetMediaPerPageCalledWithDefaultParams(MediaCubit mediaCubit) {
+void _verifyGetMediaPerPageCalledWithDefaultParams(MediaCubit mediaCubit,
+    {int count = 1}) {
   return verify(
     () => mediaCubit.getMediaPerPage(
       any(
@@ -439,7 +469,7 @@ void _verifyGetMediaPerPageCalledWithDefaultParams(MediaCubit mediaCubit) {
         ),
       ),
     ),
-  ).called(1);
+  ).called(count);
 }
 
 bool _defaultParams(GetMediaPerPageParams params) {

@@ -175,6 +175,29 @@ void main() {
         ).called(1);
       });
     });
+
+    group("on delete -", () {
+      testWidgets(
+          "should invoke the deleteMedia of mediaCubit when delete confirmed",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_makeTestWidget(mediaCubit, mediaEntity));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byKey(const Key("delete_button")), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("delete_button")));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byKey(const Key("confirm_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => mediaCubit.deleteMedia(any())).called(1);
+      });
+    });
   });
 }
 

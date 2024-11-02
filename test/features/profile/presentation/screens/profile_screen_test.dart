@@ -155,7 +155,7 @@ void main() {
 
     group("listener -", () {
       testWidgets(
-          "should insert the profile data to inputs when profile state is loaded",
+          "should insert the profile data to inputs when profile (state is loaded)",
           (tester) async {
         //arrange
         whenListen(

@@ -57,10 +57,29 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
   Widget _listViewRenderer() =>
       widget.data.isEmpty ? _showNoMediaInfo() : _showListOfMedia();
 
-  Text _showNoMediaInfo() {
-    return const Text(
-      key: Key("no_data_info_text"),
-      "محتوایی برای نمایش وجود ندارد.",
+  Widget _showNoMediaInfo() {
+    return Column(
+      key: const Key("no_data_widget"),
+      children: [
+        const Text(
+          "محتوایی برای نمایش وجود ندارد.",
+        ),
+        _refreshButton()
+      ],
+    );
+  }
+
+  IconButton _refreshButton() {
+    return IconButton.filled(
+      style: IconButton.styleFrom(
+        shadowColor: Colors.black87,
+        backgroundColor: Colors.white,
+        foregroundColor: ColorPallet.lightBlue,
+        elevation: 5,
+      ),
+      key: const Key("no_data_refresh_button"),
+      onPressed: () => widget.onRefresh(),
+      icon: const Icon(Icons.refresh),
     );
   }
 

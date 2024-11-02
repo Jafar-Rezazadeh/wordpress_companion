@@ -59,49 +59,91 @@ void main() {
   });
 
   group("popUpMenu -", () {
-    testWidgets(
-        "should go to editMediaScreen when MenuItem with edit value tapped",
-        (tester) async {
-      //arrange
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(_testWidgetTree(mediaCubit));
+    group("Edit", () {
+      testWidgets("should go to editMediaScreen when edit_media tapped",
+          (tester) async {
+        //arrange
+        await mockNetworkImagesFor(() async {
+          await tester.pumpWidget(_testWidgetTree(mediaCubit));
+        });
+
+        //verification
+        expect(find.byType(PopupMenuButton), findsOneWidget);
+
+        //act
+        await tester.tap(find.byType(PopupMenuButton));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("edit_media")));
+        await tester.pumpAndSettle();
+
+        //assert
+        expect(find.byType(EditMediaScreen), findsOneWidget);
       });
 
-      //verification
-      expect(find.byType(PopupMenuButton), findsOneWidget);
+      testWidgets(
+          "should send the mediaEntity to editMediaScreen when edit_media tapped ",
+          (tester) async {
+        //arrange
+        await mockNetworkImagesFor(() async {
+          await tester.pumpWidget(_testWidgetTree(mediaCubit));
+        });
 
-      //act
-      await tester.tap(find.byType(PopupMenuButton));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key("edit_media")));
-      await tester.pumpAndSettle();
+        //verification
+        expect(find.byType(PopupMenuButton), findsOneWidget);
 
-      //assert
-      expect(find.byType(EditMediaScreen), findsOneWidget);
+        //act
+        await tester.tap(find.byType(PopupMenuButton));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("edit_media")));
+        await tester.pumpAndSettle();
+        final editScreen = tester.widget<EditMediaScreen>(
+          find.byType(EditMediaScreen),
+        );
+
+        //assert
+        expect(editScreen.mediaEntity, isNotNull);
+      });
     });
 
-    testWidgets(
-        "should send the mediaEntity to editMediaScreen when MenuItem with edit value tapped ",
-        (tester) async {
-      //arrange
-      await mockNetworkImagesFor(() async {
+    group("delete", () {
+      testWidgets("should open are_you_sure_dialog when delete_media tapped",
+          (tester) async {
+        //arrange
         await tester.pumpWidget(_testWidgetTree(mediaCubit));
+
+        //verification
+        expect(find.byType(PopupMenuButton), findsOneWidget);
+
+        //act
+        await tester.tap(find.byType(PopupMenuButton));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("delete_media")));
+        await tester.pumpAndSettle();
+
+        //assert
+        expect(find.byKey(const Key("are_you_sure_dialog")), findsOneWidget);
       });
 
-      //verification
-      expect(find.byType(PopupMenuButton), findsOneWidget);
+      testWidgets(
+          "should invoke mediaCubit.delete when delete_media is confirmed ",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidgetTree(mediaCubit));
 
-      //act
-      await tester.tap(find.byType(PopupMenuButton));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key("edit_media")));
-      await tester.pumpAndSettle();
-      final editScreen = tester.widget<EditMediaScreen>(
-        find.byType(EditMediaScreen),
-      );
+        //verification
+        expect(find.byType(PopupMenuButton), findsOneWidget);
 
-      //assert
-      expect(editScreen.mediaEntity, isNotNull);
+        //act
+        await tester.tap(find.byType(PopupMenuButton));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("delete_media")));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("confirm_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => mediaCubit.deleteMedia(any())).called(1);
+      });
     });
   });
 }
@@ -112,22 +154,27 @@ Widget _testWidgetTree(MediaCubit mediaCubit) {
       routerConfig: GoRouter(
         initialLocation: "/",
         routes: [
-          GoRoute(
-            path: "/",
-            builder: (context, state) => Material(
-              child: MediaListItem(media: _mediaEntity),
+          ShellRoute(
+            builder: (context, state, child) => BlocProvider(
+              create: (context) => mediaCubit,
+              child: child,
             ),
             routes: [
               GoRoute(
-                name: editMediaScreenRoute,
-                path: editMediaScreenRoute,
-                builder: (context, state) {
-                  final media = state.extra as MediaEntity;
-                  return BlocProvider(
-                    create: (context) => mediaCubit,
-                    child: EditMediaScreen(mediaEntity: media),
-                  );
-                },
+                path: "/",
+                builder: (context, state) => Material(
+                  child: MediaListItem(media: _mediaEntity),
+                ),
+                routes: [
+                  GoRoute(
+                    name: editMediaScreenRoute,
+                    path: editMediaScreenRoute,
+                    builder: (context, state) {
+                      final media = state.extra as MediaEntity;
+                      return EditMediaScreen(mediaEntity: media);
+                    },
+                  )
+                ],
               )
             ],
           )

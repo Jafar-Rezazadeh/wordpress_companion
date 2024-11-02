@@ -36,7 +36,7 @@ class MediaCubit extends Cubit<MediaState> {
   updateMedia(UpdateMediaParams params) async {
     emit(const MediaState.loading());
 
-    // FIXME: remove this in production
+    // HACK: remove this in production
     await Future.delayed(const Duration(seconds: 3));
 
     final result = await _updateMedia(params);
@@ -50,7 +50,7 @@ class MediaCubit extends Cubit<MediaState> {
   getMediaPerPage(GetMediaPerPageParams params) async {
     if (_isNotInLoadingState()) {
       emit(const MediaState.loading());
-      // FIXME: remove the delay
+      // HACK: remove the delay
       await Future.delayed(Durations.extralong4);
       final result = await _getMediaPerPage(params);
 

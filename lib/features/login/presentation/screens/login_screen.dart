@@ -21,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _applicationPasswordController =
       TextEditingController();
   final TextEditingController _domainController = TextEditingController();
+  // FIXME: remember me is true at the beginning
+
   bool _rememberMeValue = true;
   bool _obscurePassword = true;
 
@@ -117,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _userName(),
               _applicationPassword(),
               _rememberMe(),
+              // TODO: add auto login
               _domain(),
               Gap(0.01.sh),
               _submitButton()
@@ -219,7 +222,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _domain() {
-    // TODO: remove the [/] at the end of the value on change
     return CustomFormInputField(
       key: const Key("domain"),
       controller: _domainController,

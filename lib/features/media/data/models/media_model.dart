@@ -77,7 +77,7 @@ class MediaModel extends MediaEntity {
   String get generatedSlug => super.generatedSlug;
 
   @override
-  @JsonKey(name: "class_list")
+  @JsonKey(name: "class_list", defaultValue: [])
   List<String> get classList => super.classList;
 
   @override

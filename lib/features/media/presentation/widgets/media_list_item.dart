@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
@@ -82,9 +83,18 @@ class _MediaListItemState extends State<MediaListItem> {
 
   PopupMenuItem _deleteMenuItem() {
     return PopupMenuItem(
+      key: const Key("delete_media"),
       value: "delete",
       onTap: () {
-        // TODO: show a delete Dialog and delete media
+        CustomDialogs.showAreYouSureDialog(
+          context: context,
+          title: "حذف رسانه",
+          content:
+              "آیا مطمئن هستید که میخواهید (${widget.media.title}) را برای همیشه حذف کنید؟",
+          onConfirm: () {
+            context.read<MediaCubit>().deleteMedia(widget.media.id);
+          },
+        );
       },
       child: Row(
         textDirection: TextDirection.rtl,
