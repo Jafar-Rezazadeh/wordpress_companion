@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
-import 'package:wordpress_companion/core/extensions/extensions.dart';
 
-import '../../../../core/constants/enums.dart';
 import '../../../../core/core_export.dart';
-import '../../../../core/widgets/custom_persian_date_selector.dart';
 
 class MediaFilterButton extends StatefulWidget {
   final Function(MediaFilters filters) onApply;

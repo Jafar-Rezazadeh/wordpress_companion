@@ -4,12 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
 
 class MockMediaCubit extends MockCubit<MediaState> implements MediaCubit {}
 

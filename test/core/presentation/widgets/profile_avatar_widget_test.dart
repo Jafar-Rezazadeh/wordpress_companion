@@ -4,11 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'package:wordpress_companion/core/presentation/widgets/profile_avatar_widget.dart';
-import 'package:wordpress_companion/features/profile/domain/entities/profile_avatar_urls.dart';
-import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
+import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
     implements GlobalProfileCubit {}

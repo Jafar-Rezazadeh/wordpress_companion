@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/features/media/presentation/widgets/media_list_item_leading.dart';
 
 import '../../media_exports.dart';

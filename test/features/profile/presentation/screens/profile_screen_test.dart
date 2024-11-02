@@ -4,10 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
 class MockProfileCubit extends MockCubit<ProfileState>
@@ -19,7 +16,6 @@ class FakeUpdateMyProfileParams extends Fake implements UpdateMyProfileParams {}
 
 void main() {
   late ProfileCubit profileCubit;
-  late Widget simulatedTree;
 
   final dummyProfileEntity = ProfileEntity(
     id: 0,
@@ -52,39 +48,10 @@ void main() {
     when(
       () => profileCubit.state,
     ).thenAnswer((_) => const ProfileState.initial());
-
-    simulatedTree = ScreenUtilInit(
-      child: MaterialApp(
-        home: BlocProvider(
-          create: (_) => profileCubit,
-          child: const ProfileScreen(),
-        ),
-      ),
-    );
   });
 
   group("profileCubit -", () {
     group("builder -", () {
-      testWidgets("should Not build anything when profileState is initial",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([
-            const ProfileState.initial(),
-          ]),
-        );
-
-        //act
-        await tester.pumpWidget(simulatedTree);
-        await tester.pump();
-
-        //assert
-        expect(find.byType(LoadingWidget), findsNothing);
-        expect(find.byKey(const Key("contents_key")), findsNothing);
-        expect(find.byType(FailureWidget), findsNothing);
-      });
-
       testWidgets("should build loadingWidget when ProfileState is loading",
           (tester) async {
         //arrange
@@ -96,7 +63,7 @@ void main() {
         );
 
         //act
-        await tester.pumpWidget(simulatedTree);
+        await tester.pumpWidget(_testWidget(profileCubit));
         await tester.pump();
 
         //assert
@@ -105,7 +72,8 @@ void main() {
         expect(find.byType(FailureWidget), findsNothing);
       });
 
-      testWidgets("should build the content when profileState is loaded",
+      testWidgets(
+          "should build the content when profileState is anything else loading",
           (tester) async {
         //arrange
         whenListen(
@@ -116,40 +84,13 @@ void main() {
         );
 
         //act
-        await tester.pumpWidget(simulatedTree);
+        await tester.pumpWidget(_testWidget(profileCubit));
         await tester.pumpAndSettle();
 
         //assert
         expect(find.byKey(const Key("contents_key")), findsOneWidget);
         expect(find.byType(LoadingWidget), findsNothing);
         expect(find.byType(FailureWidget), findsNothing);
-      });
-
-      testWidgets("should build FailureWidget when ProfileState is error",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable(
-            [
-              ProfileState.error(
-                InternalFailure(
-                  message: "message",
-                  stackTrace: StackTrace.fromString("stackTraceString"),
-                ),
-              )
-            ],
-          ),
-        );
-
-        //act
-        await tester.pumpWidget(simulatedTree);
-        await tester.pump();
-
-        //assert
-        expect(find.byType(FailureWidget), findsOneWidget);
-        expect(find.byKey(const Key("contents_key")), findsNothing);
-        expect(find.byType(LoadingWidget), findsNothing);
       });
     });
 
@@ -160,11 +101,14 @@ void main() {
         //arrange
         whenListen(
           profileCubit,
-          Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
+          Stream.fromIterable([
+            ProfileState.loaded(dummyProfileEntity),
+          ]),
+          initialState: const ProfileState.loading(),
         );
 
         //act
-        await tester.pumpWidget(simulatedTree);
+        await tester.pumpWidget(_testWidget(profileCubit));
         await tester.pumpAndSettle();
 
         //assert
@@ -177,6 +121,28 @@ void main() {
         expect(find.text(dummyProfileEntity.nickName), findsOneWidget);
         expect(find.text(dummyProfileEntity.url), findsOneWidget);
         expect(find.text(dummyProfileEntity.description), findsOneWidget);
+      });
+
+      testWidgets("should show a failure_bottom_sheet when state is failure",
+          (tester) async {
+        //arrange
+        whenListen(
+          profileCubit,
+          Stream.fromIterable([
+            ProfileState.error(
+              InternalFailure(
+                  message: "message",
+                  stackTrace: StackTrace.fromString("stackTraceString")),
+            )
+          ]),
+        );
+        await tester.pumpWidget(_testWidget(profileCubit));
+
+        //verification
+
+        //act
+
+        //assert
       });
     });
   });
@@ -192,11 +158,11 @@ void main() {
             profileCubit,
             Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
           );
-          await tester.pumpWidget(simulatedTree);
+          await tester.pumpWidget(_testWidget(profileCubit));
           await tester.pumpAndSettle();
 
           //verification
-          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+          expect(find.byKey(const Key("email_input")), findsOneWidget);
 
           //act
           final emailInput = tester.widget<TextFormField>(
@@ -213,16 +179,15 @@ void main() {
             "should email input has been focused if value is invalid when submit button is tapped",
             (tester) async {
           //arrange
-
           whenListen(
             profileCubit,
             Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
           );
-          await tester.pumpWidget(simulatedTree);
+          await tester.pumpWidget(_testWidget(profileCubit));
           await tester.pumpAndSettle();
 
           //verification
-          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+          expect(find.byKey(const Key("email_input")), findsOneWidget);
 
           //act
           final emailInput = tester.widget<CustomFormInputField>(
@@ -247,11 +212,11 @@ void main() {
             profileCubit,
             Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
           );
-          await tester.pumpWidget(simulatedTree);
+          await tester.pumpWidget(_testWidget(profileCubit));
           await tester.pumpAndSettle();
 
           //verification
-          expect(find.text(dummyProfileEntity.email), findsOneWidget);
+          expect(find.byKey(const Key("email_input")), findsOneWidget);
 
           //act
           final emailInput = tester.widget<TextFormField>(
@@ -274,13 +239,17 @@ void main() {
           Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
         );
 
-        await tester.pumpWidget(simulatedTree);
+        await tester.pumpWidget(_testWidget(profileCubit));
         await tester.pumpAndSettle();
 
         //verification
+        expect(find.byKey(const Key("email_input")), findsOneWidget);
         expect(find.byKey(const Key("submit_button")), findsOneWidget);
 
         //act
+        await tester.enterText(
+            find.byKey(const Key("email_input")), "test@gmail.com");
+        await tester.pumpAndSettle();
         await tester.tap(find.byKey(const Key("submit_button")));
         await tester.pumpAndSettle();
 
@@ -297,7 +266,7 @@ void main() {
           Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
         );
 
-        await tester.pumpWidget(simulatedTree);
+        await tester.pumpWidget(_testWidget(profileCubit));
         await tester.pumpAndSettle();
 
         //verification
@@ -313,4 +282,15 @@ void main() {
       });
     });
   });
+}
+
+Widget _testWidget(ProfileCubit profileCubit) {
+  return ScreenUtilInit(
+    child: MaterialApp(
+      home: BlocProvider(
+        create: (_) => profileCubit,
+        child: const ProfileScreen(),
+      ),
+    ),
+  );
 }

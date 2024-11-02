@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../core_export.dart';
 import '../../../features/profile/profile_exports.dart';
 
-import '../../router/go_router_config.dart';
-import '../cubits/global_profile_cubit/global_profile_cubit.dart';
-
 class ProfileAvatarWidget extends StatelessWidget {
   final double? radius;
   const ProfileAvatarWidget({super.key, this.radius});

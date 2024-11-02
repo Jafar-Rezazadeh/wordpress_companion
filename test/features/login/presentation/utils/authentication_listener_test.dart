@@ -4,8 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 void main() {

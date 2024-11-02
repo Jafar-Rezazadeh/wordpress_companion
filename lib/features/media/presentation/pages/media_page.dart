@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_list_item.dart';
 
 import '../../../../core/core_export.dart';
 import '../../media_exports.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
-import 'package:wordpress_companion/core/widgets/video_player.dart';
 
 import '../../../../core/core_export.dart';
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/widgets/custom_persian_date_selector.dart';
 import 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
 
 void main() {

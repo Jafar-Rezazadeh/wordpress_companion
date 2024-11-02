@@ -5,10 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/widgets/time_zone_selector.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/screens/site_settings_screen.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/widgets/start_of_week_input.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockSiteSettingsCubit extends MockCubit<SiteSettingsState>

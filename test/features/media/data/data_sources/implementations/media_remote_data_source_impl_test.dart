@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:wordpress_companion/core/constants/enums.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 

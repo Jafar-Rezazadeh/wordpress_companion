@@ -54,14 +54,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _performSubmitAction() {
-    if (formKey.currentState != null && formKey.currentState!.validate()) {
-      _callCubitToUpdate();
+    if (_inputsAreValid()) {
+      context.read<ProfileCubit>().updateProfile(paramsBuilder.build());
     }
   }
 
-  void _callCubitToUpdate() {
-    context.read<ProfileCubit>().updateProfile(paramsBuilder.build());
-  }
+  bool _inputsAreValid() =>
+      formKey.currentState != null && formKey.currentState!.validate();
 
   Widget _bodyLayout() {
     return Directionality(
@@ -82,26 +81,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: _profileStateListener,
       builder: (context, state) {
-        return state.when(
-          initial: () => Container(),
-          loading: () => const Padding(
-            padding: EdgeInsets.only(top: 100),
-            child: LoadingWidget(),
-          ),
-          loaded: (profile) => _contents(),
-          // TODO: show a modal Bottom sheet on error state and remove this from builder
-          error: (failure) => FailureWidget(failure: failure),
+        return state.maybeWhen(
+          loading: () => _loading(),
+          orElse: () => _contents(),
         );
       },
     );
   }
 
+  Padding _loading() {
+    return const Padding(
+      padding: EdgeInsets.only(top: 100),
+      child: LoadingWidget(),
+    );
+  }
+
   void _profileStateListener(BuildContext _, ProfileState state) {
     state.whenOrNull(
-      loaded: (profile) => setState(() {
+      loaded: (profile) {
         initialProfileData = profile;
         paramsBuilder.setFromInitialData(profile);
-      }),
+      },
+      error: (failure) => CustomBottomSheets.showFailureBottomSheet(
+        context: context,
+        failure: failure,
+      ),
     );
   }
 

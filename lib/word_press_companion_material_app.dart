@@ -6,7 +6,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'core/core_export.dart';
 
-import 'core/router/go_router_config.dart';
 import 'core/theme/theme.dart';
 
 class WordpressCompanion extends StatelessWidget {

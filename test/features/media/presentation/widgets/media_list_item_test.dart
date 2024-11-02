@@ -8,8 +8,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/media/presentation/screens/edit_media_screen.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_list_item.dart';
 
 class FakeMediaEntity extends Fake implements MediaEntity {
   @override

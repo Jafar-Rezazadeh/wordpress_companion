@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/media/presentation/screens/edit_media_screen.dart';
 
 class MockMediaCubit extends MockCubit<MediaState> implements MediaCubit {}
 

@@ -5,9 +5,6 @@ import 'package:gap/gap.dart';
 import '../../../../core/core_export.dart';
 import '../../site_settings_exports.dart';
 
-import '../../../../core/widgets/time_zone_selector.dart';
-import '../widgets/start_of_week_input.dart';
-
 class SiteSettingsScreen extends StatefulWidget {
   final UpdateSiteSettingsParamsBuilder updateSiteSettingsParamsBuilder;
   SiteSettingsScreen({
