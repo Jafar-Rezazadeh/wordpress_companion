@@ -6,7 +6,7 @@ class UpdateSiteSettingsParamsBuilder {
   int _siteIcon = 0;
   String _url = "";
   String _email = "";
-  String _timeZone = "Asia/Tehran";
+  String _timeZone = "UTC+0";
   String _dateFormat = "";
   String _timeFormat = "";
   int _startOfWeek = 1;
@@ -17,7 +17,7 @@ class UpdateSiteSettingsParamsBuilder {
     _siteIcon = entity.siteIcon;
     _url = entity.url;
     _email = entity.email;
-    _timeZone = entity.timeZone;
+    _timeZone = entity.timeZone.isNotEmpty ? entity.timeZone : _timeZone;
     _dateFormat = entity.dateFormat;
     _timeFormat = entity.timeFormat;
     _startOfWeek = entity.startOfWeek;

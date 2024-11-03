@@ -27,7 +27,9 @@ class TimezoneDropdownState extends State<TimezoneDropdown> {
 
   @override
   void initState() {
-    selectedZone = widget.initialTimeZone;
+    selectedZone = widget.initialTimeZone?.isNotEmpty == true
+        ? widget.initialTimeZone
+        : null;
     super.initState();
   }
 

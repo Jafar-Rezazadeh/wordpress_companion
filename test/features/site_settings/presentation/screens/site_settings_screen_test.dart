@@ -12,28 +12,28 @@ class MockSiteSettingsCubit extends MockCubit<SiteSettingsState>
 
 class DummySiteSettingsEntity extends Fake implements SiteSettingsEntity {
   @override
-  String get title => "test";
+  String get title => "title";
 
   @override
-  String get description => "test";
+  String get description => "description";
 
   @override
   int get siteIcon => 2;
 
   @override
-  String get url => "test";
+  String get url => "url";
 
   @override
   String get email => "test@gmail.com";
 
   @override
-  String get timeZone => "lhk:g";
+  String get timeZone => "UTC";
 
   @override
   String get timeFormat => "H:i A";
 
   @override
-  String get dateFormat => "h/lf/y";
+  String get dateFormat => "d/m/y";
 
   @override
   int get startOfWeek => 1;
@@ -44,7 +44,6 @@ class FakeUpdateSiteSettingsParams extends Fake
 
 void main() {
   late SiteSettingsCubit settingsCubit;
-  late UpdateSiteSettingsParamsBuilder builder;
   late Widget testWidgetTree;
 
   setUpAll(() {
@@ -53,7 +52,6 @@ void main() {
 
   setUp(() {
     settingsCubit = MockSiteSettingsCubit();
-    builder = UpdateSiteSettingsParamsBuilder();
 
     when(
       () => settingsCubit.state,
@@ -63,7 +61,7 @@ void main() {
       child: MaterialApp(
         home: BlocProvider(
           create: (context) => settingsCubit,
-          child: SiteSettingsScreen(updateSiteSettingsParamsBuilder: builder),
+          child: const SiteSettingsScreen(),
         ),
       ),
     );
@@ -122,56 +120,40 @@ void main() {
   });
 
   group("siteSettingsStateListener -", () {
-    testWidgets(
-        "should add the site settings data into fields when state is loaded ",
+    testWidgets("should set settings data into fields when state is loaded ",
         (tester) async {
       //arrange
+      final settings = DummySiteSettingsEntity();
       whenListen(
         settingsCubit,
         Stream.fromIterable(
-          [SiteSettingsState.loaded(DummySiteSettingsEntity())],
+          [SiteSettingsState.loaded(settings)],
         ),
+        initialState: const SiteSettingsState.loading(),
       );
       await tester.pumpWidget(testWidgetTree);
       await tester.pump();
 
       //assert
-      final allInputs = tester.widgetList<TextFormField>(
-        find.descendant(
-          of: find.byType(Form),
-          matching: find.byType(TextFormField),
-        ),
-      );
-      for (var input in allInputs) {
-        expect(input.initialValue, isNotEmpty);
-      }
+      _expectSettingsIsSetToInputs(settings, tester);
     });
 
-    testWidgets(
-        "should add the site settings data into fields when state is updated",
+    testWidgets("should set settings data into fields when state is updated",
         (tester) async {
       //arrange
+      final settings = DummySiteSettingsEntity();
       whenListen(
         settingsCubit,
         Stream.fromIterable([
-          SiteSettingsState.updated(DummySiteSettingsEntity()),
+          SiteSettingsState.updated(settings),
         ]),
+        initialState: const SiteSettingsState.loading(),
       );
       await tester.pumpWidget(testWidgetTree);
       await tester.pump();
 
-      //act
-      final allInputs = tester.widgetList<TextFormField>(
-        find.descendant(
-          of: find.byType(Form),
-          matching: find.byType(TextFormField),
-        ),
-      );
-
       //assert
-      for (var input in allInputs) {
-        expect(input.initialValue, isNotEmpty);
-      }
+      _expectSettingsIsSetToInputs(settings, tester);
     });
 
     testWidgets("should show a bottomSheet when state is error",
@@ -194,39 +176,8 @@ void main() {
       //assert
       expect(find.byType(FailureWidget), findsOneWidget);
     });
-
-    testWidgets("should set the builder fields when state is loaded",
-        (tester) async {
-      //arrange
-      final initialSettings = DummySiteSettingsEntity();
-
-      whenListen(
-        settingsCubit,
-        Stream.fromIterable([
-          SiteSettingsState.loaded(initialSettings),
-        ]),
-      );
-      await tester.pumpWidget(testWidgetTree);
-
-      //assert
-      _expectBuilderFieldAreSetFromExistingData(builder, initialSettings);
-    });
-    testWidgets("should set the builder fields when state is updated",
-        (tester) async {
-      //arrange
-      final initialSettings = DummySiteSettingsEntity();
-      whenListen(
-        settingsCubit,
-        Stream.fromIterable([
-          SiteSettingsState.updated(initialSettings),
-        ]),
-      );
-      await tester.pumpWidget(testWidgetTree);
-
-      //assert
-      _expectBuilderFieldAreSetFromExistingData(builder, initialSettings);
-    });
   });
+
   group("user interaction -", () {
     group("email input -", () {
       testWidgets("should email request focus when the value of it is invalid",
@@ -279,69 +230,6 @@ void main() {
       });
     });
 
-    group("inputs -", () {
-      testWidgets("should set the builder fields when inputs value are changed",
-          (tester) async {
-        //arrange
-        await tester.pumpWidget(testWidgetTree);
-        await tester.pump();
-
-        //act
-        final textInputsFinder = find.byType(CustomFormInputField);
-        final textFieldsLength = tester.widgetList(textInputsFinder).length;
-
-        for (var i = 0; i < textFieldsLength; i++) {
-          await tester.enterText(textInputsFinder.at(i), "test");
-        }
-        await tester.pump();
-
-        tester
-            .widget<SiteIconInput>(
-              find.byType(SiteIconInput),
-            )
-            .onSelect(1);
-        tester
-            .widget<TimezoneDropdown>(
-              find.byType(TimezoneDropdown),
-            )
-            .onTimezoneSelected("Asia/tokyo");
-
-        await tester.scrollUntilVisible(
-          find.byType(DateFormatInput),
-          500,
-          scrollable: find.byType(Scrollable).first,
-        );
-        tester
-            .widget<DateFormatInput>(
-              find.byType(DateFormatInput),
-            )
-            .onChanged("y/m/n");
-        tester
-            .widget<TimeFormatInput>(
-              find.byType(TimeFormatInput),
-            )
-            .onChanged("h:m:s");
-
-        tester
-            .widget<StartOfWeekInput>(
-              find.byType(StartOfWeekInput),
-            )
-            .onSelect(2);
-
-        //assert
-        final params = builder.build();
-        expect(params.title, "test");
-        expect(params.description, "test");
-        expect(params.siteIcon, 1);
-        expect(params.url, "test");
-        expect(params.email, "test");
-        expect(params.timeZone, "Asia/tokyo");
-        expect(params.dateFormat, "y/m/n");
-        expect(params.timeFormat, "h:m:s");
-        expect(params.startOfWeek, 2);
-      });
-    });
-
     group("on save -", () {
       testWidgets(
           "should invoke the update method of siteSettingsCubit when form is valid",
@@ -382,22 +270,118 @@ void main() {
         //assert
         verifyNever(() => settingsCubit.updateSettings(any()));
       });
+
+      testWidgets(
+          "should invoke the update method with expected params when inputs value are changed",
+          (tester) async {
+        //arrange
+        final settings = DummySiteSettingsEntity();
+        await tester.pumpWidget(testWidgetTree);
+        await tester.pump();
+
+        //act
+        await _enterSettingsToInputs(tester, settings);
+
+        await tester.tap(find.byKey(const Key("save_site_settings_button")));
+
+        //assert
+        verify(
+          () => settingsCubit.updateSettings(
+            any(
+              that: isA<UpdateSiteSettingsParams>().having(
+                (params) =>
+                    params.title == "test" &&
+                    params.description == "test" &&
+                    params.siteIcon == settings.siteIcon &&
+                    params.url == "test" &&
+                    params.email == settings.email &&
+                    params.timeZone == settings.timeZone &&
+                    params.dateFormat == settings.dateFormat &&
+                    params.timeFormat == settings.timeFormat &&
+                    params.startOfWeek == settings.startOfWeek,
+                "is expected params",
+                true,
+              ),
+            ),
+          ),
+        ).called(1);
+      });
     });
   });
 }
 
-void _expectBuilderFieldAreSetFromExistingData(
-  UpdateSiteSettingsParamsBuilder builder,
-  SiteSettingsEntity setting,
-) {
-  final params = builder.build();
-  expect(params.title, setting.title);
-  expect(params.description, setting.description);
-  expect(params.email, setting.email);
-  expect(params.siteIcon, setting.siteIcon);
-  expect(params.url, setting.url);
-  expect(params.timeZone, setting.timeZone);
-  expect(params.dateFormat, setting.dateFormat);
-  expect(params.timeFormat, setting.timeFormat);
-  expect(params.startOfWeek, setting.startOfWeek);
+Future<void> _enterSettingsToInputs(
+    WidgetTester tester, DummySiteSettingsEntity settings) async {
+  final textInputsFinder = find.byType(CustomFormInputField);
+  final textFieldsLength = tester.widgetList(textInputsFinder).length;
+
+  for (var i = 0; i < textFieldsLength; i++) {
+    if (tester.widget<CustomFormInputField>(textInputsFinder.at(i)).key ==
+        const Key("email_input")) {
+      await tester.enterText(textInputsFinder.at(i), settings.email);
+    } else {
+      await tester.enterText(textInputsFinder.at(i), "test");
+    }
+  }
+  await tester.pumpAndSettle();
+
+  tester
+      .widget<SiteIconInput>(
+        find.byType(SiteIconInput),
+      )
+      .onSelect(settings.siteIcon);
+  tester
+      .widget<TimezoneDropdown>(
+        find.byType(TimezoneDropdown),
+      )
+      .onTimezoneSelected(settings.timeZone);
+
+  await tester.scrollUntilVisible(
+    find.byType(DateFormatInput),
+    500,
+    scrollable: find.byType(Scrollable).first,
+  );
+  tester
+      .widget<DateFormatInput>(
+        find.byType(DateFormatInput),
+      )
+      .onChanged(settings.dateFormat);
+  tester
+      .widget<TimeFormatInput>(
+        find.byType(TimeFormatInput),
+      )
+      .onChanged(settings.timeFormat);
+
+  tester
+      .widget<StartOfWeekInput>(
+        find.byType(StartOfWeekInput),
+      )
+      .onSelect(settings.startOfWeek);
+}
+
+Future<void> _expectSettingsIsSetToInputs(
+    DummySiteSettingsEntity initialSettings, WidgetTester tester) async {
+  expect(find.text(initialSettings.title), findsOneWidget);
+  expect(find.text(initialSettings.description), findsOneWidget);
+  expect(find.text(initialSettings.url), findsOneWidget);
+  expect(find.text(initialSettings.email), findsOneWidget);
+  expect(find.text(initialSettings.timeZone), findsOneWidget);
+  await tester.scrollUntilVisible(
+    find.text("دوشنبه"),
+    500,
+    scrollable: find.byType(Scrollable).first,
+  );
+  expect(find.text("دوشنبه"), findsOneWidget);
+  expect(
+    tester
+        .widget<DateFormatInput>(find.byKey(const Key("date_format_input")))
+        .initialValue,
+    initialSettings.dateFormat,
+  );
+  expect(
+    tester
+        .widget<TimeFormatInput>(find.byKey(const Key("time_format_input")))
+        .initialValue,
+    initialSettings.timeFormat,
+  );
 }

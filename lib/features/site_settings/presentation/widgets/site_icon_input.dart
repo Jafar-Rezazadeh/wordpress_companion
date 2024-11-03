@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/core_export.dart';
 
-// TODO: make media feature and use it here
 class SiteIconInput extends StatelessWidget {
   final int? initialValue;
   final Function(int value) onSelect;
@@ -52,6 +51,7 @@ class SiteIconInput extends StatelessWidget {
       context: context,
       builder: (context) => const Dialog(
         key: Key("select_media_dialog"),
+        // TODO: make media feature and use it here to get image by id and select image
       ),
     );
   }
