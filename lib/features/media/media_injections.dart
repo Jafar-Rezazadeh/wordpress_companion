@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
+import 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/upload_media_cubit/upload_media_cubit.dart';
 
 initMediaInjections(GetIt getIt) {
   // Data Sources
@@ -16,6 +17,12 @@ initMediaInjections(GetIt getIt) {
       deleteMedia: DeleteMedia(mediaRepository: mediaRepository),
       getMediaPerPage: GetMediaPerPage(mediaRepository: mediaRepository),
       updateMedia: UpdateMedia(mediaRepository: mediaRepository),
+    ),
+  );
+  getIt.registerFactory(
+    () => UploadMediaCubit(
+      uploadMedia: UploadMedia(mediaRepository: mediaRepository),
+      cancelMediaUpload: CancelMediaUpload(mediaRepository: mediaRepository),
     ),
   );
 }

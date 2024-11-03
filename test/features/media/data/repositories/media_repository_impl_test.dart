@@ -6,6 +6,8 @@ import 'package:wordpress_companion/features/media/media_exports.dart';
 
 class MockMediaRemoteDataSource extends Mock implements MediaRemoteDataSource {}
 
+class MockCancelToken extends Mock implements CancelToken {}
+
 class FakeUpdateMediaParams extends Fake implements UpdateMediaParams {}
 
 class FakeMediaModel extends Fake implements MediaModel {}
@@ -15,15 +17,18 @@ class FakeCurrentPageMediasEntity extends Fake
 
 void main() {
   late MockMediaRemoteDataSource mockMediaRemoteDataSource;
+  late MockCancelToken mockCancelToken;
   late MediaRepositoryImpl mediaRepositoryImpl;
 
   setUpAll(() {
     registerFallbackValue(FakeUpdateMediaParams());
     registerFallbackValue(GetMediaPerPageParams());
+    registerFallbackValue(MockCancelToken());
   });
 
   setUp(() {
     mockMediaRemoteDataSource = MockMediaRemoteDataSource();
+    mockCancelToken = MockCancelToken();
     mediaRepositoryImpl = MediaRepositoryImpl(
       mediaRemoteDataSource: mockMediaRemoteDataSource,
     );
@@ -186,12 +191,14 @@ void main() {
 
   group("uploadMediaFile -", () {
     test(
-        "should return upload progress as (Stream<double>) when success to upload",
+        "should return upload progress as (UploadMediaResult) when start to upload",
         () async {
       //arrange
       when(
         () => mockMediaRemoteDataSource.uploadMediaFile(any()),
-      ).thenAnswer((_) => const Stream<double>.empty());
+      ).thenAnswer(
+        (_) => (cancelToken: mockCancelToken, stream: const Stream.empty()),
+      );
 
       //act
       final result = await mediaRepositoryImpl.uploadMediaFile("path");
@@ -199,7 +206,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(rightValue, isA<Stream<double>>());
+      expect(rightValue, isA<UploadMediaResult>());
     });
 
     test("should return (ServerFailure) when DioException is thrown ",
@@ -227,6 +234,56 @@ void main() {
 
       //act
       final result = await mediaRepositoryImpl.uploadMediaFile("pathToFile");
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<InternalFailure>());
+    });
+  });
+
+  group("cancelMediaUpload -", () {
+    test("should return (void) when success to cancel", () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.cancelMediaUpload(any()),
+      ).thenAnswer((_) async {});
+
+      //act
+      final result =
+          await mediaRepositoryImpl.cancelMediaUpload(mockCancelToken);
+
+      //assert
+      expect(result.isRight(), true);
+    });
+
+    test("should return (ServerFailure) when DioException thrown", () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.cancelMediaUpload(any()),
+      ).thenAnswer(
+          (_) async => throw DioException(requestOptions: RequestOptions()));
+
+      //act
+      final result =
+          await mediaRepositoryImpl.cancelMediaUpload(mockCancelToken);
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<ServerFailure>());
+    });
+
+    test("should return (InternalFailure) when any other exception is thrown",
+        () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.cancelMediaUpload(any()),
+      ).thenAnswer((_) async => throw TypeError());
+
+      //act
+      final result =
+          await mediaRepositoryImpl.cancelMediaUpload(mockCancelToken);
       final leftValue = result.fold((l) => l, (r) => null);
 
       //assert

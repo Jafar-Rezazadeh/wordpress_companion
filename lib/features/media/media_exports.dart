@@ -13,10 +13,11 @@ export 'package:wordpress_companion/features/media/domain/use_cases/delete_media
 export 'package:wordpress_companion/features/media/domain/use_cases/update_media.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/get_media_per_page.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/upload_media.dart';
+export 'package:wordpress_companion/features/media/domain/use_cases/cancel_media_upload.dart';
 
 // presentation
 export 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/media_cubit/media_cubit.dart';
 export 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
-export 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
-export 'package:wordpress_companion/features/media/presentation/widgets/media_list_item.dart';
+export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_filter_button.dart';
+export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_list_item.dart';
 export 'package:wordpress_companion/features/media/presentation/screens/edit_media_screen.dart';

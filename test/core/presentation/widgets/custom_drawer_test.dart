@@ -163,7 +163,7 @@ void main() {
                       path: siteSettingsScreenRoute,
                       builder: (context, state) => BlocProvider(
                         create: (context) => siteSettingsCubit,
-                        child: SiteSettingsScreen(),
+                        child: const SiteSettingsScreen(),
                       ),
                     )
                   ],

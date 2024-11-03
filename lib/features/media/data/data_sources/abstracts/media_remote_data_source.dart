@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../../media_exports.dart';
 
 abstract class MediaRemoteDataSource {
@@ -5,5 +7,6 @@ abstract class MediaRemoteDataSource {
   Future<CurrentPageMediasEntity> getMediasPerPage(
       GetMediaPerPageParams params);
   Future<MediaModel> updateMedia(UpdateMediaParams params);
-  Stream<double> uploadMediaFile(String pathToFile);
+  UploadMediaResult uploadMediaFile(String pathToFile);
+  Future<void> cancelMediaUpload(CancelToken cancelToken);
 }

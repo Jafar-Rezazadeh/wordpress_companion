@@ -15,13 +15,17 @@ class MockDio extends Mock implements Dio {
   BaseOptions get options => BaseOptions(baseUrl: "https://example.com");
 }
 
+class MockCancelToken extends Mock implements CancelToken {}
+
 void main() {
   const dummyAssetFileForUpload = "assets/fonts/Vazir.ttf";
   late Dio dio;
   late DioAdapter dioAdapter;
   late MediaRemoteDataSourceImpl mediaRemoteDataSourceImpl;
+  late MockCancelToken mockCancelToken;
 
   setUp(() {
+    mockCancelToken = MockCancelToken();
     dio = Dio(BaseOptions(baseUrl: "https://example.com"));
     dioAdapter = DioAdapter(
       dio: dio,
@@ -436,6 +440,7 @@ void main() {
           data: any(named: 'data'),
           options: any(named: 'options'),
           onSendProgress: any(named: 'onSendProgress'),
+          cancelToken: any(named: 'cancelToken'),
         ),
       ).thenAnswer((invocation) async {
         final onSendProgress = invocation
@@ -454,6 +459,7 @@ void main() {
       // act
       final result = await mediaRemoteDataSourceImpl
           .uploadMediaFile(dummyAssetFileForUpload)
+          .stream
           .toList();
 
       // assert
@@ -482,6 +488,7 @@ void main() {
       //act
       await mediaRemoteDataSourceImpl
           .uploadMediaFile(dummyAssetFileForUpload)
+          .stream
           .toList();
 
       //assert
@@ -490,6 +497,21 @@ void main() {
         headers["content-type"].toString(),
         contains("multipart/form-data"),
       );
+    });
+  });
+
+  group("cancelUploadMediaFile -", () {
+    test("should invoke the cancelToken when called", () async {
+      //arrange
+      when(
+        () => mockCancelToken.cancel(),
+      ).thenAnswer((_) async {});
+
+      //act
+      await mediaRemoteDataSourceImpl.cancelMediaUpload(mockCancelToken);
+
+      //assert
+      verify(() => mockCancelToken.cancel(any())).called(1);
     });
   });
 }

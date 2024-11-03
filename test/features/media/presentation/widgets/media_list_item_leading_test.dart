@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_list_item_leading.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_list_item_leading.dart';
 
 void main() {
   testWidgets("should show the image when mimetype is image", (tester) async {

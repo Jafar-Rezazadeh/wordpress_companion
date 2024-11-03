@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/media_filter_button.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_filter_button.dart';
 
 void main() {
   const applyFilterKey = Key("apply_filter_button");

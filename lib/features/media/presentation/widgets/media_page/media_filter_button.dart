@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 
-import '../../../../core/core_export.dart';
+import '../../../../../core/core_export.dart';
 
 class MediaFilterButton extends StatefulWidget {
   final Function(MediaFilters filters) onApply;

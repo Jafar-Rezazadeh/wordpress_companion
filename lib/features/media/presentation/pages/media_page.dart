@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/upload_file_dialog.dart';
 
 import '../../../../core/core_export.dart';
 import '../../media_exports.dart';
@@ -11,7 +12,8 @@ class MediaPage extends StatefulWidget {
   State<MediaPage> createState() => _MediaPageState();
 }
 
-class _MediaPageState extends State<MediaPage> {
+class _MediaPageState extends State<MediaPage>
+    with AutomaticKeepAliveClientMixin {
   bool hasMoreMedias = false;
   List<MediaEntity> listOfMedias = [];
   GetMediaPerPageParams params = GetMediaPerPageParams();
@@ -36,12 +38,29 @@ class _MediaPageState extends State<MediaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      // TODO: add upload media button (hint use an scaffold)
-      children: [
+    super.build(context);
+    return Scaffold(
+      body: Column(children: [
         _header(),
         _mediaBuilder(),
-      ],
+      ]),
+      floatingActionButton: _uploadMedia(),
+    );
+  }
+
+  Widget _uploadMedia() {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => PopScope(
+            canPop: false,
+            child: UploadFileDialog(dialogContext: dialogContext),
+          ),
+        );
+      },
+      child: const Icon(Icons.file_upload_outlined),
     );
   }
 
@@ -136,4 +155,7 @@ class _MediaPageState extends State<MediaPage> {
 
   bool _isLoadingState(MediaState state) =>
       state.whenOrNull(loading: () => true) == true;
+
+  @override
+  bool get wantKeepAlive => true;
 }

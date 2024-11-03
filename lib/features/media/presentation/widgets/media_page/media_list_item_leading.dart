@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/core_export.dart';
+import '../../../../../core/core_export.dart';
 
 class MediaListItemLeading extends StatelessWidget {
   final String mimeType;

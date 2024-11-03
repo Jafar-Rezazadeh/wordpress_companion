@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
@@ -13,19 +14,20 @@ class FakeMediaEntity extends Fake implements MediaEntity {}
 void main() {
   late MockMediaRepository mockMediaRepository;
   late UploadMedia uploadMedia;
-
+  final UploadMediaResult uploadMediaResult =
+      (cancelToken: CancelToken(), stream: const Stream<double>.empty());
   setUp(() {
     mockMediaRepository = MockMediaRepository();
     uploadMedia = UploadMedia(mediaRepository: mockMediaRepository);
   });
 
   test(
-      "should return the progress of upload as (Stream<double>) when uploading",
+      "should return the progress of upload as (UploadMediaResult) when uploading",
       () async {
     //arrange
     when(
       () => mockMediaRepository.uploadMediaFile(any()),
-    ).thenAnswer((_) async => right(const Stream<double>.empty()));
+    ).thenAnswer((_) async => right(uploadMediaResult));
 
     //act
     final result = await uploadMedia.call("path");
@@ -33,7 +35,7 @@ void main() {
 
     //assert
     expect(result.isRight(), true);
-    expect(rightValue, isA<Stream<double>>());
+    expect(rightValue, isA<UploadMediaResult>());
   });
 
   test("should return kind of (Failure) when fails to upload", () async {

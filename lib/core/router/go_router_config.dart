@@ -76,7 +76,7 @@ ShellRoute _mainScreenRoute() {
             path: siteSettingsScreenRoute,
             builder: (context, state) => BlocProvider(
               create: (context) => getIt<SiteSettingsCubit>(),
-              child: SiteSettingsScreen(),
+              child: const SiteSettingsScreen(),
             ),
           )
         ],

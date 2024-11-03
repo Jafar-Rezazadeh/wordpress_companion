@@ -62,7 +62,7 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
   }
 
   @override
-  Stream<double> uploadMediaFile(String pathToFile) {
+  UploadMediaResult uploadMediaFile(String pathToFile) {
     final fileData = FormData.fromMap(
       {
         'file': MultipartFile.fromFileSync(pathToFile),
@@ -70,10 +70,12 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
     );
 
     final controller = StreamController<double>();
+    final cancelToken = CancelToken();
 
     _dio.post(
       "$wpV2EndPoint/media",
       data: fileData,
+      cancelToken: cancelToken,
       options: Options(
         headers: {
           "content-type": "multipart/form-data",
@@ -85,13 +87,20 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
     ).then((response) {
       controller.close();
     }).onError((error, stackTrace) {
+      controller.addError(error ?? "خطا در بارگذاری فایل");
       controller.close();
-      throw error.toString();
     }).catchError((error) {
       controller.close();
-      throw error;
     });
 
-    return controller.stream;
+    return (
+      stream: controller.stream,
+      cancelToken: cancelToken,
+    );
+  }
+
+  @override
+  Future<void> cancelMediaUpload(CancelToken cancelToken) async {
+    cancelToken.cancel("بارگذاری فایل توسط کاربر لغو شد.");
   }
 }

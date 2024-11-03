@@ -19,6 +19,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
     required TResult Function(double progress) uploading,
     required TResult Function() uploaded,
     required TResult Function(Failure failure) error,
@@ -27,6 +28,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
     TResult? Function(double progress)? uploading,
     TResult? Function()? uploaded,
     TResult? Function(Failure failure)? error,
@@ -35,6 +37,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
     TResult Function(double progress)? uploading,
     TResult Function()? uploaded,
     TResult Function(Failure failure)? error,
@@ -44,6 +47,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
     required TResult Function(_Loading value) uploading,
     required TResult Function(_Uploaded value) uploaded,
     required TResult Function(_Error value) error,
@@ -52,6 +56,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
     TResult? Function(_Loading value)? uploading,
     TResult? Function(_Uploaded value)? uploaded,
     TResult? Function(_Error value)? error,
@@ -60,6 +65,7 @@ mixin _$UploadMediaState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
     TResult Function(_Loading value)? uploading,
     TResult Function(_Uploaded value)? uploaded,
     TResult Function(_Error value)? error,
@@ -125,6 +131,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
     required TResult Function(double progress) uploading,
     required TResult Function() uploaded,
     required TResult Function(Failure failure) error,
@@ -136,6 +143,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
     TResult? Function(double progress)? uploading,
     TResult? Function()? uploaded,
     TResult? Function(Failure failure)? error,
@@ -147,6 +155,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
     TResult Function(double progress)? uploading,
     TResult Function()? uploaded,
     TResult Function(Failure failure)? error,
@@ -162,6 +171,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
     required TResult Function(_Loading value) uploading,
     required TResult Function(_Uploaded value) uploaded,
     required TResult Function(_Error value) error,
@@ -173,6 +183,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
     TResult? Function(_Loading value)? uploading,
     TResult? Function(_Uploaded value)? uploaded,
     TResult? Function(_Error value)? error,
@@ -184,6 +195,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
     TResult Function(_Loading value)? uploading,
     TResult Function(_Uploaded value)? uploaded,
     TResult Function(_Error value)? error,
@@ -198,6 +210,159 @@ class _$InitialImpl implements _Initial {
 
 abstract class _Initial implements UploadMediaState {
   const factory _Initial() = _$InitialImpl;
+}
+
+/// @nodoc
+abstract class _$$StatingUploadImplCopyWith<$Res> {
+  factory _$$StatingUploadImplCopyWith(
+          _$StatingUploadImpl value, $Res Function(_$StatingUploadImpl) then) =
+      __$$StatingUploadImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({CancelToken cancelToken});
+}
+
+/// @nodoc
+class __$$StatingUploadImplCopyWithImpl<$Res>
+    extends _$UploadMediaStateCopyWithImpl<$Res, _$StatingUploadImpl>
+    implements _$$StatingUploadImplCopyWith<$Res> {
+  __$$StatingUploadImplCopyWithImpl(
+      _$StatingUploadImpl _value, $Res Function(_$StatingUploadImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? cancelToken = null,
+  }) {
+    return _then(_$StatingUploadImpl(
+      null == cancelToken
+          ? _value.cancelToken
+          : cancelToken // ignore: cast_nullable_to_non_nullable
+              as CancelToken,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$StatingUploadImpl implements _StatingUpload {
+  const _$StatingUploadImpl(this.cancelToken);
+
+  @override
+  final CancelToken cancelToken;
+
+  @override
+  String toString() {
+    return 'UploadMediaState.startingUpload(cancelToken: $cancelToken)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$StatingUploadImpl &&
+            (identical(other.cancelToken, cancelToken) ||
+                other.cancelToken == cancelToken));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, cancelToken);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$StatingUploadImplCopyWith<_$StatingUploadImpl> get copyWith =>
+      __$$StatingUploadImplCopyWithImpl<_$StatingUploadImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
+    required TResult Function(double progress) uploading,
+    required TResult Function() uploaded,
+    required TResult Function(Failure failure) error,
+  }) {
+    return startingUpload(cancelToken);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
+    TResult? Function(double progress)? uploading,
+    TResult? Function()? uploaded,
+    TResult? Function(Failure failure)? error,
+  }) {
+    return startingUpload?.call(cancelToken);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
+    TResult Function(double progress)? uploading,
+    TResult Function()? uploaded,
+    TResult Function(Failure failure)? error,
+    required TResult orElse(),
+  }) {
+    if (startingUpload != null) {
+      return startingUpload(cancelToken);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
+    required TResult Function(_Loading value) uploading,
+    required TResult Function(_Uploaded value) uploaded,
+    required TResult Function(_Error value) error,
+  }) {
+    return startingUpload(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
+    TResult? Function(_Loading value)? uploading,
+    TResult? Function(_Uploaded value)? uploaded,
+    TResult? Function(_Error value)? error,
+  }) {
+    return startingUpload?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
+    TResult Function(_Loading value)? uploading,
+    TResult Function(_Uploaded value)? uploaded,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (startingUpload != null) {
+      return startingUpload(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _StatingUpload implements UploadMediaState {
+  const factory _StatingUpload(final CancelToken cancelToken) =
+      _$StatingUploadImpl;
+
+  CancelToken get cancelToken;
+  @JsonKey(ignore: true)
+  _$$StatingUploadImplCopyWith<_$StatingUploadImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -266,6 +431,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
     required TResult Function(double progress) uploading,
     required TResult Function() uploaded,
     required TResult Function(Failure failure) error,
@@ -277,6 +443,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
     TResult? Function(double progress)? uploading,
     TResult? Function()? uploaded,
     TResult? Function(Failure failure)? error,
@@ -288,6 +455,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
     TResult Function(double progress)? uploading,
     TResult Function()? uploaded,
     TResult Function(Failure failure)? error,
@@ -303,6 +471,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
     required TResult Function(_Loading value) uploading,
     required TResult Function(_Uploaded value) uploaded,
     required TResult Function(_Error value) error,
@@ -314,6 +483,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
     TResult? Function(_Loading value)? uploading,
     TResult? Function(_Uploaded value)? uploaded,
     TResult? Function(_Error value)? error,
@@ -325,6 +495,7 @@ class _$LoadingImpl implements _Loading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
     TResult Function(_Loading value)? uploading,
     TResult Function(_Uploaded value)? uploaded,
     TResult Function(_Error value)? error,
@@ -385,6 +556,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
     required TResult Function(double progress) uploading,
     required TResult Function() uploaded,
     required TResult Function(Failure failure) error,
@@ -396,6 +568,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
     TResult? Function(double progress)? uploading,
     TResult? Function()? uploaded,
     TResult? Function(Failure failure)? error,
@@ -407,6 +580,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
     TResult Function(double progress)? uploading,
     TResult Function()? uploaded,
     TResult Function(Failure failure)? error,
@@ -422,6 +596,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
     required TResult Function(_Loading value) uploading,
     required TResult Function(_Uploaded value) uploaded,
     required TResult Function(_Error value) error,
@@ -433,6 +608,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
     TResult? Function(_Loading value)? uploading,
     TResult? Function(_Uploaded value)? uploaded,
     TResult? Function(_Error value)? error,
@@ -444,6 +620,7 @@ class _$UploadedImpl implements _Uploaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
     TResult Function(_Loading value)? uploading,
     TResult Function(_Uploaded value)? uploaded,
     TResult Function(_Error value)? error,
@@ -525,6 +702,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(CancelToken cancelToken) startingUpload,
     required TResult Function(double progress) uploading,
     required TResult Function() uploaded,
     required TResult Function(Failure failure) error,
@@ -536,6 +714,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(CancelToken cancelToken)? startingUpload,
     TResult? Function(double progress)? uploading,
     TResult? Function()? uploaded,
     TResult? Function(Failure failure)? error,
@@ -547,6 +726,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(CancelToken cancelToken)? startingUpload,
     TResult Function(double progress)? uploading,
     TResult Function()? uploaded,
     TResult Function(Failure failure)? error,
@@ -562,6 +742,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
+    required TResult Function(_StatingUpload value) startingUpload,
     required TResult Function(_Loading value) uploading,
     required TResult Function(_Uploaded value) uploaded,
     required TResult Function(_Error value) error,
@@ -573,6 +754,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
+    TResult? Function(_StatingUpload value)? startingUpload,
     TResult? Function(_Loading value)? uploading,
     TResult? Function(_Uploaded value)? uploaded,
     TResult? Function(_Error value)? error,
@@ -584,6 +766,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
+    TResult Function(_StatingUpload value)? startingUpload,
     TResult Function(_Loading value)? uploading,
     TResult Function(_Uploaded value)? uploaded,
     TResult Function(_Error value)? error,

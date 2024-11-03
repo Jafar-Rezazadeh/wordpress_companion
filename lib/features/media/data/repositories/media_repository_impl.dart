@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 
@@ -45,11 +46,24 @@ class MediaRepositoryImpl implements MediaRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<double>>> uploadMediaFile(
+  Future<Either<Failure, UploadMediaResult>> uploadMediaFile(
     String pathToFile,
   ) async {
     try {
       final result = _mediaRemoteDataSource.uploadMediaFile(pathToFile);
+
+      return right(result);
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> cancelMediaUpload(
+      CancelToken cancelToken) async {
+    try {
+      final result =
+          await _mediaRemoteDataSource.cancelMediaUpload(cancelToken);
 
       return right(result);
     } catch (e, s) {
