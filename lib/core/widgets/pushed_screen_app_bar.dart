@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../core_export.dart';
 
-class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+class PushedScreenAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final BuildContext context;
   final double bottomHeightSize;
   final String? title;
@@ -9,7 +10,7 @@ class PushedPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> bottomActionWidgets;
   final bool? showLoading;
 
-  const PushedPageAppBar({
+  const PushedScreenAppBar({
     super.key,
     required this.context,
     this.bottomHeightSize = 80.0,

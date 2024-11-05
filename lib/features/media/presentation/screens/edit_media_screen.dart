@@ -56,7 +56,7 @@ class _EditMediaScreenState extends State<EditMediaScreen> {
     );
   }
 
-  PushedPageAppBar _appBar() {
+  PushedScreenAppBar _appBar() {
     return EditMediaScreenAppBar(
       context: context,
       mediaEntity: widget.mediaEntity,

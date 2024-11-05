@@ -15,9 +15,11 @@ void main() {
       home: Scaffold(
         body: FailureWidget(
           failure: ServerFailure(
-              message: "message",
-              response: Response(requestOptions: RequestOptions()),
-              stackTrace: StackTrace.current),
+            message: "message",
+            dioException: DioException(requestOptions: RequestOptions()),
+            response: Response(requestOptions: RequestOptions()),
+            stackTrace: StackTrace.current,
+          ),
         ),
       ),
     ));

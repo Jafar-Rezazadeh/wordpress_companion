@@ -17,8 +17,8 @@ class EditMediaScreenAppBar {
     required this.downloader,
   });
 
-  PushedPageAppBar build() {
-    return PushedPageAppBar(
+  PushedScreenAppBar build() {
+    return PushedScreenAppBar(
       context: context,
       title: "ویرایش رسانه",
       bottomLeadingWidgets: [_submitButton()],

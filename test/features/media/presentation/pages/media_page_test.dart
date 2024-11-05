@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/upload_media_dialog/upload_file_dialog.dart';
 
 class MockMediaCubit extends MockCubit<MediaState> implements MediaCubit {}
 
@@ -210,77 +211,118 @@ void main() {
   });
 
   group("user interaction -", () {
-    testWidgets("should refresh when user drag scroll to top ", (tester) async {
-      //arrange
-      whenListen(
-        mediaCubit,
-        Stream.fromIterable([
-          MediaState.loaded(CurrentPageMediasEntity(
-            hasMoreMedias: false,
-            medias: [FakeMediaEntity()],
-          ))
-        ]),
-      );
-      await tester.pumpWidget(_testWidget(mediaCubit));
-      await tester.pumpAndSettle();
-      final listViewFinder = find.byType(ListView).first;
+    group("listView -", () {
+      testWidgets("should refresh when user drag scroll to top ",
+          (tester) async {
+        //arrange
+        whenListen(
+          mediaCubit,
+          Stream.fromIterable([
+            MediaState.loaded(CurrentPageMediasEntity(
+              hasMoreMedias: false,
+              medias: [FakeMediaEntity()],
+            ))
+          ]),
+        );
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
+        final listViewFinder = find.byType(ListView).first;
 
-      //verification
-      expect(listViewFinder, findsOneWidget);
+        //verification
+        expect(listViewFinder, findsOneWidget);
 
-      //act
-      await tester.drag(listViewFinder, const Offset(0, -300));
-      await tester.pumpAndSettle();
+        //act
+        await tester.drag(listViewFinder, const Offset(0, -300));
+        await tester.pumpAndSettle();
 
-      //assert
-      verify(
-        () => mediaCubit.getMediaPerPage(
-          any(
-            that: isA<GetMediaPerPageParams>()
-                .having((params) => params.page == 1, "is page 1", true),
+        //assert
+        verify(
+          () => mediaCubit.getMediaPerPage(
+            any(
+              that: isA<GetMediaPerPageParams>()
+                  .having((params) => params.page == 1, "is page 1", true),
+            ),
           ),
-        ),
-      ).called(1);
+        ).called(1);
+      });
+
+      testWidgets(
+          "should increase the page index of params when listView is scrolled to bottom and hasMore is true",
+          (tester) async {
+        //arrange
+        _setMediaStateLoaded(mediaCubit);
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
+        final listViewFinder = find.byType(ListView).first;
+
+        //verification
+        expect(listViewFinder, findsOneWidget);
+        verify(
+          () => mediaCubit.getMediaPerPage(
+            any(
+              that: isA<GetMediaPerPageParams>().having(
+                (params) => params.page == 1,
+                "is page 1",
+                true,
+              ),
+            ),
+          ),
+        ).called(1);
+
+        //act
+        await tester.drag(listViewFinder, const Offset(0, -5000));
+
+        //assert
+        verify(
+          () => mediaCubit.getMediaPerPage(
+            any(
+              that: isA<GetMediaPerPageParams>().having(
+                (params) => params.page == 2,
+                "is page 2",
+                true,
+              ),
+            ),
+          ),
+        ).called(1);
+      });
     });
 
-    testWidgets(
-        "should increase the page index of params when listView is scrolled to bottom and hasMore is true",
-        (tester) async {
-      //arrange
-      _setMediaStateLoaded(mediaCubit);
-      await tester.pumpWidget(_testWidget(mediaCubit));
-      await tester.pumpAndSettle();
-      final listViewFinder = find.byType(ListView).first;
+    group("upload_media_button -", () {
+      testWidgets("should open upload file dialog when button tapped",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
 
-      //verification
-      expect(listViewFinder, findsOneWidget);
-      verify(
-        () => mediaCubit.getMediaPerPage(
-          any(
-            that: isA<GetMediaPerPageParams>().having(
-              (params) => params.page == 1,
-              "is page 1",
-              true,
-            ),
-          ),
-        ),
-      ).called(1);
+        //verification
+        expect(find.byKey(const Key("upload_media_button")), findsOneWidget);
 
-      //act
-      await tester.drag(listViewFinder, const Offset(0, -5000));
+        //act
+        await tester.tap(find.byKey(const Key("upload_media_button")));
+        await tester.pumpAndSettle();
 
-      //assert
-      verify(
-        () => mediaCubit.getMediaPerPage(
-          any(
-            that: isA<GetMediaPerPageParams>().having(
-              (params) => params.page == 2,
-              "is page 2",
-              true,
-            ),
-          ),
-        ),
-      ).called(1);
+        //assert
+        expect(find.byType(UploadFileDialog), findsOneWidget);
+      });
+      testWidgets(
+          "should invoke the getMediaPerPage of cubit when dialog is closed",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(mediaCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byKey(const Key("upload_media_button")), findsOneWidget);
+
+        //act
+        await tester.tap(find.byKey(const Key("upload_media_button")));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("back_button")));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => mediaCubit.getMediaPerPage(any())).called(2);
+      });
     });
   });
 

@@ -25,6 +25,7 @@ class UploadMediaCubit extends Cubit<UploadMediaState> {
       (failure) => emit(UploadMediaState.error(failure)),
       (uploadMediaResult) {
         emit(UploadMediaState.startingUpload(uploadMediaResult.cancelToken));
+
         _emitStateByListeningTo(uploadMediaResult.stream);
       },
     );
@@ -36,11 +37,13 @@ class UploadMediaCubit extends Cubit<UploadMediaState> {
       (progress) => emit(UploadMediaState.uploading(progress)),
       onDone: () => emit(const UploadMediaState.uploaded()),
       cancelOnError: true,
-      onError: (error) => emit(
-        UploadMediaState.error(
-          FailureFactory.createFailure(error, StackTrace.current),
-        ),
-      ),
+      onError: (error, s) {
+        emit(
+          UploadMediaState.error(
+            FailureFactory.createFailure(error ?? "", s),
+          ),
+        );
+      },
     );
   }
 

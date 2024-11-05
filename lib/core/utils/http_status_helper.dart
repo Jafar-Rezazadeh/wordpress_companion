@@ -1,9 +1,5 @@
 class HttpStatusHelper {
-  final int status;
-
-  HttpStatusHelper({required this.status});
-
-  String translateToMessage() {
+  static String translateToMessage(int status) {
     switch (status) {
       case 200:
         return "درخواست با موفقیت انجام شد";
@@ -21,9 +17,9 @@ class HttpStatusHelper {
       case 410:
         return "منبع درخواستی دیگر در دسترس نیست و دوباره در دسترس نخواهد بود";
       case 500:
-        return "خطای سرور نامشخص ";
+        return " خطای سرور ";
       default:
-        return "خطای نامشخص، از صحت نام دامنه مطمئن شوید.";
+        return "خطای نامشخص، از صحت نام دامنه مطمئن شوید. Status code: $status";
     }
   }
 }

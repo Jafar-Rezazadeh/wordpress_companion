@@ -64,8 +64,8 @@ class FailureWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          HttpStatusHelper(status: failure.response?.statusCode ?? 0)
-              .translateToMessage(),
+          HttpStatusHelper.translateToMessage(
+              failure.response?.statusCode ?? 0),
         ),
         const Gap(5),
         Text(

@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/upload_media_cubit/upload_media_cubit.dart';
 
 initMediaInjections(GetIt getIt) {
   // Data Sources

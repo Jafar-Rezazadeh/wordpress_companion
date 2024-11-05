@@ -1,4 +1,4 @@
-// TODO: add this to flutter handy util
+// TODO: add this to flutter handy util an extension
 class StringFormatter {
   static shortenText(String text, int maxLength, {bool fromLast = false}) {
     if (text.length > maxLength) {

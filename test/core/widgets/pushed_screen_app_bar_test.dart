@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wordpress_companion/core/widgets/pushed_page_app_bar.dart';
+import 'package:wordpress_companion/core/widgets/pushed_screen_app_bar.dart';
 
 void main() {
   group("size -", () {
@@ -11,17 +11,17 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Builder(
           builder: (context) => Scaffold(
-            appBar: PushedPageAppBar(context: context),
+            appBar: PushedScreenAppBar(context: context),
           ),
         ),
       ));
 
       //verification
-      expect(find.byType(PushedPageAppBar), findsOneWidget);
+      expect(find.byType(PushedScreenAppBar), findsOneWidget);
 
       //act
-      final appBarFinder = find.byType(PushedPageAppBar);
-      final appBar = tester.widget<PushedPageAppBar>(appBarFinder);
+      final appBarFinder = find.byType(PushedScreenAppBar);
+      final appBar = tester.widget<PushedScreenAppBar>(appBarFinder);
 
       //assert
       expect(appBar.preferredSize.height, AppBar().preferredSize.height);
@@ -35,7 +35,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) => Scaffold(
-              appBar: PushedPageAppBar(
+              appBar: PushedScreenAppBar(
                 context: context,
                 bottomHeightSize: 30,
                 bottomLeadingWidgets: [Container()],
@@ -46,11 +46,11 @@ void main() {
       );
 
       //verification
-      expect(find.byType(PushedPageAppBar), findsOneWidget);
+      expect(find.byType(PushedScreenAppBar), findsOneWidget);
 
       //act
-      final appBarFinder = find.byType(PushedPageAppBar);
-      final appBar = tester.widget<PushedPageAppBar>(appBarFinder);
+      final appBarFinder = find.byType(PushedScreenAppBar);
+      final appBar = tester.widget<PushedScreenAppBar>(appBarFinder);
 
       //assert
       expect(
@@ -69,7 +69,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) => Scaffold(
-              appBar: PushedPageAppBar(
+              appBar: PushedScreenAppBar(
                 context: context,
                 bottomActionWidgets: [Container()],
                 showLoading: true,
@@ -91,7 +91,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) => Scaffold(
-              appBar: PushedPageAppBar(
+              appBar: PushedScreenAppBar(
                 context: context,
                 bottomActionWidgets: [Container()],
               ),
@@ -101,12 +101,12 @@ void main() {
       );
 
       //verification
-      expect(find.byType(PushedPageAppBar), findsOneWidget);
+      expect(find.byType(PushedScreenAppBar), findsOneWidget);
 
       //act
       final appBar = tester.widget<AppBar>(
         find.descendant(
-          of: find.byType(PushedPageAppBar),
+          of: find.byType(PushedScreenAppBar),
           matching: find.byType(AppBar),
         ),
       );
@@ -123,19 +123,19 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) => Scaffold(
-              appBar: PushedPageAppBar(context: context),
+              appBar: PushedScreenAppBar(context: context),
             ),
           ),
         ),
       );
 
       //verification
-      expect(find.byType(PushedPageAppBar), findsOneWidget);
+      expect(find.byType(PushedScreenAppBar), findsOneWidget);
 
       //act
       final appBar = tester.widget<AppBar>(
         find.descendant(
-          of: find.byType(PushedPageAppBar),
+          of: find.byType(PushedScreenAppBar),
           matching: find.byType(AppBar),
         ),
       );

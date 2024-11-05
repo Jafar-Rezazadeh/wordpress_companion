@@ -12,7 +12,7 @@ export 'package:wordpress_companion/core/extensions/extensions.dart';
 export 'package:wordpress_companion/core/router/go_router_config.dart';
 
 // widgets
-export 'package:wordpress_companion/core/widgets/pushed_page_app_bar.dart';
+export 'package:wordpress_companion/core/widgets/pushed_screen_app_bar.dart';
 export 'package:wordpress_companion/core/widgets/save_button.dart';
 export 'package:wordpress_companion/core/widgets/custom_form_input_field.dart';
 export 'package:wordpress_companion/core/widgets/failure_widget.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wordpress_companion/features/media/presentation/widgets/upload_file_dialog.dart';
+import 'package:wordpress_companion/features/media/presentation/widgets/upload_media_dialog/upload_file_dialog.dart';
 
 import '../../../../core/core_export.dart';
 import '../../media_exports.dart';
@@ -50,15 +50,16 @@ class _MediaPageState extends State<MediaPage>
 
   Widget _uploadMedia() {
     return FloatingActionButton(
-      onPressed: () {
-        showDialog(
+      key: const Key("upload_media_button"),
+      onPressed: () async {
+        await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (dialogContext) => PopScope(
             canPop: false,
             child: UploadFileDialog(dialogContext: dialogContext),
           ),
-        );
+        ).then((value) => _reset());
       },
       child: const Icon(Icons.file_upload_outlined),
     );
@@ -135,6 +136,8 @@ class _MediaPageState extends State<MediaPage>
       deleted: (_) => _reset(),
       loaded: (data) {
         hasMoreMedias = data.hasMoreMedias;
+        // FIXME: has moreMedias always true bug endless
+        print(data.hasMoreMedias);
         listOfMedias.addAll(data.medias);
       },
       error: (failure) {

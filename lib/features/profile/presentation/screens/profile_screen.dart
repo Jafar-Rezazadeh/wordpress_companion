@@ -34,8 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  PushedPageAppBar _appBar() {
-    return PushedPageAppBar(
+  PushedScreenAppBar _appBar() {
+    return PushedScreenAppBar(
       context: context,
       bottomLeadingWidgets: [
         SaveButton(

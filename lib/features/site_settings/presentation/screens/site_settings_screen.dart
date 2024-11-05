@@ -32,8 +32,8 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
     );
   }
 
-  PushedPageAppBar _appBar() {
-    return PushedPageAppBar(
+  PushedScreenAppBar _appBar() {
+    return PushedScreenAppBar(
       context: context,
       title: "تنظیمات سایت",
       bottomLeadingWidgets: [

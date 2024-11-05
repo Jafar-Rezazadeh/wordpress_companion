@@ -17,6 +17,7 @@ export 'package:wordpress_companion/features/media/domain/use_cases/cancel_media
 
 // presentation
 export 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/media_cubit/media_cubit.dart';
+export 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/upload_media_cubit/upload_media_cubit.dart';
 export 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
 export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_filter_button.dart';
 export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_list_item.dart';

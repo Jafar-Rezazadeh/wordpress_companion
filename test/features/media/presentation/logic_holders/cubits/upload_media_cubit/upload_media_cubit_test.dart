@@ -8,7 +8,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/upload_media_cubit/upload_media_cubit.dart';
 
 class MockUploadMedia extends Mock implements UploadMedia {}
 
