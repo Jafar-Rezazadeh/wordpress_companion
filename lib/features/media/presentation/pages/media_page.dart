@@ -30,9 +30,8 @@ class _MediaPageState extends State<MediaPage>
 
   _goNextPage() {
     if (hasMoreMedias) {
-      context.read<MediaCubit>().getMediaPerPage(
-            params.copyWith(page: params.page + 1),
-          );
+      params = params.copyWith(page: params.page + 1);
+      _getMedias();
     }
   }
 
@@ -40,10 +39,12 @@ class _MediaPageState extends State<MediaPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: Column(children: [
-        _header(),
-        _mediaBuilder(),
-      ]),
+      body: Column(
+        children: [
+          _header(),
+          _mediaBuilder(),
+        ],
+      ),
       floatingActionButton: _uploadMedia(),
     );
   }
@@ -135,9 +136,8 @@ class _MediaPageState extends State<MediaPage>
       updated: () => _reset(),
       deleted: (_) => _reset(),
       loaded: (data) {
-        hasMoreMedias = data.hasMoreMedias;
-        // FIXME: has moreMedias always true bug endless
-        print(data.hasMoreMedias);
+        hasMoreMedias = data.hasNextPage;
+
         listOfMedias.addAll(data.medias);
       },
       error: (failure) {

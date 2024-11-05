@@ -299,7 +299,7 @@ void main() {
 
     group("hasMoreMedias -", () {
       test(
-          "should CurrentPageMediasEntity (hasMoreMedias = false) when the length of received medias is less than perPage",
+          "should CurrentPageMediasEntity (hasNextPage = false) when the current page is Not less than total pages",
           () async {
         //arrange
         dioAdapter.onGet(
@@ -310,17 +310,21 @@ void main() {
           },
           (server) => server.reply(
             HttpStatus.ok,
-            List.generate(3, (index) => JsonResponseSimulator.media),
+            headers: {
+              Headers.contentTypeHeader: [Headers.jsonContentType],
+              "x-wp-totalpages": ["1"],
+            },
+            [JsonResponseSimulator.media],
           ),
         );
 
         //act
         final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
-          GetMediaPerPageParams(perPage: 10),
+          GetMediaPerPageParams(perPage: 10, page: 1),
         );
 
         //assert
-        expect(result.hasMoreMedias, false);
+        expect(result.hasNextPage, false);
       });
 
       test(
@@ -335,17 +339,21 @@ void main() {
           },
           (server) => server.reply(
             HttpStatus.ok,
-            List.generate(10, (index) => JsonResponseSimulator.media),
+            headers: {
+              Headers.contentTypeHeader: [Headers.jsonContentType],
+              "x-wp-totalpages": ["10"],
+            },
+            [JsonResponseSimulator.media],
           ),
         );
 
         //act
         final result = await mediaRemoteDataSourceImpl.getMediasPerPage(
-          GetMediaPerPageParams(perPage: 10),
+          GetMediaPerPageParams(perPage: 10, page: 1),
         );
 
         //assert
-        expect(result.hasMoreMedias, true);
+        expect(result.hasNextPage, true);
       });
     });
   });

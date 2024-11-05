@@ -1,11 +1,11 @@
 import '../../media_exports.dart';
 
 class CurrentPageMediasEntity {
-  final bool hasMoreMedias;
+  final bool hasNextPage;
   final List<MediaEntity> medias;
 
   CurrentPageMediasEntity({
-    required this.hasMoreMedias,
+    required this.hasNextPage,
     required this.medias,
   });
 }

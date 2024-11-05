@@ -42,10 +42,13 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
 
     final listOfMedias = ApiResponseHandler.convertToJsonList(response.data);
 
-    final hasMore = listOfMedias.length >= params.perPage;
+    final totalPages =
+        int.tryParse(response.headers["x-wp-totalpages"]?.first ?? "") ?? 1;
+
+    final bool hasNextPage = params.page < totalPages;
 
     return CurrentPageMediasEntity(
-      hasMoreMedias: hasMore,
+      hasNextPage: hasNextPage,
       medias: listOfMedias.map((e) => MediaModel.fromJson(e)).toList(),
     );
   }

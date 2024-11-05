@@ -68,7 +68,7 @@ void main() {
         Stream.fromIterable(
           [
             MediaState.loaded(
-              CurrentPageMediasEntity(hasMoreMedias: false, medias: []),
+              CurrentPageMediasEntity(hasNextPage: false, medias: []),
             )
           ],
         ),
@@ -107,7 +107,7 @@ void main() {
         mediaCubit,
         Stream.fromIterable([
           MediaState.loaded(CurrentPageMediasEntity(
-            hasMoreMedias: true,
+            hasNextPage: true,
             medias: [
               FakeMediaEntity(),
               FakeMediaEntity(),
@@ -139,7 +139,7 @@ void main() {
         Stream.fromIterable([
           MediaState.loaded(
             CurrentPageMediasEntity(
-              hasMoreMedias: false,
+              hasNextPage: false,
               medias: [FakeMediaEntity()],
             ),
           )
@@ -219,7 +219,7 @@ void main() {
           mediaCubit,
           Stream.fromIterable([
             MediaState.loaded(CurrentPageMediasEntity(
-              hasMoreMedias: false,
+              hasNextPage: false,
               medias: [FakeMediaEntity()],
             ))
           ]),
@@ -524,7 +524,7 @@ void _setMediaStateLoaded(MediaCubit mediaCubit) {
     mediaCubit,
     Stream.fromIterable([
       MediaState.loaded(CurrentPageMediasEntity(
-        hasMoreMedias: true,
+        hasNextPage: true,
         medias: [
           FakeMediaEntity(),
           FakeMediaEntity(),

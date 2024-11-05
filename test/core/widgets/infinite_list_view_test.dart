@@ -103,33 +103,67 @@ void main() {
     expect(a, 1);
   });
 
-  testWidgets(
-      "should invoke the onScrolledToBottom method when listView is scrolled to bottom",
-      (tester) async {
-    //arrange
-    bool invoked = false;
-    onScrolledToBottom() {
-      invoked = true;
-    }
+  group("onScrollBottom -", () {
+    testWidgets(
+        "should invoke the onScrolledToBottom method when listView is scrolled to bottom and is Not Loading",
+        (tester) async {
+      //arrange
+      bool invoked = false;
+      onScrolledToBottom() {
+        invoked = true;
+      }
 
-    await tester.pumpWidget(
-      _TestWidget(
-        data: List.generate(10, (int i) => "hello $i"),
-        onScrolledToBottom: onScrolledToBottom,
-      ),
-    );
-    final listViewFinder = find.byType(ListView).first;
+      await tester.pumpWidget(
+        _TestWidget(
+          data: List.generate(10, (int i) => "hello $i"),
+          onScrolledToBottom: onScrolledToBottom,
+          showBottomLoading: false,
+          showFullScreenLoading: false,
+        ),
+      );
+      final listViewFinder = find.byType(ListView).first;
 
-    //verification
-    expect(invoked, false);
-    expect(listViewFinder, findsOneWidget);
+      //verification
+      expect(invoked, false);
+      expect(listViewFinder, findsOneWidget);
 
-    //act
-    await tester.drag(listViewFinder, const Offset(0, -1000));
-    await tester.pumpAndSettle();
+      //act
+      await tester.drag(listViewFinder, const Offset(0, -1000));
+      await tester.pumpAndSettle();
 
-    //assert
-    expect(invoked, true);
+      //assert
+      expect(invoked, true);
+    });
+    testWidgets(
+        "should NOT invoke the onScrolledToBottom method when listView is scrolled to bottom but it is in loading",
+        (tester) async {
+      //arrange
+      bool invoked = false;
+      onScrolledToBottom() {
+        invoked = true;
+      }
+
+      await tester.pumpWidget(
+        _TestWidget(
+          data: List.generate(10, (int i) => "hello $i"),
+          onScrolledToBottom: onScrolledToBottom,
+          showBottomLoading: true,
+          showFullScreenLoading: false,
+        ),
+      );
+      final listViewFinder = find.byType(ListView).first;
+
+      //verification
+      expect(invoked, false);
+      expect(listViewFinder, findsOneWidget);
+
+      //act
+      await tester.drag(listViewFinder, const Offset(0, -1000));
+      await tester.pump(Durations.short1);
+
+      //assert
+      expect(invoked, false);
+    });
   });
 }
 

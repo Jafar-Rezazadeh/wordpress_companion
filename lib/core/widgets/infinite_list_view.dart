@@ -35,11 +35,19 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
   }
 
   void _scrollListener() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent) {
+    if (_isScrolledToBottom && _isNotLoading) {
       widget.onScrolledToBottom();
     }
   }
+
+  bool get _isScrolledToBottom {
+    return scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent;
+  }
+
+  bool get _isNotLoading =>
+      widget.showBottomLoadingWhen == false &&
+      widget.showFullScreenLoadingWhen == false;
 
   @override
   Widget build(BuildContext context) {
