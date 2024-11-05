@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/utils/string_formatter.dart';
 import 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/upload_media_cubit/upload_media_cubit.dart';
 
 class UploadCard extends StatefulWidget {
@@ -218,11 +217,26 @@ class _UploadCardState extends State<UploadCard> {
     }
   }
 
-  Text _fileName() {
-    return Text(
-      "نام فایل: ${StringFormatter.shortenText(widget.file.name, 20, fromLast: true)}",
-      style:
-          Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+  Widget _fileName() {
+    return Wrap(
+      children: [
+        Text(
+          "نام فایل: ",
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Colors.white),
+        ),
+        Text(
+          widget.file.name.ellipsSize(maxLength: 20, fromStart: true),
+          textAlign: TextAlign.justify,
+          textDirection: TextDirection.ltr,
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Colors.white),
+        )
+      ],
     );
   }
 
