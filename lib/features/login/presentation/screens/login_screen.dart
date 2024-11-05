@@ -21,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _applicationPasswordController =
       TextEditingController();
   final TextEditingController _domainController = TextEditingController();
-  // FIXME: remember me is true at the beginning
 
   bool _rememberMeValue = true;
   bool _obscurePassword = true;
@@ -82,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _userNameController.text = credentials.userName;
         _applicationPasswordController.text = credentials.applicationPassword;
         _domainController.text = credentials.domain;
-        _rememberMeValue = credentials.rememberMe;
+        _rememberMeValue = credentials.rememberMe ?? _rememberMeValue;
       },
     );
   }
