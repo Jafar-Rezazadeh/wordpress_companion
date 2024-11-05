@@ -30,7 +30,7 @@ class AuthenticationStateListener {
         WidgetsBinding.instance.addPostFrameCallback(
           (timeStamp) => context.goNamed(mainScreenRoute, extra: credentials),
         );
-        _showSnackBar(content: "ورود با موفقیت انجام شد");
+
         return;
       },
       notValidUser: () {
@@ -43,7 +43,7 @@ class AuthenticationStateListener {
 
   _showFailureInModalBottomSheet(Failure failure) {
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) => CustomBottomSheet.showFailureBottomSheet(
+      (timeStamp) => CustomBottomSheets.showFailureBottomSheet(
         context: context,
         failure: failure,
       ),

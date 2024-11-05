@@ -7,8 +7,8 @@ class GetLastLoginCredentials
     implements UseCase<LoginCredentialsEntity, NoParams> {
   final LoginRepository _userLoginRepository;
 
-  GetLastLoginCredentials({required LoginRepository userLoginRepository})
-      : _userLoginRepository = userLoginRepository;
+  GetLastLoginCredentials({required LoginRepository loginRepository})
+      : _userLoginRepository = loginRepository;
   @override
   Future<Either<Failure, LoginCredentialsEntity>> call(NoParams params) async {
     return await _userLoginRepository.getLastLoginCredentials();

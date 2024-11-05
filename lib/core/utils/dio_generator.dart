@@ -16,7 +16,7 @@ class DioGenerator {
       },
     );
 
-    //FIXME: Remove this on Production to check bad certificate
+    //HACK: Remove this on Production to check bad certificate
     // just for testing
     (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
         (client) {

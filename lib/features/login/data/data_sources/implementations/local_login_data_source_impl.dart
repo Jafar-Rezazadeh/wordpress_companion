@@ -58,7 +58,7 @@ class LocalLoginDataSourceImpl implements LocalLoginDataSource {
       userName: userName ?? "",
       applicationPassword: applicationPassword ?? "",
       domain: domain ?? "",
-      rememberMe: rememberMe ?? false,
+      rememberMe: rememberMe,
     );
   }
 

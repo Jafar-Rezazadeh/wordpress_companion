@@ -5,12 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../core_export.dart';
-import '../cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'profile_avatar_widget.dart';
-import '../../utils/custom_url_launcher.dart';
 import '../../../features/profile/domain/entities/profile_entity.dart';
-
-import '../../router/go_router_config.dart';
 
 class CustomDrawer extends StatelessWidget {
   final CustomUrlLauncher _customUrlLauncher;

@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _applicationPasswordController =
       TextEditingController();
   final TextEditingController _domainController = TextEditingController();
+
   bool _rememberMeValue = true;
   bool _obscurePassword = true;
 
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _userNameController.text = credentials.userName;
         _applicationPasswordController.text = credentials.applicationPassword;
         _domainController.text = credentials.domain;
-        _rememberMeValue = credentials.rememberMe;
+        _rememberMeValue = credentials.rememberMe ?? _rememberMeValue;
       },
     );
   }
@@ -117,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _userName(),
               _applicationPassword(),
               _rememberMe(),
+              // TODO: add auto login
               _domain(),
               Gap(0.01.sh),
               _submitButton()

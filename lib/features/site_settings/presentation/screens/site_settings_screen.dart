@@ -2,20 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/core_export.dart';
 import '../../site_settings_exports.dart';
 
-import '../../../../core/widgets/time_zone_selector.dart';
-import '../widgets/start_of_week_input.dart';
-
 class SiteSettingsScreen extends StatefulWidget {
-  final UpdateSiteSettingsParamsBuilder updateSiteSettingsParamsBuilder;
-  SiteSettingsScreen({
-    super.key,
-    UpdateSiteSettingsParamsBuilder? updateSiteSettingsParamsBuilder,
-  }) : updateSiteSettingsParamsBuilder = updateSiteSettingsParamsBuilder ??
-            UpdateSiteSettingsParamsBuilder();
+  const SiteSettingsScreen({super.key});
 
   @override
   State<SiteSettingsScreen> createState() => _SiteSettingsScreenState();
@@ -25,6 +16,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
   final formKey = GlobalKey<FormState>();
   final emailFocus = FocusNode();
   SiteSettingsEntity? settingData;
+  final updateSiteSettingsParamsBuilder = UpdateSiteSettingsParamsBuilder();
 
   @override
   void initState() {
@@ -37,6 +29,28 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
     return Scaffold(
       appBar: _appBar(),
       body: _settingsBuilder(),
+    );
+  }
+
+  PushedScreenAppBar _appBar() {
+    return PushedScreenAppBar(
+      context: context,
+      title: "تنظیمات سایت",
+      bottomLeadingWidgets: [
+        _submit(),
+      ],
+    );
+  }
+
+  SaveButton _submit() {
+    return SaveButton(
+      key: const Key("save_site_settings_button"),
+      onPressed: () {
+        if (formKey.currentState?.validate() == true) {
+          final params = updateSiteSettingsParamsBuilder.build();
+          context.read<SiteSettingsCubit>().updateSettings(params);
+        }
+      },
     );
   }
 
@@ -55,7 +69,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
 
   Widget _loadingWidget() {
     return Container(
-      padding: const EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 50),
       width: double.infinity,
       child: const LoadingWidget(),
     );
@@ -64,41 +78,19 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
   _siteSettingsStateListener(_, SiteSettingsState state) {
     state.whenOrNull(
       loaded: (settings) {
-        widget.updateSiteSettingsParamsBuilder.fromExistingObject(settings);
+        updateSiteSettingsParamsBuilder.fromExistingObject(settings);
         settingData = settings;
         return;
       },
       updated: (settings) {
-        widget.updateSiteSettingsParamsBuilder.fromExistingObject(settings);
+        updateSiteSettingsParamsBuilder.fromExistingObject(settings);
         settingData = settings;
         return;
       },
-      error: (failure) => CustomBottomSheet.showFailureBottomSheet(
+      error: (failure) => CustomBottomSheets.showFailureBottomSheet(
         context: context,
         failure: failure,
       ),
-    );
-  }
-
-  PushedPageAppBar _appBar() {
-    return PushedPageAppBar(
-      context: context,
-      title: "تنظیمات سایت",
-      bottomActionWidgets: [
-        _submit(),
-      ],
-    );
-  }
-
-  SaveButton _submit() {
-    return SaveButton(
-      key: const Key("save_site_settings_button"),
-      onPressed: () {
-        if (formKey.currentState?.validate() == true) {
-          final params = widget.updateSiteSettingsParamsBuilder.build();
-          context.read<SiteSettingsCubit>().updateSettings(params);
-        }
-      },
     );
   }
 
@@ -133,8 +125,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
     return CustomFormInputField(
       initialValue: settingData?.title,
       label: "عنوان سایت",
-      onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setTitle(value),
+      onChanged: (value) => updateSiteSettingsParamsBuilder.setTitle(value),
     );
   }
 
@@ -143,24 +134,23 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       initialValue: settingData?.description,
       label: "معرفی کوتاه",
       onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setDescription(value),
+          updateSiteSettingsParamsBuilder.setDescription(value),
     );
   }
 
   Widget _siteIconInput() {
     return SiteIconInput(
       initialValue: settingData?.siteIcon,
-      onSelect: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setIcon(value),
+      onSelect: (value) => updateSiteSettingsParamsBuilder.setIcon(value),
     );
   }
 
   Widget _urlInput() {
     return CustomFormInputField(
       initialValue: settingData?.url,
+      textDirection: TextDirection.ltr,
       label: "نشانی سایت",
-      onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setUrl(value),
+      onChanged: (value) => updateSiteSettingsParamsBuilder.setUrl(value),
     );
   }
 
@@ -177,8 +167,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
         }
         return isValid;
       },
-      onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setEmail(value),
+      onChanged: (value) => updateSiteSettingsParamsBuilder.setEmail(value),
     );
   }
 
@@ -192,7 +181,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
           selectHint: "انتخاب زمان محلی",
           searchHint: "جستجو...",
           onTimezoneSelected: (timeZone) =>
-              widget.updateSiteSettingsParamsBuilder.setTimeZone(timeZone),
+              updateSiteSettingsParamsBuilder.setTimeZone(timeZone),
         ),
       ],
     );
@@ -203,7 +192,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       key: const Key("date_format_input"),
       initialValue: settingData?.dateFormat,
       onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setDateFormat(value),
+          updateSiteSettingsParamsBuilder.setDateFormat(value),
     );
   }
 
@@ -212,7 +201,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
       key: const Key("time_format_input"),
       initialValue: settingData?.timeFormat,
       onChanged: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setTimeFormat(value),
+          updateSiteSettingsParamsBuilder.setTimeFormat(value),
     );
   }
 
@@ -220,7 +209,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
     return StartOfWeekInput(
       initialValue: settingData?.startOfWeek,
       onSelect: (value) =>
-          widget.updateSiteSettingsParamsBuilder.setStartOfWeek(value),
+          updateSiteSettingsParamsBuilder.setStartOfWeek(value),
     );
   }
 }

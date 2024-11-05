@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'core/core_export.dart';
 
-import 'core/router/go_router_config.dart';
 import 'core/theme/theme.dart';
 
 class WordpressCompanion extends StatelessWidget {
@@ -23,6 +23,16 @@ class WordpressCompanion extends StatelessWidget {
 
   MaterialApp _materialApp() {
     return MaterialApp.router(
+      locale: const Locale("fa", "IR"),
+      supportedLocales: const [
+        Locale("fa", "IR"),
+        Locale("en", "US"),
+      ],
+      localizationsDelegates: const [
+        // Add Localization
+        PersianMaterialLocalizations.delegate,
+        PersianCupertinoLocalizations.delegate,
+      ],
       debugShowCheckedModeBanner: false,
       theme: CustomTheme().lightTheme(),
       builder: (context, child) => GlobalLoaderOverlay(

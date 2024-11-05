@@ -20,7 +20,7 @@ void main() {
     () {
       mockUserLoginRepository = MockUserLoginRepository();
       getLastLoginCredentials =
-          GetLastLoginCredentials(userLoginRepository: mockUserLoginRepository);
+          GetLastLoginCredentials(loginRepository: mockUserLoginRepository);
     },
   );
 

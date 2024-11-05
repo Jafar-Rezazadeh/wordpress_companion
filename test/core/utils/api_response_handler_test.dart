@@ -29,4 +29,35 @@ void main() {
       expect(result, isA<Map<String, dynamic>>());
     });
   });
+
+  group("convertToJsonList -", () {
+    test("should return same when input is List<dynamic>", () {
+      //arrange
+      final json = [
+        {"id": 1, "name": "someName"},
+        {"id": 2, "name": "someName"}
+      ];
+
+      //act
+      final result = ApiResponseHandler.convertToJsonList(json);
+
+      //assert
+      expect(result, isA<List<dynamic>>());
+    });
+
+    test("should return (List<dynamic>) when input is jsonString", () {
+      //arrange
+      final jsonString = jsonEncode([
+        {"id": 1, "name": "someName"},
+        {"id": 2, "name": "someName"}
+      ]);
+
+      //act
+      final result = ApiResponseHandler.convertToJsonList(jsonString);
+
+      //assert
+      expect(result, isA<dynamic>());
+      expect(result[0]["id"], 1);
+    });
+  });
 }

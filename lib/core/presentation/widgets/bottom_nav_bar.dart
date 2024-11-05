@@ -14,15 +14,26 @@ class CustomizedBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
-      showUnselectedLabels: false,
-      showSelectedLabels: false,
-      selectedItemColor: ColorPallet.midBlue,
-      unselectedItemColor: ColorPallet.text,
-      onTap: onTap,
-      items: _bottomBavItems,
+    return Container(
+      decoration: const BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 5,
+          spreadRadius: 2,
+        )
+      ]),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        elevation: 5,
+        backgroundColor: ColorPallet.white,
+        selectedItemColor: ColorPallet.midBlue,
+        unselectedItemColor: ColorPallet.text,
+        onTap: onTap,
+        items: _bottomBavItems,
+      ),
     );
   }
 

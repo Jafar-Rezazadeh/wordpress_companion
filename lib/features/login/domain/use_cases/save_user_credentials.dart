@@ -7,8 +7,8 @@ class SaveUserCredentials
     implements UseCase<LoginCredentialsEntity, LoginCredentialsParams> {
   final LoginRepository _userLoginRepository;
 
-  SaveUserCredentials({required LoginRepository userLoginRepository})
-      : _userLoginRepository = userLoginRepository;
+  SaveUserCredentials({required LoginRepository loginRepository})
+      : _userLoginRepository = loginRepository;
   @override
   Future<Either<Failure, LoginCredentialsEntity>> call(
       LoginCredentialsParams params) async {

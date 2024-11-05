@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../utils/http_status_helper.dart';
-import '../utils/string_formatter.dart';
 
 import '../errors/failures.dart';
 
@@ -65,8 +64,8 @@ class FailureWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          HttpStatusHelper(status: failure.response?.statusCode ?? 0)
-              .translateToMessage(),
+          HttpStatusHelper.translateToMessage(
+              failure.response?.statusCode ?? 0),
         ),
         const Gap(5),
         Text(
@@ -95,10 +94,15 @@ class FailureWidget extends StatelessWidget {
           const Gap(10),
           Text(failure.message),
           const Gap(10),
-          Text(
-            StringFormatter.shortenText(failure.stackTrace.toString(), 300),
-            textAlign: TextAlign.left,
-          ),
+          ExpansionTile(
+            title: const Text("اطلاعات بیشتر"),
+            children: [
+              Text(
+                failure.stackTrace.toString(),
+                textAlign: TextAlign.left,
+              ),
+            ],
+          )
         ],
       ),
     );

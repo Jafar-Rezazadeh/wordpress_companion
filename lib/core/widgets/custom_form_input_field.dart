@@ -60,7 +60,8 @@ class CustomFormInputField extends StatelessWidget {
       labelText: label,
       suffixIcon: suffixIcon,
       hintText: hintText,
-      contentPadding: const EdgeInsets.fromLTRB(16, 5, 16, 5),
+      contentPadding:
+          EdgeInsets.fromLTRB(16, _verticalPadding(), 16, _verticalPadding()),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(smallCornerRadius),
         borderSide: BorderSide(color: ColorPallet.border),
@@ -80,5 +81,13 @@ class CustomFormInputField extends StatelessWidget {
       helperText: helperText,
       helperStyle: const TextStyle(color: Colors.black54),
     );
+  }
+
+  double _verticalPadding() {
+    if (maxLines > 1) {
+      return 20;
+    } else {
+      return 5;
+    }
   }
 }

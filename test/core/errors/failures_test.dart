@@ -16,7 +16,8 @@ void main() {
       );
 
       //act
-      final result = FailureFactory.createFailure(object);
+      final result = FailureFactory.createFailure(
+          object, StackTrace.fromString("stackTraceString"));
 
       //assert
       expect(result, isA<ServerFailure>());
@@ -27,7 +28,8 @@ void main() {
         "should return (InternalFailure) when object is Not (DioException) anything else",
         () {
       //act
-      final result = FailureFactory.createFailure(TypeError());
+      final result = FailureFactory.createFailure(
+          TypeError(), StackTrace.fromString("stackTraceString"));
 
       //assert
       expect(result, isA<InternalFailure>());
@@ -41,6 +43,7 @@ void main() {
       final failure = ServerFailure(
         message: "",
         response: Response(requestOptions: RequestOptions()),
+        dioException: DioException(requestOptions: RequestOptions()),
         stackTrace: StackTrace.fromString("hello"),
       );
 
@@ -48,10 +51,15 @@ void main() {
       final props = failure.props;
 
       //assert
-      expect(
-        props,
-        containsAll([isA<String>(), isA<Response>(), isA<StackTrace>()]),
-      );
+      final expected = [
+        isA<String>(),
+        isA<Response>(),
+        isA<DioException>(),
+        isA<Response>(),
+      ];
+      for (var prop in expected) {
+        expect(props, contains(prop));
+      }
     });
   });
 
@@ -67,10 +75,11 @@ void main() {
       final props = failure.props;
 
       //assert
-      expect(
-        props,
-        containsAll([isA<String>(), isA<StackTrace>()]),
-      );
+      final expected = [isA<String>(), isA<StackTrace>()];
+
+      for (var prop in expected) {
+        expect(props, contains(prop));
+      }
     });
   });
 }

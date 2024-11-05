@@ -6,14 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
-import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
-import 'package:wordpress_companion/core/router/go_router_config.dart';
-import 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
-import 'package:wordpress_companion/features/profile/domain/entities/profile_avatar_urls.dart';
-import 'package:wordpress_companion/features/profile/domain/entities/profile_entity.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/screens/site_settings_screen.dart';
+import 'package:wordpress_companion/features/profile/profile_exports.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
@@ -170,7 +163,7 @@ void main() {
                       path: siteSettingsScreenRoute,
                       builder: (context, state) => BlocProvider(
                         create: (context) => siteSettingsCubit,
-                        child: SiteSettingsScreen(),
+                        child: const SiteSettingsScreen(),
                       ),
                     )
                   ],

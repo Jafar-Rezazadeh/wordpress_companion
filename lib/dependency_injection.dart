@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:wordpress_companion/features/media/media_injections.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_injection.dart';
 import 'core/utils/dio_generator.dart';
 import 'features/login/login_dependency_inj.dart';
@@ -14,6 +15,7 @@ class DependencyInjection {
     await initLoginInjection(getIt);
     await initProfileInjection(getIt);
     await initSiteSettingsInjections(getIt);
+    await initMediaInjections(getIt);
   }
 
   _initDio() {

@@ -4,7 +4,7 @@ class LoginCredentialsEntity extends Equatable {
   final String userName;
   final String applicationPassword;
   final String domain;
-  final bool rememberMe;
+  final bool? rememberMe;
 
   const LoginCredentialsEntity({
     required this.userName,

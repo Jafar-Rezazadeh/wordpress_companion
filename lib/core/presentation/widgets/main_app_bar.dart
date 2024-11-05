@@ -24,12 +24,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     return [
       IconButton(
         key: const Key("drawer_button"),
-        onPressed: () {
-          Scaffold.of(context).openEndDrawer();
-        },
-        icon: const Icon(Icons.menu),
+        onPressed: () => Scaffold.of(context).openEndDrawer(),
+        icon: const Icon(
+          Icons.menu,
+          size: 30,
+        ),
       ),
-      const Gap(0),
+      const Gap(5),
     ];
   }
 
