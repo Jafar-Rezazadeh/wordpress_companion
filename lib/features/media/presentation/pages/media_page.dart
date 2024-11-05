@@ -95,7 +95,7 @@ class _MediaPageState extends State<MediaPage>
   }
 
   Widget _filterButton() {
-    return MediaFilterButton(
+    return MediaFilter(
       onApply: (filters) {
         _reinitializeVariables(
           params: GetMediaPerPageParams(

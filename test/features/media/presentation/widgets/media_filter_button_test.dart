@@ -171,7 +171,7 @@ ScreenUtilInit _testWidget(
   return ScreenUtilInit(
     child: MaterialApp(
       home: Material(
-        child: MediaFilterButton(
+        child: MediaFilter(
           onApply: onApply,
           onClear: onClear,
         ),

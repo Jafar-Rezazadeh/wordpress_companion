@@ -394,11 +394,11 @@ void main() {
         await tester.pumpWidget(_testWidget(mediaCubit));
 
         //verification
-        final mediaFilterButtonFinder = find.byType(MediaFilterButton);
+        final mediaFilterButtonFinder = find.byType(MediaFilter);
         expect(mediaFilterButtonFinder, findsOneWidget);
 
         //act
-        final mediaFilterButton = tester.widget<MediaFilterButton>(
+        final mediaFilterButton = tester.widget<MediaFilter>(
           mediaFilterButtonFinder,
         );
         mediaFilterButton.onApply(
@@ -431,12 +431,12 @@ void main() {
         await tester.pumpWidget(_testWidget(mediaCubit));
 
         //verification
-        final mediaFilterButtonFinder = find.byType(MediaFilterButton);
+        final mediaFilterButtonFinder = find.byType(MediaFilter);
         expect(mediaFilterButtonFinder, findsOneWidget);
         _verifyGetMediaPerPageCalledWithDefaultParams(mediaCubit);
 
         //act
-        final mediaFilterButton = tester.widget<MediaFilterButton>(
+        final mediaFilterButton = tester.widget<MediaFilter>(
           mediaFilterButtonFinder,
         );
         mediaFilterButton.onClear();
@@ -461,8 +461,8 @@ void main() {
       expect(infiniteListViewFinder, findsOneWidget);
 
       // setting the other params
-      final mediaFilterButton = tester.widget<MediaFilterButton>(
-        find.byType(MediaFilterButton),
+      final mediaFilterButton = tester.widget<MediaFilter>(
+        find.byType(MediaFilter),
       );
       mediaFilterButton.onApply(
         (after: "after-date", before: "before-date", type: MediaType.video),

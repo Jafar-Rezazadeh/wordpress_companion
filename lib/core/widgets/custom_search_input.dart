@@ -66,13 +66,13 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
     )
       ..scaleXY(
         begin: 1,
-        end: 1.1,
+        end: 1.2,
         delay: 1.seconds,
         duration: 100.milliseconds,
       )
       ..shake(delay: 1.seconds, duration: 500.milliseconds)
       ..then()
-      ..scaleXY(begin: 1.1, end: 1, duration: 100.milliseconds);
+      ..scaleXY(begin: 1.2, end: 1, duration: 100.milliseconds);
   }
 
   Widget _suffixIcon() {

@@ -108,9 +108,9 @@ class _EditMediaScreenState extends State<EditMediaScreen> {
         ),
       ).build(
         mimetype: MimeTypeRecognizer.fromString(widget.mediaEntity.mimeType),
+        //HACK: remove this replace on production
         sourceUrl: widget.mediaEntity.sourceUrl
             .replaceAll("https://localhost", "http://192.168.1.2"),
-        //HACK: remove this replace on production
         label: widget.mediaEntity.title,
       ),
     );

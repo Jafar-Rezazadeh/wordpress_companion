@@ -3,17 +3,17 @@ import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 
 import '../../../../../core/core_export.dart';
 
-class MediaFilterButton extends StatefulWidget {
+class MediaFilter extends StatefulWidget {
   final Function(MediaFilters filters) onApply;
   final VoidCallback onClear;
-  const MediaFilterButton({
+  const MediaFilter({
     super.key,
     required this.onApply,
     required this.onClear,
   });
 
   @override
-  State<MediaFilterButton> createState() => _MediaFilterButtonState();
+  State<MediaFilter> createState() => _MediaFilterState();
 }
 
 typedef MediaFilters = ({
@@ -22,7 +22,7 @@ typedef MediaFilters = ({
   String? after,
 });
 
-class _MediaFilterButtonState extends State<MediaFilterButton> {
+class _MediaFilterState extends State<MediaFilter> {
   final filtersBuilder = _MediaFiltersBuilder();
 
   @override
@@ -99,7 +99,7 @@ class _MediaFilterButtonState extends State<MediaFilterButton> {
     return CustomPersianDateSelector(
       key: const Key("after_date_selector"),
       initialDate: DateTime.tryParse(filtersBuilder.after ?? ""),
-      label: ":بعد از",
+      label: ":از",
       onSelected: (value) {
         filtersBuilder.setAfter = value?.toIso8601String();
       },
@@ -110,7 +110,7 @@ class _MediaFilterButtonState extends State<MediaFilterButton> {
     return CustomPersianDateSelector(
       key: const Key("before_date_selector"),
       initialDate: DateTime.tryParse(filtersBuilder.before ?? ""),
-      label: ":قبل از",
+      label: ":تا",
       onSelected: (value) {
         filtersBuilder.setBefore = value?.toIso8601String();
       },
