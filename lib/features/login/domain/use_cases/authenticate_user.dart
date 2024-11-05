@@ -6,8 +6,8 @@ import '../../login_exports.dart';
 class AuthenticateUser implements UseCase<bool, LoginCredentialsParams> {
   final LoginRepository _userAuthenticationRepository;
 
-  AuthenticateUser({required LoginRepository userLoginRepository})
-      : _userAuthenticationRepository = userLoginRepository;
+  AuthenticateUser({required LoginRepository loginRepository})
+      : _userAuthenticationRepository = loginRepository;
   @override
   Future<Either<Failure, bool>> call(LoginCredentialsParams params) async {
     return _userAuthenticationRepository.authenticateUser(params);

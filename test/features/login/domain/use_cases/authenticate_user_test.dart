@@ -24,7 +24,7 @@ void main() {
     () {
       mockUserAuthentication = MockUserAuthentication();
       authenticateUser =
-          AuthenticateUser(userLoginRepository: mockUserAuthentication);
+          AuthenticateUser(loginRepository: mockUserAuthentication);
     },
   );
 

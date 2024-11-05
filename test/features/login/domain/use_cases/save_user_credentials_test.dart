@@ -22,7 +22,7 @@ void main() {
     () {
       mockUserAuthenticationRepository = MockUserAuthenticationRepository();
       saveUserCredentials = SaveUserCredentials(
-          userLoginRepository: mockUserAuthenticationRepository);
+          loginRepository: mockUserAuthenticationRepository);
     },
   );
 

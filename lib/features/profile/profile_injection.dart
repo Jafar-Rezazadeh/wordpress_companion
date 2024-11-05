@@ -5,27 +5,26 @@ import 'profile_exports.dart';
 
 initProfileInjection(GetIt getIt) {
   // data sources
-  getIt.registerLazySingleton<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(dio: getIt()),
-  );
+  final ProfileRemoteDataSource profileRemoteDataSource =
+      ProfileRemoteDataSourceImpl(dio: getIt());
 
   // repositories
-  getIt.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(profileRemoteDataSource: getIt()),
+  final ProfileRepository profileRepository = ProfileRepositoryImpl(
+    profileRemoteDataSource: profileRemoteDataSource,
   );
 
   // cubits
   getIt.registerFactory(
     () => ProfileCubit(
-      getMyProfile: GetMyProfile(profileRepository: getIt()),
-      updateMyProfile: UpdateMyProfile(profileRepository: getIt()),
+      getMyProfile: GetMyProfile(profileRepository: profileRepository),
+      updateMyProfile: UpdateMyProfile(profileRepository: profileRepository),
     ),
   );
 
   // Service
   getIt.registerLazySingleton<ProfileService>(
     () => ProfileServiceImpl(
-      getMyProfile: GetMyProfile(profileRepository: getIt()),
+      getMyProfile: GetMyProfile(profileRepository: profileRepository),
     ),
   );
 }

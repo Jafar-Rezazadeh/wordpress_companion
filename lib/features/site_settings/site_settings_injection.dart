@@ -3,20 +3,22 @@ import 'package:wordpress_companion/features/site_settings/site_settings_exports
 
 initSiteSettingsInjections(GetIt getIt) {
   // data sources
-  getIt.registerLazySingleton<SiteSettingsDataSource>(
-    () => SiteSettingsDataSourceImpl(dio: getIt()),
-  );
+  final siteSettingsDataSource = SiteSettingsDataSourceImpl(dio: getIt());
 
   // repositories
-  getIt.registerLazySingleton<SiteSettingsRepository>(
-    () => SiteSettingsRepositoryImpl(siteSettingsDataSource: getIt()),
+  final siteSettingsRepository = SiteSettingsRepositoryImpl(
+    siteSettingsDataSource: siteSettingsDataSource,
   );
 
   // cubit
   getIt.registerFactory(
     () => SiteSettingsCubit(
-      getSiteSettings: GetSiteSettings(siteSettingsRepository: getIt()),
-      updateSiteSettings: UpdateSiteSettings(siteSettingsRepository: getIt()),
+      getSiteSettings: GetSiteSettings(
+        siteSettingsRepository: siteSettingsRepository,
+      ),
+      updateSiteSettings: UpdateSiteSettings(
+        siteSettingsRepository: siteSettingsRepository,
+      ),
     ),
   );
 }

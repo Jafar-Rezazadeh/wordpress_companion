@@ -6,9 +6,9 @@ import 'login_exports.dart';
 
 initLoginInjection(GetIt getIt) async {
   // data sources
-  getIt.registerLazySingleton<WordpressRemoteDataSource>(
-    () => WordpressRemoteDataSourceImpl(dio: getIt()),
-  );
+  final WordpressRemoteDataSource wordpressRemoteDataSource =
+      WordpressRemoteDataSourceImpl(dio: getIt());
+
   getIt.registerLazySingletonAsync<LocalLoginDataSource>(
     () async {
       final sharedPref = await SharedPreferences.getInstance();
@@ -20,18 +20,17 @@ initLoginInjection(GetIt getIt) async {
   // repository
   getIt.registerLazySingleton<LoginRepository>(
     () => UserLoginRepositoryImpl(
-      wordpressRemoteDataSource: getIt(),
+      wordpressRemoteDataSource: wordpressRemoteDataSource,
       localUserLoginDataSource: getIt(),
     ),
   );
 
   // use cases
+  getIt.registerLazySingleton(() => AuthenticateUser(loginRepository: getIt()));
   getIt.registerLazySingleton(
-      () => AuthenticateUser(userLoginRepository: getIt()));
+      () => SaveUserCredentials(loginRepository: getIt()));
   getIt.registerLazySingleton(
-      () => SaveUserCredentials(userLoginRepository: getIt()));
-  getIt.registerLazySingleton(
-      () => GetLastLoginCredentials(userLoginRepository: getIt()));
+      () => GetLastLoginCredentials(loginRepository: getIt()));
 
   // cubit
   getIt.registerFactory(

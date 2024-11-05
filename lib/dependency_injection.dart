@@ -5,8 +5,6 @@ import 'core/utils/dio_generator.dart';
 import 'features/login/login_dependency_inj.dart';
 import 'features/profile/profile_injection.dart';
 
-// FIXME: refactor injections
-
 class DependencyInjection {
   final GetIt getIt;
 
