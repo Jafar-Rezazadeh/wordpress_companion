@@ -33,8 +33,8 @@ class _GroupedRadioButtonState<T> extends State<GroupedRadioButton<T>> {
 
   @override
   void initState() {
-    groupValue = widget.initialGroupValue;
     super.initState();
+    groupValue = widget.initialGroupValue;
   }
 
   @override

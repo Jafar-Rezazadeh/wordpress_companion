@@ -30,8 +30,8 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
 
   @override
   void initState() {
-    scrollController.addListener(_scrollListener);
     super.initState();
+    scrollController.addListener(_scrollListener);
   }
 
   void _scrollListener() {

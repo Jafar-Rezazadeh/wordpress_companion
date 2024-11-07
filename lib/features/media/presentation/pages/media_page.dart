@@ -20,8 +20,8 @@ class _MediaPageState extends State<MediaPage>
 
   @override
   void initState() {
-    _getMedias();
     super.initState();
+    _getMedias();
   }
 
   _getMedias() {

@@ -28,11 +28,11 @@ class _EditMediaScreenState extends State<EditMediaScreen> {
 
   @override
   void initState() {
+    super.initState();
     altTextValue = widget.mediaEntity.altText;
     titleValue = widget.mediaEntity.title;
     captionValue = widget.mediaEntity.caption;
     descriptionValue = widget.mediaEntity.description;
-    super.initState();
   }
 
   @override

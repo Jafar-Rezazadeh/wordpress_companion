@@ -20,8 +20,8 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
 
   @override
   void initState() {
-    context.read<SiteSettingsCubit>().loadSettings();
     super.initState();
+    context.read<SiteSettingsCubit>().loadSettings();
   }
 
   @override

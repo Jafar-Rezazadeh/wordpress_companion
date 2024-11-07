@@ -22,8 +22,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   initState() {
-    _initController();
     super.initState();
+    _initController();
   }
 
   _initController() {

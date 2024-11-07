@@ -30,8 +30,8 @@ class _UploadCardState extends State<UploadCard> {
 
   @override
   void initState() {
-    progressValueNotifier = ValueNotifier<double>(0);
     super.initState();
+    progressValueNotifier = ValueNotifier<double>(0);
   }
 
   @override

@@ -25,8 +25,8 @@ class _CustomDropDownButtonState<T> extends State<CustomDropDownButton<T>> {
 
   @override
   void initState() {
-    selectedValue = widget.initialValue;
     super.initState();
+    selectedValue = widget.initialValue;
   }
 
   @override
