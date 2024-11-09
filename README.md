@@ -1,4 +1,5 @@
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)
+
 
 # WordPress Companion
 
