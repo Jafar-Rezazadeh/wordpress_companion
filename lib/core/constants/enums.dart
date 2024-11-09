@@ -19,3 +19,11 @@ enum MimeType {
   video,
   file,
 }
+
+enum PostStatus {
+  publish,
+  future,
+  draft,
+  pending,
+  private,
+}
