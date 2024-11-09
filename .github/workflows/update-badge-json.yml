@@ -1,0 +1,35 @@
+name: Update Badge JSON
+
+on:
+  workflow_run:
+    workflows: ["Generate Coverage Badge"]
+    types:
+      - completed
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-percentage
+
+      - name: Read coverage percentage and update badge JSON
+        run: |
+          COVERAGE=$(cat coverage_percentage.txt)
+          echo "{ \"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE%\", \"color\": \"green\" }" > coverage-badge.json
+
+      - name: Commit and push JSON
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add coverage-badge.json
+          git commit -m "Update coverage badge JSON"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
