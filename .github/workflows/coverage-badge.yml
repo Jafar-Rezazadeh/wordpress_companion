@@ -25,6 +25,9 @@ jobs:
           flutter-version: "3.24.4" # Replace with a specific Flutter version
           cache: true
 
+      - name: Create package.json
+        run: npm init -y
+
       - name: Install dependencies
         run: npm install
 
