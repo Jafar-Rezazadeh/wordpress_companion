@@ -43,6 +43,7 @@ class MediaCubit extends Cubit<MediaState> {
     );
   }
 
+  // TODO: put the page increment logic here and only get other logic
   getMediaPerPage(GetMediaPerPageParams params) async {
     if (_isNotInLoadingState()) {
       emit(const MediaState.loading());

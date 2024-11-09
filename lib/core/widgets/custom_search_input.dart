@@ -23,26 +23,26 @@ class _CustomSearchInputState extends State<CustomSearchInput> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(mediumCornerRadius),
-      child: TextField(
-        focusNode: focusNode,
-        controller: _controller,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: _inputDecoration(),
-        onChanged: (value) {
-          if (value.isEmpty) {
-            widget.onClear();
-          }
-          setState(() => playAnimation = value.isNotEmpty ? true : false);
-        },
-      ),
+    return TextField(
+      focusNode: focusNode,
+      controller: _controller,
+      textAlignVertical: TextAlignVertical.center,
+      decoration: _inputDecoration(),
+      onChanged: (value) {
+        if (value.isEmpty) {
+          widget.onClear();
+        }
+        setState(() => playAnimation = value.isNotEmpty ? true : false);
+      },
     );
   }
 
   InputDecoration _inputDecoration() {
     return InputDecoration(
-      border: InputBorder.none,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(mediumCornerRadius),
+        borderSide: BorderSide.none,
+      ),
       filled: true,
       hintText: "جستجو...",
       prefixIcon: _prefixIcon(),

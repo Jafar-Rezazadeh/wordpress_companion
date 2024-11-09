@@ -22,11 +22,6 @@ class _TimeFormatInputState extends State<TimeFormatInput> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SiteSettingsFormatInputWidget(
       initialValue: widget.initialValue,

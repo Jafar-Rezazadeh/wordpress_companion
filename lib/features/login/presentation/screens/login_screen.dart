@@ -27,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<LoginCredentialsCubit>(context).getLastLoginCredentials();
     super.initState();
+    BlocProvider.of<LoginCredentialsCubit>(context).getLastLoginCredentials();
   }
 
   @override

@@ -15,8 +15,7 @@ class FakeFailure extends Fake implements Failure {}
 
 class FakeMediaEntity extends Fake implements MediaEntity {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {}
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {}
 
 void main() {
   late MockDeleteMedia mockDeleteMedia;

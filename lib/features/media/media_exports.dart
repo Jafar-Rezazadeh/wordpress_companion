@@ -14,6 +14,7 @@ export 'package:wordpress_companion/features/media/domain/use_cases/update_media
 export 'package:wordpress_companion/features/media/domain/use_cases/get_media_per_page.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/upload_media.dart';
 export 'package:wordpress_companion/features/media/domain/use_cases/cancel_media_upload.dart';
+export 'package:wordpress_companion/features/media/domain/use_cases/get_single_media.dart';
 
 // presentation
 export 'package:wordpress_companion/features/media/presentation/logic_holders/cubits/media_cubit/media_cubit.dart';

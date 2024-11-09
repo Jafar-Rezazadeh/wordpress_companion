@@ -20,7 +20,7 @@ mixin _$MediaState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -30,7 +30,7 @@ mixin _$MediaState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -40,7 +40,7 @@ mixin _$MediaState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -138,7 +138,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -151,7 +151,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -164,7 +164,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -264,7 +264,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -277,7 +277,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -290,7 +290,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -356,7 +356,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({CurrentPageMediasEntity currentPageMedias});
+  $Res call({CurrentPageMedias currentPageMedias});
 }
 
 /// @nodoc
@@ -376,7 +376,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       null == currentPageMedias
           ? _value.currentPageMedias
           : currentPageMedias // ignore: cast_nullable_to_non_nullable
-              as CurrentPageMediasEntity,
+              as CurrentPageMedias,
     ));
   }
 }
@@ -387,7 +387,7 @@ class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(this.currentPageMedias);
 
   @override
-  final CurrentPageMediasEntity currentPageMedias;
+  final CurrentPageMedias currentPageMedias;
 
   @override
   String toString() {
@@ -417,7 +417,7 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -430,7 +430,7 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -443,7 +443,7 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -500,10 +500,10 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements MediaState {
-  const factory _Loaded(final CurrentPageMediasEntity currentPageMedias) =
+  const factory _Loaded(final CurrentPageMedias currentPageMedias) =
       _$LoadedImpl;
 
-  CurrentPageMediasEntity get currentPageMedias;
+  CurrentPageMedias get currentPageMedias;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -549,7 +549,7 @@ class _$UpdatedImpl implements _Updated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -562,7 +562,7 @@ class _$UpdatedImpl implements _Updated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -575,7 +575,7 @@ class _$UpdatedImpl implements _Updated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -702,7 +702,7 @@ class _$DeletedImpl implements _Deleted {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -715,7 +715,7 @@ class _$DeletedImpl implements _Deleted {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -728,7 +728,7 @@ class _$DeletedImpl implements _Deleted {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,
@@ -859,7 +859,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function() updated,
     required TResult Function(bool isDeleted) deleted,
     required TResult Function(Failure failure) error,
@@ -872,7 +872,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function()? updated,
     TResult? Function(bool isDeleted)? deleted,
     TResult? Function(Failure failure)? error,
@@ -885,7 +885,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function()? updated,
     TResult Function(bool isDeleted)? deleted,
     TResult Function(Failure failure)? error,

@@ -23,8 +23,8 @@ class _CustomPersianDateSelectorState extends State<CustomPersianDateSelector> {
   Jalali? selectedDate;
   @override
   void initState() {
-    _setInitialDate();
     super.initState();
+    _setInitialDate();
   }
 
   void _setInitialDate() {

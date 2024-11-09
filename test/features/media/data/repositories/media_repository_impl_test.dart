@@ -12,8 +12,7 @@ class FakeUpdateMediaParams extends Fake implements UpdateMediaParams {}
 
 class FakeMediaModel extends Fake implements MediaModel {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {}
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {}
 
 void main() {
   late MockMediaRemoteDataSource mockMediaRemoteDataSource;
@@ -98,7 +97,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(rightValue, isA<CurrentPageMediasEntity>());
+      expect(rightValue, isA<CurrentPageMedias>());
     });
 
     test("should return (ServerFailure) when DioException thrown", () async {
@@ -284,6 +283,54 @@ void main() {
       //act
       final result =
           await mediaRepositoryImpl.cancelMediaUpload(mockCancelToken);
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<InternalFailure>());
+    });
+  });
+
+  group("getSingleMedia -", () {
+    test("should return (MediaEntity) when success", () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.getSingleMedia(any()),
+      ).thenAnswer((_) async => FakeMediaModel());
+
+      //act
+      final result = await mediaRepositoryImpl.getSingleMedia(1);
+      final rightValue = result.fold((l) => null, (r) => r);
+
+      //assert
+      expect(result.isRight(), true);
+      expect(rightValue, isA<MediaEntity>());
+    });
+
+    test("should return (ServerFailure) when DioException thrown", () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.getSingleMedia(any()),
+      ).thenAnswer((_) => throw DioException(requestOptions: RequestOptions()));
+
+      //act
+      final result = await mediaRepositoryImpl.getSingleMedia(1);
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<ServerFailure>());
+    });
+
+    test("should return (InternalFailure) when any other exception is thrown ",
+        () async {
+      //arrange
+      when(
+        () => mockMediaRemoteDataSource.getSingleMedia(any()),
+      ).thenAnswer((_) => throw TypeError());
+
+      //act
+      final result = await mediaRepositoryImpl.getSingleMedia(1);
       final leftValue = result.fold((l) => l, (r) => null);
 
       //assert

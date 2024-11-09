@@ -20,8 +20,8 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
 
   @override
   void initState() {
-    context.read<SiteSettingsCubit>().loadSettings();
     super.initState();
+    context.read<SiteSettingsCubit>().loadSettings();
   }
 
   @override
@@ -140,7 +140,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
 
   Widget _siteIconInput() {
     return SiteIconInput(
-      initialValue: settingData?.siteIcon,
+      initialImageId: settingData?.siteIcon,
       onSelect: (value) => updateSiteSettingsParamsBuilder.setIcon(value),
     );
   }

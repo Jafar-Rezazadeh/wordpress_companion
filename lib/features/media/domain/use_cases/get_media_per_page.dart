@@ -7,14 +7,14 @@ import 'package:wordpress_companion/features/media/domain/entities/current_page_
 import '../repositories/media_repository.dart';
 
 class GetMediaPerPage
-    implements UseCase<CurrentPageMediasEntity, GetMediaPerPageParams> {
+    implements UseCase<CurrentPageMedias, GetMediaPerPageParams> {
   final MediaRepository _repository;
 
   GetMediaPerPage({required MediaRepository mediaRepository})
       : _repository = mediaRepository;
 
   @override
-  Future<Either<Failure, CurrentPageMediasEntity>> call(
+  Future<Either<Failure, CurrentPageMedias>> call(
       GetMediaPerPageParams params) {
     return _repository.getMediaPerPage(params);
   }

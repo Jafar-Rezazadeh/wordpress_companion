@@ -20,8 +20,8 @@ class _StartOfWeekInputState extends State<StartOfWeekInput> {
 
   @override
   void initState() {
-    selectedValue = widget.initialValue;
     super.initState();
+    selectedValue = widget.initialValue;
   }
 
   @override

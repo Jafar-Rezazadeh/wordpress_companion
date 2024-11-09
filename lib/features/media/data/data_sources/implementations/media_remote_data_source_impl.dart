@@ -24,7 +24,7 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
   }
 
   @override
-  Future<CurrentPageMediasEntity> getMediasPerPage(
+  Future<CurrentPageMedias> getMediasPerPage(
     GetMediaPerPageParams params,
   ) async {
     final response = await _dio.get(
@@ -47,7 +47,7 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
 
     final bool hasNextPage = params.page < totalPages;
 
-    return CurrentPageMediasEntity(
+    return CurrentPageMedias(
       hasNextPage: hasNextPage,
       medias: listOfMedias.map((e) => MediaModel.fromJson(e)).toList(),
     );
@@ -105,5 +105,14 @@ class MediaRemoteDataSourceImpl implements MediaRemoteDataSource {
   @override
   Future<void> cancelMediaUpload(CancelToken cancelToken) async {
     cancelToken.cancel("بارگذاری فایل توسط کاربر لغو شد.");
+  }
+
+  @override
+  Future<MediaModel> getSingleMedia(int id) async {
+    final response = await _dio.get("$wpV2EndPoint/media/$id");
+
+    final json = ApiResponseHandler.convertToJson(response.data);
+
+    return MediaModel.fromJson(json);
   }
 }

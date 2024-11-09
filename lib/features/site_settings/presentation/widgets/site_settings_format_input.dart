@@ -31,10 +31,10 @@ class _SiteSettingsFormatInputWidgetState
 
   @override
   void initState() {
+    super.initState();
     customFormatController = TextEditingController(
       text: _ifNotAlreadyDefined() ? widget.initialValue : "",
     );
-    super.initState();
   }
 
   bool _ifNotAlreadyDefined() =>

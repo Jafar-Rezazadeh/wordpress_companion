@@ -8,8 +8,7 @@ class MockMediaRepository extends Mock implements MediaRepository {}
 
 class FakeFailure extends Fake implements Failure {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {}
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {}
 
 void main() {
   late MockMediaRepository mockMediaRepository;
@@ -49,6 +48,17 @@ void main() {
       });
     });
     group("copyWith -", () {
+      test("should return (GetMediaPerPageParams) ", () {
+        //arrange
+        final params = GetMediaPerPageParams();
+
+        //act
+        final result = params.copyWith();
+
+        //assert
+        expect(result, isA<GetMediaPerPageParams>());
+      });
+
       test(
           "should copy the properties and return (GetMediaPerPageParams) with given new properties",
           () {
@@ -82,7 +92,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(rightValue, isA<CurrentPageMediasEntity>());
+      expect(rightValue, isA<CurrentPageMedias>());
     });
 
     test("should return kind of (Failure) when fails", () async {

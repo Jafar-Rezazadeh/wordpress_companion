@@ -46,9 +46,7 @@ class FailureFactory {
   static Failure createFailure(Object object, StackTrace stackTrace) {
     if (object is DioException) {
       return ServerFailure(
-        message: object.error != null
-            ? object.error.toString()
-            : object.message.toString(),
+        message: object.message.toString(),
         dioException: object,
         response: object.response,
         stackTrace: object.stackTrace,

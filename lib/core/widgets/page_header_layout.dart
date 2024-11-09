@@ -13,7 +13,7 @@ class PageHeaderLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 60,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(bottom: 10),
       decoration: const BoxDecoration(

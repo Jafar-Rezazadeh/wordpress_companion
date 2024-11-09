@@ -15,6 +15,9 @@ class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
 class MockSiteSettingsCubit extends MockCubit<SiteSettingsState>
     implements SiteSettingsCubit {}
 
+class MockImageFinderCubit extends MockCubit<ImageFinderState>
+    implements ImageFinderCubit {}
+
 class MockCustomUrlLauncher extends Mock implements CustomUrlLauncher {}
 
 class FakeProfileEntity extends Fake implements ProfileEntity {
@@ -38,11 +41,13 @@ class FakeProfileEntity extends Fake implements ProfileEntity {
 void main() {
   late GlobalProfileCubit globalProfileCubit;
   late SiteSettingsCubit siteSettingsCubit;
+  late ImageFinderCubit imageFinderCubit;
   late MockCustomUrlLauncher mockCustomUrlLauncher;
 
   setUp(() {
     globalProfileCubit = MockGlobalProfileCubit();
     siteSettingsCubit = MockSiteSettingsCubit();
+    imageFinderCubit = MockImageFinderCubit();
     mockCustomUrlLauncher = MockCustomUrlLauncher();
     when(
       () => globalProfileCubit.state,
@@ -50,6 +55,9 @@ void main() {
     when(
       () => siteSettingsCubit.state,
     ).thenAnswer((_) => const SiteSettingsState.initial());
+    when(
+      () => imageFinderCubit.state,
+    ).thenAnswer((_) => const ImageFinderState.initial());
   });
 
   Widget testWidgetTree = ScreenUtilInit(
@@ -161,8 +169,11 @@ void main() {
                     GoRoute(
                       name: siteSettingsScreenRoute,
                       path: siteSettingsScreenRoute,
-                      builder: (context, state) => BlocProvider(
-                        create: (context) => siteSettingsCubit,
+                      builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(create: (context) => imageFinderCubit),
+                          BlocProvider(create: (context) => siteSettingsCubit),
+                        ],
                         child: const SiteSettingsScreen(),
                       ),
                     )
