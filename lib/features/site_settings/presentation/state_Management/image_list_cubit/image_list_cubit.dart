@@ -57,7 +57,7 @@ class ImageListCubit extends Cubit<ImageListState> {
         : await _getNextPageData(perviousPage);
   }
 
-  Future<void> _getNextPageData(CurrentPageMediasEntity perviousPage) async {
+  Future<void> _getNextPageData(CurrentPageMedias perviousPage) async {
     if (perviousPage.hasNextPage) {
       emit(const ImageListState.loading());
 
@@ -68,7 +68,7 @@ class ImageListCubit extends Cubit<ImageListState> {
       result.fold(
         (failure) => emit(ImageListState.error(failure)),
         (currentPageMedias) {
-          final allMedias = CurrentPageMediasEntity(
+          final allMedias = CurrentPageMedias(
             hasNextPage: currentPageMedias.hasNextPage,
             medias: perviousPage.medias + currentPageMedias.medias,
           );

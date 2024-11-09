@@ -11,8 +11,7 @@ class MockMediaService extends Mock implements MediaService {}
 
 class FakeMediaEntity extends Fake implements MediaEntity {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {
   @override
   bool get hasNextPage => true;
   @override
@@ -206,7 +205,7 @@ void main() {
     blocTest<ImageListCubit, ImageListState>(
       'Does NoThing when hasNextPage is false',
       seed: () => ImageListState.loaded(
-          CurrentPageMediasEntity(hasNextPage: false, medias: [])),
+          CurrentPageMedias(hasNextPage: false, medias: [])),
       setUp: () {},
       build: () => imageListCubit,
       act: (cubit) => cubit.getNextPageData(),

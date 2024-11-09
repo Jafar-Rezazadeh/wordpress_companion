@@ -8,8 +8,7 @@ class MockMediaRepository extends Mock implements MediaRepository {}
 
 class FakeFailure extends Fake implements Failure {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {}
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {}
 
 void main() {
   late MockMediaRepository mockMediaRepository;
@@ -93,7 +92,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(rightValue, isA<CurrentPageMediasEntity>());
+      expect(rightValue, isA<CurrentPageMedias>());
     });
 
     test("should return kind of (Failure) when fails", () async {

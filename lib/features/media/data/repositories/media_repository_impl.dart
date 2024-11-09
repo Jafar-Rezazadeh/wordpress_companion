@@ -22,7 +22,7 @@ class MediaRepositoryImpl implements MediaRepository {
   }
 
   @override
-  Future<Either<Failure, CurrentPageMediasEntity>> getMediaPerPage(
+  Future<Either<Failure, CurrentPageMedias>> getMediaPerPage(
       GetMediaPerPageParams params) async {
     try {
       final result = await _mediaRemoteDataSource.getMediasPerPage(params);
@@ -64,6 +64,17 @@ class MediaRepositoryImpl implements MediaRepository {
     try {
       final result =
           await _mediaRemoteDataSource.cancelMediaUpload(cancelToken);
+
+      return right(result);
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MediaEntity>> getSingleMedia(int id) async {
+    try {
+      final result = await _mediaRemoteDataSource.getSingleMedia(id);
 
       return right(result);
     } catch (e, s) {

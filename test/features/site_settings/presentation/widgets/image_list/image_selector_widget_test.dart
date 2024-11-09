@@ -137,7 +137,7 @@ void main() {
           imageListCubit,
           Stream.fromIterable([
             ImageListState.loaded(
-              CurrentPageMediasEntity(hasNextPage: true, medias: []),
+              CurrentPageMedias(hasNextPage: true, medias: []),
             ),
           ]),
         );

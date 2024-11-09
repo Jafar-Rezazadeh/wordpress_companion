@@ -20,7 +20,7 @@ mixin _$ImageListState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function(Failure failure) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$ImageListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function(Failure failure)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$ImageListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function(Failure failure) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function(Failure failure)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function(Failure failure) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function(Failure failure)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -320,7 +320,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({CurrentPageMediasEntity currentPageMedias});
+  $Res call({CurrentPageMedias currentPageMedias});
 }
 
 /// @nodoc
@@ -340,7 +340,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       null == currentPageMedias
           ? _value.currentPageMedias
           : currentPageMedias // ignore: cast_nullable_to_non_nullable
-              as CurrentPageMediasEntity,
+              as CurrentPageMedias,
     ));
   }
 }
@@ -351,7 +351,7 @@ class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(this.currentPageMedias);
 
   @override
-  final CurrentPageMediasEntity currentPageMedias;
+  final CurrentPageMedias currentPageMedias;
 
   @override
   String toString() {
@@ -381,7 +381,7 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function(Failure failure) error,
   }) {
     return loaded(currentPageMedias);
@@ -392,7 +392,7 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function(Failure failure)? error,
   }) {
     return loaded?.call(currentPageMedias);
@@ -403,7 +403,7 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -452,10 +452,10 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements ImageListState {
-  const factory _Loaded(final CurrentPageMediasEntity currentPageMedias) =
+  const factory _Loaded(final CurrentPageMedias currentPageMedias) =
       _$LoadedImpl;
 
-  CurrentPageMediasEntity get currentPageMedias;
+  CurrentPageMedias get currentPageMedias;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -527,7 +527,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CurrentPageMediasEntity currentPageMedias) loaded,
+    required TResult Function(CurrentPageMedias currentPageMedias) loaded,
     required TResult Function(Failure failure) error,
   }) {
     return error(failure);
@@ -538,7 +538,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult? Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult? Function(Failure failure)? error,
   }) {
     return error?.call(failure);
@@ -549,7 +549,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CurrentPageMediasEntity currentPageMedias)? loaded,
+    TResult Function(CurrentPageMedias currentPageMedias)? loaded,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {

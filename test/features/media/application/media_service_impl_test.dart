@@ -7,13 +7,17 @@ import 'package:wordpress_companion/features/media/media_exports.dart';
 
 class MockGetMediaPerPage extends Mock implements GetMediaPerPage {}
 
-class FakeCurrentPageMediasEntity extends Fake
-    implements CurrentPageMediasEntity {}
+class MockGetSingleMedia extends Mock implements GetSingleMedia {}
+
+class FakeCurrentPageMediasEntity extends Fake implements CurrentPageMedias {}
+
+class FakeMediaEntity extends Fake implements MediaEntity {}
 
 class FakeFailure extends Fake implements Failure {}
 
 void main() {
   late MockGetMediaPerPage mockGetMediaPerPage;
+  late MockGetSingleMedia mockGetSingleMedia;
   late MediaServiceImpl mediaServiceImpl;
 
   setUpAll(() {
@@ -22,41 +26,79 @@ void main() {
 
   setUp(() {
     mockGetMediaPerPage = MockGetMediaPerPage();
-    mediaServiceImpl = MediaServiceImpl(getMediaPerPage: mockGetMediaPerPage);
+    mockGetSingleMedia = MockGetSingleMedia();
+    mediaServiceImpl = MediaServiceImpl(
+      getMediaPerPage: mockGetMediaPerPage,
+      getSingleMedia: mockGetSingleMedia,
+    );
   });
 
-  test("should return (CurrentPageMediasEntity) when success", () async {
-    //arrange
-    when(
-      () => mockGetMediaPerPage.call(any()),
-    ).thenAnswer(
-      (_) async => right(FakeCurrentPageMediasEntity()),
-    );
+  group("getMediaPerPage -", () {
+    test("should return (CurrentPageMediasEntity) when success", () async {
+      //arrange
+      when(
+        () => mockGetMediaPerPage.call(any()),
+      ).thenAnswer(
+        (_) async => right(FakeCurrentPageMediasEntity()),
+      );
 
-    //act
-    final result = await mediaServiceImpl.getMediaPerPage(
-      GetMediaPerPageParams(),
-    );
-    final rightValue = result.fold((l) => null, (r) => r);
+      //act
+      final result = await mediaServiceImpl.getMediaPerPage(
+        GetMediaPerPageParams(),
+      );
+      final rightValue = result.fold((l) => null, (r) => r);
 
-    //assert
-    expect(result.isRight(), true);
-    expect(rightValue, isA<CurrentPageMediasEntity>());
+      //assert
+      expect(result.isRight(), true);
+      expect(rightValue, isA<CurrentPageMedias>());
+    });
+
+    test("should return kind of (failure) when a failure occurs", () async {
+      //arrange
+      when(
+        () => mockGetMediaPerPage.call(any()),
+      ).thenAnswer((_) async => left(FakeFailure()));
+
+      //act
+      final result =
+          await mediaServiceImpl.getMediaPerPage(GetMediaPerPageParams());
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<Failure>());
+    });
   });
 
-  test("should return kind of (failure) when a failure occurs", () async {
-    //arrange
-    when(
-      () => mockGetMediaPerPage.call(any()),
-    ).thenAnswer((_) async => left(FakeFailure()));
+  group("getSingleMedia -", () {
+    test("should return (MediaEntity) when success", () async {
+      //arrange
+      when(
+        () => mockGetSingleMedia.call(any()),
+      ).thenAnswer((_) async => right(FakeMediaEntity()));
 
-    //act
-    final result =
-        await mediaServiceImpl.getMediaPerPage(GetMediaPerPageParams());
-    final leftValue = result.fold((l) => l, (r) => null);
+      //act
+      final result = await mediaServiceImpl.getSingleMedia(1);
+      final rightValue = result.fold((l) => null, (r) => r);
 
-    //assert
-    expect(result.isLeft(), true);
-    expect(leftValue, isA<Failure>());
+      //assert
+      expect(result.isRight(), true);
+      expect(rightValue, isA<MediaEntity>());
+    });
+
+    test("should return kind of (Failure) when fails", () async {
+      //arrange
+      when(
+        () => mockGetSingleMedia.call(any()),
+      ).thenAnswer((_) async => left(FakeFailure()));
+
+      //act
+      final result = await mediaServiceImpl.getSingleMedia(1);
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<Failure>());
+    });
   });
 }

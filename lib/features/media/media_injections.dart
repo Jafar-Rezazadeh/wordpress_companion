@@ -31,6 +31,7 @@ initMediaInjections(GetIt getIt) {
   getIt.registerLazySingleton<MediaService>(
     () => MediaServiceImpl(
       getMediaPerPage: GetMediaPerPage(mediaRepository: mediaRepository),
+      getSingleMedia: GetSingleMedia(mediaRepository: mediaRepository),
     ),
   );
 }

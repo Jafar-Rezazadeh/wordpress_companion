@@ -130,7 +130,7 @@ void main() {
       );
 
       //assert
-      expect(result, isA<CurrentPageMediasEntity>());
+      expect(result, isA<CurrentPageMedias>());
       expect(result.medias, isNotEmpty);
     });
 
@@ -156,7 +156,7 @@ void main() {
       );
 
       //assert
-      expect(result, isA<CurrentPageMediasEntity>());
+      expect(result, isA<CurrentPageMedias>());
       expect(result.medias, isNotEmpty);
     });
 
@@ -520,6 +520,64 @@ void main() {
 
       //assert
       verify(() => mockCancelToken.cancel(any())).called(1);
+    });
+  });
+
+  group("getSingleMedia -", () {
+    test("should return (MediaModel) when success with (json)response data",
+        () async {
+      //arrange
+      const id = 1;
+      dioAdapter.onGet(
+        "$wpV2EndPoint/media/$id",
+        (server) => server.reply(
+          HttpStatus.ok,
+          JsonResponseSimulator.media,
+        ),
+      );
+
+      //act
+      final result = await mediaRemoteDataSourceImpl.getSingleMedia(id);
+
+      //assert
+      expect(result, isA<MediaModel>());
+    });
+    test(
+        "should return (MediaModel) when success with (jsonString) response data",
+        () async {
+      //arrange
+      const id = 1;
+      dioAdapter.onGet(
+        "$wpV2EndPoint/media/$id",
+        (server) => server.reply(
+          HttpStatus.ok,
+          jsonEncode(JsonResponseSimulator.media),
+        ),
+      );
+
+      //act
+      final result = await mediaRemoteDataSourceImpl.getSingleMedia(id);
+
+      //assert
+      expect(result, isA<MediaModel>());
+    });
+
+    test("should throw (DioException) when response is a failure", () async {
+      //arrange
+      const id = 1;
+      dioAdapter.onGet(
+        "$wpV2EndPoint/media/$id",
+        (server) => server.reply(
+          HttpStatus.notFound,
+          null,
+        ),
+      );
+
+      //act
+      final result = mediaRemoteDataSourceImpl.getSingleMedia(id);
+
+      //assert
+      expect(result, throwsA(isA<DioException>()));
     });
   });
 }

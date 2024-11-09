@@ -4,7 +4,7 @@ part of 'media_cubit.dart';
 class MediaState with _$MediaState {
   const factory MediaState.initial() = _Initial;
   const factory MediaState.loading() = _Loading;
-  const factory MediaState.loaded(CurrentPageMediasEntity currentPageMedias) =
+  const factory MediaState.loaded(CurrentPageMedias currentPageMedias) =
       _Loaded;
   const factory MediaState.updated() = _Updated;
   const factory MediaState.deleted(bool isDeleted) = _Deleted;
