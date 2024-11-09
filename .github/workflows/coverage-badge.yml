@@ -2,9 +2,9 @@ name: Generate Coverage Badge
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js (for lcov parsing)
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
 
       - name: Install dependencies
         run: npm install
