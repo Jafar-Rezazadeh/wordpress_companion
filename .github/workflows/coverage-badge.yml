@@ -1,0 +1,47 @@
+name: Generate Coverage Badge
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js (for lcov parsing)
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Parse coverage percentage from lcov.info
+        run: |
+          npm install lcov-parse
+          node -e "
+          const fs = require('fs');
+          const lcovParse = require('lcov-parse');
+          lcovParse('./coverage/lcov.info', (err, data) => {
+            if (err) throw err;
+            const totalLines = data.reduce((sum, file) => sum + file.lines.found, 0);
+            const coveredLines = data.reduce((sum, file) => sum + file.lines.hit, 0);
+            const coveragePercentage = ((coveredLines / totalLines) * 100).toFixed(2);
+            fs.writeFileSync('coverage_percentage.txt', coveragePercentage);
+          });
+          "
+
+      - name: Upload Coverage Percentage as GitHub Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-percentage
+          path: coverage_percentage.txt
