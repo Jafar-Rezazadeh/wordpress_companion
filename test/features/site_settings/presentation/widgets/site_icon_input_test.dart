@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,6 +10,9 @@ import 'package:wordpress_companion/features/site_settings/site_settings_exports
 
 class MockImageListCubit extends MockCubit<ImageListState>
     implements ImageListCubit {}
+
+class MockImageFinderCubit extends MockCubit<ImageFinderState>
+    implements ImageFinderCubit {}
 
 class FakeMediaEntity extends Fake implements MediaEntity {
   @override
@@ -20,25 +24,51 @@ class FakeMediaEntity extends Fake implements MediaEntity {
 
 void main() {
   late ImageListCubit imageListCubit;
+  late ImageFinderCubit imageFinderCubit;
   GetIt getIt = GetIt.instance;
 
   setUp(() {
     imageListCubit = MockImageListCubit();
-    when(
-      () => imageListCubit.state,
-    ).thenAnswer((invocation) => const ImageListState.initial());
-    getIt.registerSingleton<ImageListCubit>(imageListCubit);
+    imageFinderCubit = MockImageFinderCubit();
+    _initImageListCubit(imageListCubit, getIt);
+    _initImageFinderCubit(imageFinderCubit);
   });
 
   tearDown(() {
     getIt.reset();
   });
 
+  group("imageFinderCubit -", () {
+    testWidgets("should invoke the findImage when widget init", (tester) async {
+      //arrange
+      await _makeTestWidget(tester, imageFinderCubit);
+
+      //verification
+      verify(() => imageFinderCubit.findImage(any())).called(1);
+    });
+    group("listener -", () {
+      testWidgets("should set the selected image when state is imageFound",
+          (tester) async {
+        //arrange
+        whenListen(
+          imageFinderCubit,
+          Stream.fromIterable([
+            ImageFinderState.imageFound(FakeMediaEntity()),
+          ]),
+        );
+        await _makeTestWidget(tester, imageFinderCubit);
+
+        //assert
+        expect(find.byType(Image), findsOneWidget);
+      });
+    });
+  });
+
   group("image input -", () {
     testWidgets("should open ImageSelectorDialog when taped on the imageBox",
         (tester) async {
       //arrange
-      await _makeTestWidget(tester);
+      await _makeTestWidget(tester, imageFinderCubit);
 
       //act
       await _openImageSelectorDialog(tester);
@@ -51,7 +81,7 @@ void main() {
         "should show an image widget when an image is selected via ImageSelectorDialog ",
         (tester) async {
       //arrange
-      await _makeTestWidget(tester);
+      await _makeTestWidget(tester, imageFinderCubit);
       await _openImageSelectorDialog(tester);
 
       //verification
@@ -73,7 +103,7 @@ void main() {
   group("Image -", () {
     testWidgets("should show error icon when Image is fails", (tester) async {
       //arrange
-      await _makeTestWidget(tester);
+      await _makeTestWidget(tester, imageFinderCubit);
       await _openImageSelectorDialog(tester);
 
       //verification
@@ -90,13 +120,31 @@ void main() {
   });
 }
 
-Future<void> _makeTestWidget(WidgetTester tester) async {
+void _initImageListCubit(ImageListCubit imageListCubit, GetIt getIt) {
+  when(
+    () => imageListCubit.state,
+  ).thenAnswer((invocation) => const ImageListState.initial());
+  getIt.registerSingleton<ImageListCubit>(imageListCubit);
+}
+
+void _initImageFinderCubit(ImageFinderCubit imageFinderCubit) {
+  when(
+    () => imageFinderCubit.state,
+  ).thenAnswer((invocation) => const ImageFinderState.initial());
+}
+
+Future<void> _makeTestWidget(
+    WidgetTester tester, ImageFinderCubit imageFinderCubit) async {
   await mockNetworkImagesFor(() async {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: SiteIconInput(
-            onSelect: (value) {},
+          child: BlocProvider(
+            create: (context) => imageFinderCubit,
+            child: SiteIconInput(
+              initialImageId: 2,
+              onSelect: (value) {},
+            ),
           ),
         ),
       ),

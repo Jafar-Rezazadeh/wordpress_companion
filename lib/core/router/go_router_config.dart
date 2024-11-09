@@ -74,8 +74,11 @@ ShellRoute _mainScreenRoute() {
           GoRoute(
             name: siteSettingsScreenRoute,
             path: siteSettingsScreenRoute,
-            builder: (context, state) => BlocProvider(
-              create: (context) => getIt<SiteSettingsCubit>(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => getIt<SiteSettingsCubit>()),
+                BlocProvider(create: (context) => getIt<ImageFinderCubit>()),
+              ],
               child: const SiteSettingsScreen(),
             ),
           )

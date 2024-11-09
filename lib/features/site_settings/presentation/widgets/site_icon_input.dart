@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
+import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_finder_cubit/image_finder_cubit.dart';
 import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_list_cubit/image_list_cubit.dart';
 import 'package:wordpress_companion/features/site_settings/presentation/widgets/image_list/image_selector_widget.dart';
 import '../../../../core/core_export.dart';
 
 class SiteIconInput extends StatefulWidget {
-  final int? initialValue;
+  final int? initialImageId;
   final Function(int value) onSelect;
   const SiteIconInput({
     super.key,
-    this.initialValue,
+    this.initialImageId,
     required this.onSelect,
   });
 
@@ -23,19 +24,34 @@ class _SiteIconInputState extends State<SiteIconInput> {
   MediaEntity? selectedImage;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialImageId != null) {
+      context.read<ImageFinderCubit>().findImage(widget.initialImageId!);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const Text("نمادک سایت:"),
-        const Gap(10),
-        _imageInput(context),
-      ],
+    return BlocListener<ImageFinderCubit, ImageFinderState>(
+      listener: _imageFinderStateListener,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Text("نمادک سایت:"),
+          const Gap(10),
+          _imageInput(context),
+        ],
+      ),
     );
   }
 
-  // TODO: get image by id
+  void _imageFinderStateListener(_, ImageFinderState state) {
+    state.whenOrNull(
+      imageFound: (image) => setState(() => selectedImage = image),
+    );
+  }
 
   Widget _imageInput(BuildContext context) {
     return InkWell(

@@ -10,6 +10,9 @@ import 'package:wordpress_companion/features/site_settings/site_settings_exports
 class MockSiteSettingsCubit extends MockCubit<SiteSettingsState>
     implements SiteSettingsCubit {}
 
+class MockImageFinderCubit extends MockCubit<ImageFinderState>
+    implements ImageFinderCubit {}
+
 class DummySiteSettingsEntity extends Fake implements SiteSettingsEntity {
   @override
   String get title => "title";
@@ -44,6 +47,7 @@ class FakeUpdateSiteSettingsParams extends Fake
 
 void main() {
   late SiteSettingsCubit settingsCubit;
+  late ImageFinderCubit imageFinderCubit;
   late Widget testWidgetTree;
 
   setUpAll(() {
@@ -52,15 +56,26 @@ void main() {
 
   setUp(() {
     settingsCubit = MockSiteSettingsCubit();
+    imageFinderCubit = MockImageFinderCubit();
 
     when(
       () => settingsCubit.state,
     ).thenAnswer((_) => const SiteSettingsState.initial());
+    when(
+      () => imageFinderCubit.state,
+    ).thenAnswer((_) => const ImageFinderState.initial());
 
     testWidgetTree = ScreenUtilInit(
       child: MaterialApp(
-        home: BlocProvider(
-          create: (context) => settingsCubit,
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<SiteSettingsCubit>(
+              create: (context) => settingsCubit,
+            ),
+            BlocProvider<ImageFinderCubit>(
+              create: (context) => imageFinderCubit,
+            ),
+          ],
           child: const SiteSettingsScreen(),
         ),
       ),

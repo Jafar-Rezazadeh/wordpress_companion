@@ -140,7 +140,7 @@ class _SiteSettingsScreenState extends State<SiteSettingsScreen> {
 
   Widget _siteIconInput() {
     return SiteIconInput(
-      initialValue: settingData?.siteIcon,
+      initialImageId: settingData?.siteIcon,
       onSelect: (value) => updateSiteSettingsParamsBuilder.setIcon(value),
     );
   }
