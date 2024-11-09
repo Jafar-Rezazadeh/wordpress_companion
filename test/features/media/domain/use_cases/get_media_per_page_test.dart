@@ -49,6 +49,17 @@ void main() {
       });
     });
     group("copyWith -", () {
+      test("should return (GetMediaPerPageParams) ", () {
+        //arrange
+        final params = GetMediaPerPageParams();
+
+        //act
+        final result = params.copyWith();
+
+        //assert
+        expect(result, isA<GetMediaPerPageParams>());
+      });
+
       test(
           "should copy the properties and return (GetMediaPerPageParams) with given new properties",
           () {
