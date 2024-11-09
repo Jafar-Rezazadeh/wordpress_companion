@@ -10,7 +10,7 @@ initSiteSettingsInjections(GetIt getIt) {
     siteSettingsDataSource: siteSettingsDataSource,
   );
 
-  // cubit
+  // cubits
   getIt.registerFactory(
     () => SiteSettingsCubit(
       getSiteSettings: GetSiteSettings(
@@ -21,4 +21,6 @@ initSiteSettingsInjections(GetIt getIt) {
       ),
     ),
   );
+
+  getIt.registerFactory(() => ImageListCubit(mediaService: getIt()));
 }

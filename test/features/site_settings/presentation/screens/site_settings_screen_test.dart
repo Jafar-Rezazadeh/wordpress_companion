@@ -298,7 +298,8 @@ void main() {
                     params.timeZone == settings.timeZone &&
                     params.dateFormat == settings.dateFormat &&
                     params.timeFormat == settings.timeFormat &&
-                    params.startOfWeek == settings.startOfWeek,
+                    params.startOfWeek == settings.startOfWeek &&
+                    params.siteIcon == settings.siteIcon,
                 "is expected params",
                 true,
               ),
