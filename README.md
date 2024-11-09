@@ -1,6 +1,5 @@
 ![Coverage](https://img.shields.io/badge/Coverage-0%25-lightgrey)
 
-
 # WordPress Companion
 
 This is a Flutter application that interacts with the WordPress REST API to display and manage WordPress content, such as posts, categories, tags, comments, users, media, pages, and menus.
