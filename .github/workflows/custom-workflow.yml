@@ -42,11 +42,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Commit only if there are changes
-          if ! git diff --exit-code; then
-              git add README.md
-              git commit -m "Update coverage badge in README.md"
-              git push
-          fi
+
+          git add README.md
+          git commit -m "Update coverage badge in README.md"
+          git push
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
