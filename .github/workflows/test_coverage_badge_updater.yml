@@ -42,7 +42,20 @@ jobs:
         run: |
           # Replace the number in the coverage badge URL with the new percentage
           echo "coverage_percentage: $COVERAGE_PERCENTAGE"
-          sed -i "s/!\[Coverage\](https:\/\/img.shields.io\/badge\/Test--Coverage-[0-9.]*-lightgrey)/![Coverage](https:\/\/img.shields.io\/badge\/Test--Coverage-${COVERAGE_PERCENTAGE}-lightgrey)/" README.md
+
+          # Determine the color based on COVERAGE_PERCENTAGE
+          if (( $(echo "$COVERAGE_PERCENTAGE < 50" | bc -l) )); then
+              COLOR="red"
+          elif (( $(echo "$COVERAGE_PERCENTAGE < 90" | bc -l) )); then
+              COLOR="yellow"
+          else
+              COLOR="lightgreen"
+          fi
+
+          # Display the selected color for debugging
+          echo "Selected color: $COLOR"
+
+          sed -i "s/!\[Coverage\](https:\/\/img.shields.io\/badge\/Test--Coverage-[0-9.]*-[0-9a-zA-Z]*)/![Coverage](https:\/\/img.shields.io\/badge\/Test--Coverage-${COVERAGE_PERCENTAGE}-${COLOR})/" README.md
 
       - name: Commit Changes
         if: env.coverage_file_exists == 'true'
