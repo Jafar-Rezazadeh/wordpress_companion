@@ -45,11 +45,11 @@ jobs:
 
           # Determine the color based on COVERAGE_PERCENTAGE
           if (( $(echo "$COVERAGE_PERCENTAGE < 50" | bc -l) )); then
-              COLOR="red"
+              COLOR="critical"
           elif (( $(echo "$COVERAGE_PERCENTAGE < 90" | bc -l) )); then
               COLOR="yellow"
           else
-              COLOR="lightgreen"
+              COLOR="success"
           fi
 
           # Display the selected color for debugging
