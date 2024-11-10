@@ -1,4 +1,4 @@
-![Coverage](https://img.shields.io/badge/Test--Coverage-97.56-lightgrey)
+![Coverage](https://img.shields.io/badge/Test--Coverage-97.63-lightgrey)
 
 # WordPress Companion
 
