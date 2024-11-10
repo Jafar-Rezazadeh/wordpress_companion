@@ -26,6 +26,7 @@ jobs:
 
           if [ "$total_lines" -gt 0 ]; then
           coverage_percentage=$(echo "scale=2; $covered_lines * 100 / $total_lines" | bc)
+          echo "coverage=$coverage_percentage"
           else
           coverage_percentage="0.00"
           fi
