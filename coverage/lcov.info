@@ -1,9 +1,9 @@
 SF:lib\core\entities\profile_avatar.dart
 DA:7,1
-DA:12,1
-DA:13,4
+DA:12,0
+DA:13,0
 LF:3
-LH:3
+LH:1
 end_of_record
 SF:lib\core\errors\failures.dart
 DA:7,17
