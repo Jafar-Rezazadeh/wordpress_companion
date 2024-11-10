@@ -35,7 +35,7 @@ jobs:
         if: env.coverage_file_exists == 'true'
         run: |
           # Replace the number in the coverage badge URL with the new percentage
-          sed -i "s/!\[Coverage\](https:\/\/img.shields.io\/badge\/Coverage-[0-9.]*-lightgrey)/![Coverage](https:\/\/img.shields.io\/badge\/Coverage-${{ steps.calculate_coverage.outputs.coverage }}-lightgrey)/" README.md
+          sed -i "s/!\[Coverage\](https:\/\/img.shields.io\/badge\/Coverage-[0-9.]*-lightgrey)/![Coverage](https:\/\/img.shields.io\/badge\/Coverage-${{ steps.calculate_coverage.outputs.coverage_percentage }}-lightgrey)/" README.md
 
       - name: Commit Changes
         if: env.coverage_file_exists == 'true'
