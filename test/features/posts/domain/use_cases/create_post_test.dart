@@ -6,7 +6,7 @@ import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockPostsRepository extends Mock implements PostsRepository {}
 
-class FakeCreatePostParams extends Fake implements CreatePostParams {}
+class FakePostParams extends Fake implements PostParams {}
 
 class FakePostEntity extends Fake implements PostEntity {}
 
@@ -22,7 +22,7 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(FakeCreatePostParams());
+    registerFallbackValue(FakePostParams());
   });
 
   test("should return create post as (PostEntity) when success", () async {
@@ -32,7 +32,7 @@ void main() {
     ).thenAnswer((_) async => right(FakePostEntity()));
 
     //act
-    final result = await createPost(FakeCreatePostParams());
+    final result = await createPost(FakePostParams());
     final rightValue = result.fold((l) => null, (r) => r);
 
     //assert
@@ -47,7 +47,7 @@ void main() {
     ).thenAnswer((_) async => left(FakeFailure()));
 
     //act
-    final result = await createPost(FakeCreatePostParams());
+    final result = await createPost(FakePostParams());
     final leftValue = result.fold((l) => l, (r) => null);
 
     //assert

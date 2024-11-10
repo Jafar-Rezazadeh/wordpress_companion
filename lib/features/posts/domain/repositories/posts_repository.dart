@@ -6,7 +6,7 @@ abstract class PostsRepository {
   Future<Either<Failure, PostsPageResult>> getPostsPerPage(
     GetPostsPerPageParams params,
   );
-  Future<Either<Failure, PostEntity>> createPost(CreatePostParams params);
-  Future<Either<Failure, PostEntity>> updatePost(UpdatePostParams params);
+  Future<Either<Failure, PostEntity>> createPost(PostParams params);
+  Future<Either<Failure, PostEntity>> updatePost(PostParams params);
   Future<Either<Failure, PostEntity>> deletePost(int id);
 }

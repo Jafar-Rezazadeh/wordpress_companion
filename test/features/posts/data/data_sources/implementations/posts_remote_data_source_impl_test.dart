@@ -1,0 +1,240 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/posts/posts_exports.dart';
+
+import '../../../../../json_response_simulator.dart';
+
+void main() {
+  late Dio dio;
+  late DioAdapter dioAdapter;
+  late PostsRemoteDataSourceImpl postsRemoteDataSourceImpl;
+
+  setUp(() {
+    dio = Dio(BaseOptions(baseUrl: "https://example.com"));
+    dioAdapter = DioAdapter(
+      dio: dio,
+      printLogs: true,
+      matcher: const FullHttpRequestMatcher(needsExactBody: true),
+    );
+    postsRemoteDataSourceImpl = PostsRemoteDataSourceImpl(dio: dio);
+  });
+
+  group("getPostsPerPage -", () {
+    test(
+        "should return (PostsPageResult) when success with (json) response data",
+        () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.ok,
+          [JsonResponseSimulator.post],
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(),
+      );
+
+      //assert
+      expect(result, isA<PostsPageResult>());
+    });
+
+    test(
+        "should return (PostsPageResult) when success with (jsonString) response data",
+        () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.ok,
+          jsonEncode([JsonResponseSimulator.post]),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(),
+      );
+
+      //assert
+      expect(result, isA<PostsPageResult>());
+    });
+
+    test(
+        "should PostsPageResult.hasNextPage be (true) if current page is less than x-wp-totalpages ",
+        () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.ok,
+          headers: {
+            "x-wp-totalpages": ["9"]
+          },
+          jsonEncode([JsonResponseSimulator.post]),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(page: 6),
+      );
+
+      //assert
+      expect(result.hasNextPage, true);
+    });
+    test(
+        "should PostsPageResult.hasNextPage be (false) if current page is NOT less than x-wp-totalpages",
+        () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.ok,
+          headers: {
+            "x-wp-totalpages": ["9"]
+          },
+          jsonEncode([JsonResponseSimulator.post]),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(page: 9),
+      );
+
+      //assert
+      expect(result.hasNextPage, false);
+    });
+
+    test("should request has expected query params ", () async {
+      //arrange
+      Map<String, dynamic> params = {};
+      dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          params = options.queryParameters;
+          return handler.next(options);
+        },
+      ));
+
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        queryParameters: {
+          "page": Matchers.any,
+          "per_page": Matchers.any,
+        },
+        (server) => server.reply(
+          HttpStatus.ok,
+          [JsonResponseSimulator.post],
+        ),
+      );
+
+      //act
+      await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(),
+      );
+
+      //assert
+      expect(params.keys, contains("page"));
+      expect(params.keys, contains("per_page"));
+    });
+
+    test(
+        "should add nullable params with correct values when they are not null",
+        () async {
+      //arrange
+      var params = {};
+
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            params = options.queryParameters;
+            return handler.next(options);
+          },
+        ),
+      );
+
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        queryParameters: {
+          "page": Matchers.any,
+          "per_page": Matchers.any,
+          "search": Matchers.any,
+          "after": Matchers.any,
+          "before": Matchers.any,
+          "categories": "1,2,3",
+        },
+        (server) => server.reply(
+          HttpStatus.ok,
+          [JsonResponseSimulator.post],
+        ),
+      );
+
+      //act
+      await postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(
+          search: "test",
+          after: "test",
+          before: "test",
+          categories: [1, 2, 3],
+        ),
+      );
+
+      //assert
+      final expectedKeys = [
+        "page",
+        "per_page",
+        "search",
+        "after",
+        "before",
+        "categories"
+      ];
+      for (var key in expectedKeys) {
+        expect(params.keys, contains(key));
+      }
+      expect(params["categories"], "1,2,3");
+    });
+
+    test("should Not Add Nullable params when they are null", () async {
+      //arrange
+      var params = {};
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            params = options.queryParameters;
+            return handler.next(options);
+          },
+        ),
+      );
+
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        queryParameters: {
+          "page": Matchers.any,
+          "per_page": Matchers.any,
+        },
+        (server) => server.reply(
+          HttpStatus.ok,
+          [JsonResponseSimulator.post],
+        ),
+      );
+
+      //act
+      await postsRemoteDataSourceImpl.getPostsPerPage(GetPostsPerPageParams());
+
+      //assert
+      final expectedKeys = ["page", "per_page"];
+      for (var key in expectedKeys) {
+        expect(params.keys, contains(key));
+      }
+      expect(params.keys.length, expectedKeys.length);
+    });
+  });
+}

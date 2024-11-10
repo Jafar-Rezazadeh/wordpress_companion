@@ -8,7 +8,7 @@ class MockPostsRepository extends Mock implements PostsRepository {}
 
 class FakePostEntity extends Fake implements PostEntity {}
 
-class FakeUpdatePostParams extends Fake implements UpdatePostParams {}
+class FakePostParams extends Fake implements PostParams {}
 
 class FakeFailure extends Fake implements Failure {}
 
@@ -22,7 +22,7 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(FakeUpdatePostParams());
+    registerFallbackValue(FakePostParams());
   });
 
   test("should return update post as (PostEntity) when success", () async {
@@ -32,7 +32,7 @@ void main() {
     ).thenAnswer((_) async => right(FakePostEntity()));
 
     //act
-    final result = await updatePost(FakeUpdatePostParams());
+    final result = await updatePost(FakePostParams());
     final rightValue = result.fold((l) => null, (r) => r);
 
     //assert
@@ -47,7 +47,7 @@ void main() {
     ).thenAnswer((_) async => left(FakeFailure()));
 
     //act
-    final result = await updatePost(FakeUpdatePostParams());
+    final result = await updatePost(FakePostParams());
     final leftValue = result.fold((l) => l, (r) => null);
 
     //assert

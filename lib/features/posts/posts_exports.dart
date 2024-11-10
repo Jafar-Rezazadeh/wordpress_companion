@@ -1,3 +1,8 @@
+// Data
+export 'package:wordpress_companion/features/posts/data/data_sources/implementations/posts_remote_data_source_impl.dart';
+export 'package:wordpress_companion/features/posts/data/data_sources/abstracts/posts_remote_data_source.dart';
+export 'package:wordpress_companion/features/posts/data/models/post_model.dart';
+
 // Domain
 export 'package:wordpress_companion/features/posts/domain/entities/post_entity.dart';
 export 'package:wordpress_companion/features/posts/domain/entities/posts_page_result.dart';
@@ -6,3 +11,4 @@ export 'package:wordpress_companion/features/posts/domain/use_cases/get_posts_pe
 export 'package:wordpress_companion/features/posts/domain/use_cases/create_post.dart';
 export 'package:wordpress_companion/features/posts/domain/use_cases/update_post.dart';
 export 'package:wordpress_companion/features/posts/domain/use_cases/delete_post.dart';
+export 'package:wordpress_companion/features/posts/domain/use_cases/post_params.dart';
