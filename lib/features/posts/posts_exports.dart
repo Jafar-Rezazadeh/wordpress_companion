@@ -12,3 +12,6 @@ export 'package:wordpress_companion/features/posts/domain/use_cases/create_post.
 export 'package:wordpress_companion/features/posts/domain/use_cases/update_post.dart';
 export 'package:wordpress_companion/features/posts/domain/use_cases/delete_post.dart';
 export 'package:wordpress_companion/features/posts/domain/use_cases/post_params.dart';
+
+// Presentation
+export 'package:wordpress_companion/features/posts/presentation/state_management/posts_cubit/posts_cubit.dart';
