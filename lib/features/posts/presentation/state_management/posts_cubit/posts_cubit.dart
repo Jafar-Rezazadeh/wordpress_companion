@@ -15,10 +15,19 @@ typedef GetPostsFilters = ({
 
 class PostsCubit extends Cubit<PostsState> {
   final GetPostsPerPage _getPostsPerPage;
+  final DeletePost _deletePost;
+  final CreatePost _createPost;
+  final UpdatePost _updatePost;
 
   PostsCubit({
     required GetPostsPerPage getPostsPerPage,
+    required DeletePost deletePost,
+    required CreatePost createPost,
+    required UpdatePost updatePost,
   })  : _getPostsPerPage = getPostsPerPage,
+        _deletePost = deletePost,
+        _createPost = createPost,
+        _updatePost = updatePost,
         super(const PostsState.initial());
 
   GetPostsPerPageParams getPostsPerPageParams = GetPostsPerPageParams();
@@ -91,5 +100,44 @@ class PostsCubit extends Cubit<PostsState> {
       before: filters.before,
       categories: filters.categories,
     );
+  }
+
+  deletePost(int id) async {
+    if (_stateIsNotLoading()) {
+      emit(const PostsState.loading());
+
+      final result = await _deletePost(id);
+
+      result.fold(
+        (failure) => emit(PostsState.error(failure)),
+        (deletedPost) => emit(const PostsState.needRefresh()),
+      );
+    }
+  }
+
+  createPosts(PostParams postParams) async {
+    if (_stateIsNotLoading()) {
+      emit(const PostsState.loading());
+
+      final result = await _createPost(postParams);
+
+      result.fold(
+        (failure) => emit(PostsState.error(failure)),
+        (createdPost) => emit(const PostsState.needRefresh()),
+      );
+    }
+  }
+
+  updatePosts(PostParams postParams) async {
+    if (_stateIsNotLoading()) {
+      emit(const PostsState.loading());
+
+      final result = await _updatePost(postParams);
+
+      result.fold(
+        (failure) => emit(PostsState.error(failure)),
+        (updatedPost) => emit(const PostsState.needRefresh()),
+      );
+    }
   }
 }

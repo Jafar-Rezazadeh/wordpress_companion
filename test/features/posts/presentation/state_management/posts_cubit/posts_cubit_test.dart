@@ -7,6 +7,12 @@ import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockGetPostsPerPage extends Mock implements GetPostsPerPage {}
 
+class MockDeletePost extends Mock implements DeletePost {}
+
+class MockCreatePost extends Mock implements CreatePost {}
+
+class MockUpdatePost extends Mock implements UpdatePost {}
+
 class FakePostsPageResult extends Fake implements PostsPageResult {
   @override
   bool get hasNextPage => true;
@@ -18,17 +24,31 @@ class FakeFailure extends Fake implements Failure {}
 
 class FakePostEntity extends Fake implements PostEntity {}
 
+class FakePostParams extends Fake implements PostParams {}
+
 void main() {
   late MockGetPostsPerPage mockGetPostsPerPage;
+  late MockDeletePost mockDeletePost;
+  late MockCreatePost mockCreatePost;
+  late MockUpdatePost mockUpdatePost;
   late PostsCubit postsCubit;
 
   setUpAll(() {
     registerFallbackValue(GetPostsPerPageParams());
+    registerFallbackValue(FakePostParams());
   });
 
   setUp(() {
     mockGetPostsPerPage = MockGetPostsPerPage();
-    postsCubit = PostsCubit(getPostsPerPage: mockGetPostsPerPage);
+    mockDeletePost = MockDeletePost();
+    mockCreatePost = MockCreatePost();
+    mockUpdatePost = MockUpdatePost();
+    postsCubit = PostsCubit(
+      getPostsPerPage: mockGetPostsPerPage,
+      deletePost: mockDeletePost,
+      createPost: mockCreatePost,
+      updatePost: mockUpdatePost,
+    );
   });
 
   group("getFirstPage -", () {
@@ -274,6 +294,174 @@ void main() {
           ),
         ),
       ),
+    );
+  });
+
+  group("deletePost -", () {
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading , needsRefresh] when success to delete post',
+      setUp: () {
+        when(
+          () => mockDeletePost.call(any()),
+        ).thenAnswer((_) async => right(FakePostEntity()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.deletePost(1),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(needRefresh: () => true),
+          "is needsRefresh state",
+          true,
+        ),
+      ],
+    );
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading , error] when fails to delete post',
+      setUp: () {
+        when(
+          () => mockDeletePost.call(any()),
+        ).thenAnswer((_) async => left(FakeFailure()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.deletePost(1),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(error: (_) => true),
+          "is error state",
+          true,
+        ),
+      ],
+    );
+
+    blocTest<PostsCubit, PostsState>(
+      'emits [] when current state is loading',
+      seed: () => const PostsState.loading(),
+      setUp: () {},
+      build: () => postsCubit,
+      act: (cubit) => cubit.deletePost(1),
+      expect: () => [],
+    );
+  });
+
+  group("createPost -", () {
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading, needsRefresh] when success to create',
+      setUp: () {
+        when(
+          () => mockCreatePost.call(any()),
+        ).thenAnswer((_) async => right(FakePostEntity()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.createPosts(FakePostParams()),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(needRefresh: () => true),
+          "is needsRefresh state",
+          true,
+        ),
+      ],
+    );
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading, error] when fails to create',
+      setUp: () {
+        when(
+          () => mockCreatePost.call(any()),
+        ).thenAnswer((_) async => left(FakeFailure()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.createPosts(FakePostParams()),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(error: (_) => true),
+          "is error state",
+          true,
+        ),
+      ],
+    );
+
+    blocTest<PostsCubit, PostsState>(
+      'emits [] when when current state is loading',
+      seed: () => const PostsState.loading(),
+      setUp: () {},
+      build: () => postsCubit,
+      act: (cubit) => cubit.createPosts(FakePostParams()),
+      expect: () => [],
+    );
+  });
+
+  group("updatePost -", () {
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading, needsRefresh] when success',
+      setUp: () {
+        when(
+          () => mockUpdatePost.call(any()),
+        ).thenAnswer((_) async => right(FakePostEntity()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.updatePosts(FakePostParams()),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(needRefresh: () => true),
+          "is needsRefresh state",
+          true,
+        ),
+      ],
+    );
+    blocTest<PostsCubit, PostsState>(
+      'emits [loading, error] when fails',
+      setUp: () {
+        when(
+          () => mockUpdatePost.call(any()),
+        ).thenAnswer((_) async => left(FakeFailure()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.updatePosts(FakePostParams()),
+      expect: () => [
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(loading: () => true),
+          "is loading state",
+          true,
+        ),
+        isA<PostsState>().having(
+          (state) => state.whenOrNull(error: (_) => true),
+          "is error state",
+          true,
+        ),
+      ],
+    );
+
+    blocTest<PostsCubit, PostsState>(
+      'emits [] when current state is loading',
+      seed: () => const PostsState.loading(),
+      setUp: () {},
+      build: () => postsCubit,
+      act: (cubit) => cubit.updatePosts(FakePostParams()),
+      expect: () => [],
     );
   });
 }
