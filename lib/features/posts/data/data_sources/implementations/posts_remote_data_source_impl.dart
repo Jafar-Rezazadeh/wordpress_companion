@@ -8,15 +8,25 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
 
   PostsRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
   @override
-  Future<PostModel> createPost(PostParams params) {
-    // TODO: implement createPost
-    throw UnimplementedError();
+  Future<PostModel> createPost(PostParams params) async {
+    final response = await _dio.post(
+      "$wpV2EndPoint/posts",
+      data: PostModel.toJsonFromParams(params),
+    );
+
+    final jsonData = ApiResponseHandler.convertToJson(response.data);
+
+    return PostModel.fromJson(jsonData);
   }
 
   @override
-  Future<PostModel> deletePost(int id) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<PostModel> deletePost(int id) async {
+    final response = await _dio.delete(
+      "$wpV2EndPoint/posts/$id",
+    );
+    final jsonData = ApiResponseHandler.convertToJson(response.data);
+
+    return PostModel.fromJson(jsonData);
   }
 
   @override
@@ -47,8 +57,14 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
   }
 
   @override
-  Future<PostModel> updatePost(PostParams params) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  Future<PostModel> updatePost(PostParams params) async {
+    final response = await _dio.put(
+      "$wpV2EndPoint/posts/${params.id}",
+      data: PostModel.toJsonFromParams(params),
+    );
+
+    final jsonData = ApiResponseHandler.convertToJson(response.data);
+
+    return PostModel.fromJson(jsonData);
   }
 }

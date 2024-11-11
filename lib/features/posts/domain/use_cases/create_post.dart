@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/posts/domain/use_cases/post_params.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class CreatePost implements UseCase<PostEntity, PostParams> {

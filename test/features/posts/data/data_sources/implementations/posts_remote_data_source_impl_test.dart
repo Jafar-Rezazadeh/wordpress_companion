@@ -7,7 +7,10 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
+import '../../../../../dummy_params.dart';
 import '../../../../../json_response_simulator.dart';
+
+class FakePostParams extends Fake implements PostParams {}
 
 void main() {
   late Dio dio;
@@ -22,6 +25,130 @@ void main() {
       matcher: const FullHttpRequestMatcher(needsExactBody: true),
     );
     postsRemoteDataSourceImpl = PostsRemoteDataSourceImpl(dio: dio);
+  });
+
+  group("createPost -", () {
+    test(
+        "should return created post as (PostModel) when success with (json) response",
+        () async {
+      //arrange
+      dioAdapter.onPost(
+        "$wpV2EndPoint/posts",
+        data: Matchers.isA<Map<String, dynamic>>(),
+        (server) => server.reply(
+          HttpStatus.created,
+          JsonResponseSimulator.post,
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.createPost(
+        DummyParams.postParams,
+      );
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test(
+        "should return created post as (PostModel) when success with (jsonString) response",
+        () async {
+      //arrange
+      dioAdapter.onPost(
+        "$wpV2EndPoint/posts",
+        data: Matchers.isA<Map<String, dynamic>>(),
+        (server) => server.reply(
+          HttpStatus.created,
+          jsonEncode(JsonResponseSimulator.post),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.createPost(
+        DummyParams.postParams,
+      );
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test("should throw (DioException) when response is a failure", () async {
+      //arrange
+      dioAdapter.onPost(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.badRequest,
+          null,
+        ),
+      );
+
+      //act
+      final result =
+          postsRemoteDataSourceImpl.createPost(DummyParams.postParams);
+
+      //assert
+      expect(result, throwsA(isA<DioException>()));
+    });
+  });
+
+  group("deletePost -", () {
+    test(
+        "should return updated post as(PostModel) when success with (json) response",
+        () async {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onDelete(
+        "$wpV2EndPoint/posts/${params.id}",
+        (server) => server.reply(
+          HttpStatus.ok,
+          JsonResponseSimulator.post,
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.deletePost(params.id);
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test(
+        "should return updated post as (PostModel) when success with (jsonString) response",
+        () async {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onDelete(
+        "$wpV2EndPoint/posts/${params.id}",
+        (server) => server.reply(
+          HttpStatus.ok,
+          jsonEncode(JsonResponseSimulator.post),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.deletePost(params.id);
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test("should throw (DioException) when response is a failure", () {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onDelete(
+        "$wpV2EndPoint/posts/${params.id}",
+        (server) => server.reply(
+          HttpStatus.badRequest,
+          null,
+        ),
+      );
+
+      //act
+      final result = postsRemoteDataSourceImpl.deletePost(params.id);
+
+      //assert
+      expect(result, throwsA(isA<DioException>()));
+    });
   });
 
   group("getPostsPerPage -", () {
@@ -235,6 +362,87 @@ void main() {
         expect(params.keys, contains(key));
       }
       expect(params.keys.length, expectedKeys.length);
+    });
+
+    test("should throw (DioException) when response is a failure", () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/posts",
+        (server) => server.reply(
+          HttpStatus.badRequest,
+          null,
+        ),
+      );
+
+      //act
+      final result = postsRemoteDataSourceImpl.getPostsPerPage(
+        GetPostsPerPageParams(),
+      );
+
+      //assert
+      expect(result, throwsA(isA<DioException>()));
+    });
+  });
+
+  group("updatePost -", () {
+    test(
+        "should return updated post as (PostModel) when success with (json) response",
+        () async {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onPut(
+        "$wpV2EndPoint/posts/${params.id}",
+        data: Matchers.isA<Map<String, dynamic>>(),
+        (server) => server.reply(
+          HttpStatus.ok,
+          JsonResponseSimulator.post,
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.updatePost(params);
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test(
+        "should return updated post as (PostModel) when success with (jsonString) response",
+        () async {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onPut(
+        "$wpV2EndPoint/posts/${params.id}",
+        data: Matchers.isA<Map<String, dynamic>>(),
+        (server) => server.reply(
+          HttpStatus.ok,
+          jsonEncode(JsonResponseSimulator.post),
+        ),
+      );
+
+      //act
+      final result = await postsRemoteDataSourceImpl.updatePost(params);
+
+      //assert
+      expect(result, isA<PostModel>());
+    });
+
+    test("should throw (DioException) when response is a failure", () {
+      //arrange
+      final params = DummyParams.postParams;
+      dioAdapter.onPut(
+        "$wpV2EndPoint/posts/${params.id}",
+        (server) => server.reply(
+          HttpStatus.badRequest,
+          null,
+        ),
+      );
+
+      //act
+      final result = postsRemoteDataSourceImpl.updatePost(params);
+
+      //assert
+      expect(result, throwsA(isA<DioException>()));
     });
   });
 }
