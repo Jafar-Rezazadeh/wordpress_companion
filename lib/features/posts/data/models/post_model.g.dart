@@ -23,7 +23,8 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       featuredMedia: (json['featured_media'] as num).toInt(),
       featureMediaLink:
           PostModel._featureMediaLinkReadValue(json, 'featureMediaLink')
-              as String,
+                  as String? ??
+              '',
       commentStatus: json['comment_status'] as String,
       categories: (json['categories'] as List<dynamic>)
           .map((e) => (e as num).toInt())

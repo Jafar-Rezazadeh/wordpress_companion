@@ -271,6 +271,9 @@ void main() {
       //assert
       expect(params.keys, contains("page"));
       expect(params.keys, contains("per_page"));
+      expect(params.keys, contains("_embed"));
+
+      expect(params["_embed"], contains("author,wp:featuredmedia"));
     });
 
     test(
@@ -343,10 +346,6 @@ void main() {
 
       dioAdapter.onGet(
         "$wpV2EndPoint/posts",
-        queryParameters: {
-          "page": Matchers.any,
-          "per_page": Matchers.any,
-        },
         (server) => server.reply(
           HttpStatus.ok,
           [JsonResponseSimulator.post],
@@ -357,7 +356,7 @@ void main() {
       await postsRemoteDataSourceImpl.getPostsPerPage(GetPostsPerPageParams());
 
       //assert
-      final expectedKeys = ["page", "per_page"];
+      final expectedKeys = ["page", "per_page", "_embed"];
       for (var key in expectedKeys) {
         expect(params.keys, contains(key));
       }

@@ -36,6 +36,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
       queryParameters: {
         "page": params.page,
         "per_page": params.perPage,
+        "_embed": "author,wp:featuredmedia",
         if (params.search != null) "search": params.search,
         if (params.after != null) "after": params.after,
         if (params.before != null) "before": params.before,

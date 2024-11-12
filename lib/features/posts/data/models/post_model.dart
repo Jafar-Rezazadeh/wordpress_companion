@@ -87,10 +87,13 @@ class PostModel extends PostEntity {
   int get featuredMedia => super.featuredMedia;
 
   @override
-  @JsonKey(readValue: _featureMediaLinkReadValue, includeToJson: false)
+  @JsonKey(
+      readValue: _featureMediaLinkReadValue,
+      includeToJson: false,
+      defaultValue: "")
   String get featureMediaLink => super.featureMediaLink;
   static _featureMediaLinkReadValue(Map<dynamic, dynamic> json, String key) =>
-      json["_embedded"]["wp:featuredmedia"][0]["source_url"];
+      json["_embedded"]["wp:featuredmedia"]?[0]?["source_url"];
 
   @override
   @JsonKey(name: "comment_status", includeToJson: false)
