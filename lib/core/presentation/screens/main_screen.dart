@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
 import 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
+import 'package:wordpress_companion/features/posts/presentation/pages/posts_page.dart';
 import '../cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/custom_drawer.dart';
@@ -64,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       Container(
         key: const Key("posts_page"),
-        child: const Center(child: Icon(Icons.list_alt)),
+        child: const PostsPage(),
       ),
       Container(
         key: const Key("categories_page"),

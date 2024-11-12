@@ -20,7 +20,7 @@ void main() {
     });
 
     testWidgets(
-        "should show load_on_scroll_widget when showBottomLoading is true",
+        "should show on_scroll_loading_widget when showBottomLoading is true",
         (tester) async {
       //arrange
       await tester.pumpWidget(
@@ -31,7 +31,7 @@ void main() {
       );
       await tester.pump(Durations.short1);
       //assert
-      expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
+      expect(find.byKey(const Key("on_scroll_loading_widget")), findsOneWidget);
     });
   });
 
@@ -78,6 +78,30 @@ void main() {
     });
   });
 
+  group("separatorWidget -", () {
+    testWidgets("should set the given widget as separator ", (tester) async {
+      //arrange
+      await tester.pumpWidget(const _TestWidget(
+        separatorWidget: Text("sep"),
+        data: ["test", "test2"],
+      ));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byKey(const Key("separator_widget")), findsWidgets);
+    });
+    testWidgets("should Not have separator it is null", (tester) async {
+      //arrange
+      await tester.pumpWidget(const _TestWidget(
+        separatorWidget: null,
+        data: ["test", "test2"],
+      ));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byKey(const Key("separator_widget")), findsNothing);
+    });
+  });
   testWidgets("should invoke the onRefresh method when dragged top",
       (tester) async {
     //arrange
@@ -173,6 +197,7 @@ class _TestWidget extends StatelessWidget {
   final List<String>? data;
   final bool? showBottomLoading;
   final bool? showFullScreenLoading;
+  final Widget? separatorWidget;
   static Future<void> _onRefresh() async {}
   static _onScrollBottom() {}
   const _TestWidget({
@@ -181,6 +206,7 @@ class _TestWidget extends StatelessWidget {
     this.data,
     this.showBottomLoading,
     this.showFullScreenLoading,
+    this.separatorWidget,
   });
 
   @override
@@ -188,6 +214,7 @@ class _TestWidget extends StatelessWidget {
     return MaterialApp(
       home: InfiniteListView(
         onRefresh: onRefresh,
+        separatorWidget: separatorWidget,
         onScrolledToBottom: onScrolledToBottom,
         data: data ?? [],
         itemBuilder: (item) => Text(item),

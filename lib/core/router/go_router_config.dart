@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
+import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import '../../features/site_settings/site_settings_exports.dart';
 import '../presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../presentation/screens/main_screen.dart';
@@ -95,9 +96,8 @@ Widget _mainScreenProvider(context, state, child) {
         create: (context) =>
             GlobalProfileCubit(profileService: getIt<ProfileService>()),
       ),
-      BlocProvider(
-        create: (context) => getIt<MediaCubit>(),
-      )
+      BlocProvider(create: (context) => getIt<MediaCubit>()),
+      BlocProvider(create: (context) => getIt<PostsCubit>()),
     ],
     child: child,
   );

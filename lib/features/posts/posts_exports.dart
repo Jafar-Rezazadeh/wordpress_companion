@@ -2,6 +2,7 @@
 export 'package:wordpress_companion/features/posts/data/data_sources/implementations/posts_remote_data_source_impl.dart';
 export 'package:wordpress_companion/features/posts/data/data_sources/abstracts/posts_remote_data_source.dart';
 export 'package:wordpress_companion/features/posts/data/models/post_model.dart';
+export 'package:wordpress_companion/features/posts/data/repositories/posts_repository_impl.dart';
 
 // Domain
 export 'package:wordpress_companion/features/posts/domain/entities/post_entity.dart';
@@ -14,4 +15,4 @@ export 'package:wordpress_companion/features/posts/domain/use_cases/delete_post.
 export 'package:wordpress_companion/features/posts/domain/use_cases/post_params.dart';
 
 // Presentation
-export 'package:wordpress_companion/features/posts/presentation/state_management/posts_cubit/posts_cubit.dart';
+export 'package:wordpress_companion/features/posts/presentation/login_holders/posts_cubit/posts_cubit.dart';

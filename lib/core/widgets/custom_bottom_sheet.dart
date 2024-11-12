@@ -5,11 +5,11 @@ import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 
 class CustomBottomSheets {
-  static showFailureBottomSheet({
+  static Future<void> showFailureBottomSheet({
     required BuildContext context,
     required Failure failure,
-  }) {
-    showModalBottomSheet(
+  }) async {
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(
@@ -22,13 +22,13 @@ class CustomBottomSheets {
     );
   }
 
-  static showFilterBottomSheet({
+  static Future<void> showFilterBottomSheet({
     required BuildContext context,
     required Function() onApply,
     required Function() onClear,
     required List<Widget> children,
-  }) {
-    showModalBottomSheet(
+  }) async {
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(
