@@ -6,13 +6,6 @@ import 'package:wordpress_companion/features/posts/posts_exports.dart';
 part 'posts_state.dart';
 part 'posts_cubit.freezed.dart';
 
-typedef GetPostsFilters = ({
-  String? search,
-  String? after,
-  String? before,
-  List<int>? categories,
-});
-
 class PostsCubit extends Cubit<PostsState> {
   final GetPostsPerPage _getPostsPerPage;
   final DeletePost _deletePost;
@@ -32,11 +25,16 @@ class PostsCubit extends Cubit<PostsState> {
 
   GetPostsPerPageParams getPostsPerPageParams = GetPostsPerPageParams();
 
-  getFirstPage() async {
+  getFirstPage(GetPostsFilters filters) async {
     if (_stateIsNotLoading()) {
       emit(const PostsState.loading());
 
-      getPostsPerPageParams = GetPostsPerPageParams();
+      getPostsPerPageParams = GetPostsPerPageParams(
+        search: filters.search,
+        after: filters.after,
+        before: filters.before,
+        categories: filters.categories,
+      );
 
       final result = await _getPostsPerPage(getPostsPerPageParams);
 
@@ -50,19 +48,7 @@ class PostsCubit extends Cubit<PostsState> {
   bool _stateIsNotLoading() =>
       state.maybeWhen(loading: () => false, orElse: () => true);
 
-  getNextPageData({
-    String? after,
-    String? before,
-    List<int>? categories,
-    String? search,
-  }) async {
-    final GetPostsFilters filters = (
-      after: after,
-      before: before,
-      categories: categories,
-      search: search,
-    );
-
+  getNextPageData(GetPostsFilters filters) async {
     if (_stateIsNotLoading()) {
       await _getNextPageData(filters);
     }

@@ -34,9 +34,15 @@ class CustomBottomSheets {
       constraints: BoxConstraints(
         maxHeight: 0.8.sh,
       ),
-      builder: (_) => _FilterBottomSheetWidget(
-        onApply: onApply,
-        onClear: onClear,
+      builder: (dialogContext) => _FilterBottomSheetWidget(
+        onApply: () {
+          Navigator.of(dialogContext).pop();
+          onApply();
+        },
+        onClear: () {
+          Navigator.of(dialogContext).pop();
+          onClear();
+        },
         children: children,
       ),
     );

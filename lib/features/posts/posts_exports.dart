@@ -16,3 +16,6 @@ export 'package:wordpress_companion/features/posts/domain/use_cases/post_params.
 
 // Presentation
 export 'package:wordpress_companion/features/posts/presentation/login_holders/posts_cubit/posts_cubit.dart';
+
+// utils
+export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/get_posts_filters.dart';

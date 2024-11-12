@@ -14,12 +14,15 @@ class PostsPage extends StatefulWidget {
 class _PostsPageState extends State<PostsPage> {
   List<PostEntity> posts = [];
   bool isLoading = false;
+  final filters = GetPostsFilters();
 
   @override
   void initState() {
     super.initState();
-    context.read<PostsCubit>().getFirstPage();
+    _getFirstPage();
   }
+
+  _getFirstPage() => context.read<PostsCubit>().getFirstPage(filters);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +40,36 @@ class _PostsPageState extends State<PostsPage> {
   }
 
   Widget _header() {
-    return const PageHeaderLayout(
-        // TODO: make search and filters
-        );
+    return PageHeaderLayout(
+      rightWidget: FilterButton(
+        onPressed: () async {
+          await CustomBottomSheets.showFilterBottomSheet(
+            context: context,
+            onApply: () {},
+            onClear: () {},
+            children: [],
+          );
+        },
+      ),
+      leftWidget: CustomSearchInput(
+        onSubmit: (value) {
+          if (value != null) {
+            filters.setSearch(value);
+            _clearPosts();
+            _getFirstPage();
+          }
+        },
+        onClear: () {
+          _clearPosts();
+          filters.reset();
+          _getFirstPage();
+        },
+      ),
+    );
+  }
+
+  void _clearPosts() {
+    setState(() => posts.clear());
   }
 
   Widget _listOfPosts() {
@@ -48,11 +78,12 @@ class _PostsPageState extends State<PostsPage> {
       builder: (context, state) => Expanded(
         child: InfiniteListView<PostEntity>(
           onRefresh: () async {
-            setState(() => posts.clear());
-            context.read<PostsCubit>().getFirstPage();
+            _clearPosts();
+            filters.reset();
+            _getFirstPage();
           },
           onScrolledToBottom: () {
-            context.read<PostsCubit>().getNextPageData();
+            context.read<PostsCubit>().getNextPageData(filters);
           },
           data: posts,
           itemBuilder: (post) {
@@ -68,9 +99,6 @@ class _PostsPageState extends State<PostsPage> {
     );
   }
 
-  bool _isLoading(PostsState state) =>
-      state.maybeWhen(loading: () => true, orElse: () => false);
-
   void _postsStateListener(_, PostsState state) {
     state.whenOrNull(
       loaded: (postsPageResult) {
@@ -84,4 +112,7 @@ class _PostsPageState extends State<PostsPage> {
       },
     );
   }
+
+  bool _isLoading(PostsState state) =>
+      state.maybeWhen(loading: () => true, orElse: () => false);
 }

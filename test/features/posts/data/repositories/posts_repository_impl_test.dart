@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/posts/data/repositories/posts_repository_impl.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockPostsRemoteDataSource extends Mock implements PostsRemoteDataSource {}

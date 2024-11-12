@@ -22,23 +22,116 @@ class FakePostEntity extends Fake implements PostEntity {
 
   @override
   DateTime get date => DateTime(1);
+
+  @override
+  String get featureMediaLink => "";
 }
 
 void main() {
   late PostsCubit postsCubit;
-
+  setUpAll(() {
+    registerFallbackValue(GetPostsFilters());
+  });
   setUp(() {
     postsCubit = MockPostsCubit();
     when(() => postsCubit.state).thenAnswer((_) => const PostsState.initial());
+  });
+
+  group("header -", () {
+    group("filters -", () {
+      testWidgets("should open filter_bottom_sheet when FilterButton is tapped",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byType(FilterButton), findsOneWidget);
+
+        //act
+        await tester.tap(find.byType(FilterButton));
+        await tester.pumpAndSettle();
+
+        //assert
+        expect(find.byKey(const Key("filter_bottom_sheet")), findsOneWidget);
+      });
+    });
+    group("search input -", () {
+      testWidgets(
+          "should call the getFirstPageData and set search filter when onSubmit invoked",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byType(CustomSearchInput), findsOneWidget);
+
+        //act
+        tester
+            .widget<CustomSearchInput>(find.byType(CustomSearchInput))
+            .onSubmit("search");
+
+        //assert
+        verify(
+          () => postsCubit.getFirstPage(
+            any(
+              that: isA<GetPostsFilters>().having(
+                (filters) => filters.search == "search",
+                "is search filter set",
+                true,
+              ),
+            ),
+          ),
+        );
+      });
+
+      testWidgets(
+          "should clear posts reset filters and call getFirstPageData when onClear invoked",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byType(CustomSearchInput), findsOneWidget);
+
+        //act
+        tester
+            .widget<CustomSearchInput>(find.byType(CustomSearchInput))
+            .onSubmit("test");
+        tester
+            .widget<CustomSearchInput>(find.byType(CustomSearchInput))
+            .onClear();
+
+        //assert
+        verify(
+          () => postsCubit.getFirstPage(
+            any(
+              that: isA<GetPostsFilters>().having(
+                (filters) =>
+                    filters.search == null &&
+                    filters.after == null &&
+                    filters.before == null &&
+                    filters.categories == null,
+                "is all filters are null",
+                true,
+              ),
+            ),
+          ),
+        ).called(3);
+      });
+    });
   });
 
   group("PostsCubit -", () {
     testWidgets("should call getFirstPage on widget init", (tester) async {
       //arrange
       await tester.pumpWidget(_testWidget(postsCubit));
+      await tester.pumpAndSettle();
 
       //verification
-      verify(() => postsCubit.getFirstPage()).called(1);
+      verify(() => postsCubit.getFirstPage(any())).called(1);
     });
 
     testWidgets(
@@ -54,7 +147,7 @@ void main() {
       );
       await tester.pumpWidget(_testWidget(postsCubit));
 
-      await tester.pump();
+      await tester.pump(Durations.short1);
 
       //assert
       expect(find.byKey(const Key("full_screen_loading")), findsOneWidget);
@@ -127,31 +220,62 @@ void main() {
   });
 
   group("InfiniteListView -", () {
-    testWidgets(
-        "should call getFirstPage of postsCubit when onRefresh is invoked",
-        (tester) async {
-      //arrange
-      whenListen(
-        postsCubit,
-        Stream.fromIterable([
-          PostsState.loaded(PostsPageResult(hasNextPage: true, posts: [])),
-          const PostsState.loading(),
-        ]),
-      );
-      await tester.pumpWidget(_testWidget(postsCubit));
-      await tester.pump();
+    group("onRefresh -", () {
+      testWidgets(
+          "should call getFirstPage of postsCubit when onRefresh is invoked with NO filters",
+          (tester) async {
+        //arrange
+        whenListen(
+          postsCubit,
+          Stream.fromIterable([
+            PostsState.loaded(PostsPageResult(hasNextPage: true, posts: [])),
+            const PostsState.loading(),
+          ]),
+        );
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pump(Durations.short1);
 
-      //verification
-      expect(find.byType(InfiniteListView<PostEntity>), findsOneWidget);
+        //verification
+        expect(find.byType(InfiniteListView<PostEntity>), findsOneWidget);
+        expect(find.byType(CustomSearchInput), findsOneWidget);
 
-      //act
-      final infiniteListView = tester.widget<InfiniteListView<PostEntity>>(
-        find.byType(InfiniteListView<PostEntity>),
-      );
-      infiniteListView.onRefresh();
+        //act
+        tester
+            .widget<CustomSearchInput>(find.byType(CustomSearchInput))
+            .onSubmit("test search");
 
-      //assert
-      verify(() => postsCubit.getFirstPage()).called(2);
+        final infiniteListView = tester.widget<InfiniteListView<PostEntity>>(
+          find.byType(InfiniteListView<PostEntity>),
+        );
+        infiniteListView.onRefresh();
+
+        //assert
+        verify(
+          () => postsCubit.getFirstPage(
+            any(
+              that: isA<GetPostsFilters>().having(
+                (filters) =>
+                    filters.search == null &&
+                    filters.after == null &&
+                    filters.before == null &&
+                    filters.categories == null,
+                "is no filters",
+                true,
+              ),
+            ),
+          ),
+        ).called(3);
+      });
+
+      testWidgets("should get when ", (tester) async {
+        //arrange
+
+        //verification
+
+        //act
+
+        //assert
+      });
     });
 
     testWidgets(
@@ -166,7 +290,7 @@ void main() {
         ]),
       );
       await tester.pumpWidget(_testWidget(postsCubit));
-      await tester.pump();
+      await tester.pump(Durations.short1);
 
       //verification
       expect(find.byType(InfiniteListView<PostEntity>), findsOneWidget);
@@ -178,7 +302,7 @@ void main() {
       infiniteListView.onScrolledToBottom();
 
       //assert
-      verify(() => postsCubit.getNextPageData()).called(1);
+      verify(() => postsCubit.getNextPageData(any())).called(1);
     });
   });
 }

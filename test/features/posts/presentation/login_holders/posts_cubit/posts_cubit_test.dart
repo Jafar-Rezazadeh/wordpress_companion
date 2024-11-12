@@ -60,7 +60,7 @@ void main() {
         ).thenAnswer((_) async => right(FakePostsPageResult()));
       },
       build: () => postsCubit,
-      act: (cubit) => cubit.getFirstPage(),
+      act: (cubit) => cubit.getFirstPage(GetPostsFilters()),
       expect: () => [
         isA<PostsState>().having(
           (state) => state.whenOrNull(loading: () => true),
@@ -83,7 +83,7 @@ void main() {
         ).thenAnswer((_) async => left(FakeFailure()));
       },
       build: () => postsCubit,
-      act: (cubit) => cubit.getFirstPage(),
+      act: (cubit) => cubit.getFirstPage(GetPostsFilters()),
       expect: () => [
         isA<PostsState>().having(
           (state) => state.whenOrNull(loading: () => true),
@@ -103,13 +103,48 @@ void main() {
       seed: () => const PostsState.loading(),
       setUp: () {},
       build: () => postsCubit,
-      act: (cubit) => cubit.getFirstPage(),
+      act: (cubit) => cubit.getFirstPage(GetPostsFilters()),
       expect: () => [],
       verify: (_) => verifyNever(() => mockGetPostsPerPage.call(any())),
     );
 
     blocTest<PostsCubit, PostsState>(
-      'should params always be default ',
+      'should set the given filters to params',
+      seed: () => PostsState.loaded(FakePostsPageResult()),
+      setUp: () {
+        when(
+          () => mockGetPostsPerPage.call(any()),
+        ).thenAnswer((_) async => right(FakePostsPageResult()));
+      },
+      build: () => postsCubit,
+      act: (cubit) => cubit.getFirstPage(
+        GetPostsFilters()
+          ..setSearch("test")
+          ..setAfter("after")
+          ..setBefore("before")
+          ..setCategories([1, 2, 3]),
+      ),
+      verify: (_) {
+        verify(
+          () => mockGetPostsPerPage.call(
+            any(
+              that: isA<GetPostsPerPageParams>().having(
+                (params) =>
+                    params.search == "test" &&
+                    params.after == "after" &&
+                    params.before == "before" &&
+                    params.categories!.length == 3,
+                "has expected params",
+                true,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    blocTest<PostsCubit, PostsState>(
+      'should params  be default filters are null',
       seed: () => PostsState.loaded(FakePostsPageResult()),
       setUp: () {
         when(
@@ -118,10 +153,10 @@ void main() {
       },
       build: () => postsCubit,
       act: (cubit) async {
-        await cubit.getFirstPage();
-        await cubit.getNextPageData();
-        await cubit.getNextPageData();
-        await cubit.getFirstPage();
+        await cubit.getFirstPage(GetPostsFilters());
+        await cubit.getNextPageData(GetPostsFilters());
+        await cubit.getNextPageData(GetPostsFilters());
+        await cubit.getFirstPage(GetPostsFilters());
       },
       verify: (bloc) {
         _verifyParamsWithPage_1Called_2(mockGetPostsPerPage);
@@ -141,7 +176,7 @@ void main() {
         ).thenAnswer((_) async => right(FakePostsPageResult()));
       },
       build: () => postsCubit,
-      act: (cubit) => cubit.getNextPageData(),
+      act: (cubit) => cubit.getNextPageData(GetPostsFilters()),
       expect: () => [
         isA<PostsState>().having(
           (state) => state.whenOrNull(loading: () => true),
@@ -164,7 +199,7 @@ void main() {
         ).thenAnswer((_) async => left(FakeFailure()));
       },
       build: () => postsCubit,
-      act: (cubit) => cubit.getNextPageData(),
+      act: (cubit) => cubit.getNextPageData(GetPostsFilters()),
       expect: () => [
         isA<PostsState>().having(
           (state) => state.whenOrNull(loading: () => true),
@@ -184,7 +219,7 @@ void main() {
       seed: () => const PostsState.loading(),
       setUp: () {},
       build: () => postsCubit,
-      act: (cubit) => cubit.getNextPageData(),
+      act: (cubit) => cubit.getNextPageData(GetPostsFilters()),
       expect: () => [],
       verify: (_) => verifyNever(() => mockGetPostsPerPage.call(any())),
     );
@@ -212,7 +247,7 @@ void main() {
       },
       build: () => postsCubit,
       skip: 2,
-      act: (cubit) => cubit.getNextPageData(),
+      act: (cubit) => cubit.getNextPageData(GetPostsFilters()),
       expect: () => [],
       verify: (cubit) {
         final posts = cubit.state.whenOrNull(loaded: (posts) => posts.posts);
@@ -228,7 +263,7 @@ void main() {
       ),
       setUp: () {},
       build: () => postsCubit,
-      act: (cubit) => cubit.getNextPageData(),
+      act: (cubit) => cubit.getNextPageData(GetPostsFilters()),
       expect: () => [],
       verify: (_) => verifyNever(() => mockGetPostsPerPage.call(any())),
     );
@@ -242,12 +277,17 @@ void main() {
         ).thenAnswer((_) async => right(FakePostsPageResult()));
       },
       build: () => postsCubit,
-      act: (cubit) => cubit.getNextPageData(
-        search: "test",
-        after: "after",
-        before: "before",
-        categories: [2],
-      ),
+      act: (cubit) {
+        final filters = GetPostsFilters();
+
+        filters
+          ..setSearch("test")
+          ..setAfter("after")
+          ..setBefore("before")
+          ..setCategories([2]);
+
+        return cubit.getNextPageData(filters);
+      },
       verify: (_) => verify(
         () => mockGetPostsPerPage.call(
           any(
@@ -278,8 +318,8 @@ void main() {
       },
       build: () => postsCubit,
       act: (cubit) async {
-        await cubit.getFirstPage();
-        await cubit.getNextPageData();
+        await cubit.getFirstPage(GetPostsFilters());
+        await cubit.getNextPageData(GetPostsFilters());
       },
       verify: (_) => verify(
         () => mockGetPostsPerPage.call(

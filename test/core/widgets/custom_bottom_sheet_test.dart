@@ -114,6 +114,56 @@ void main() {
       //assert
       expect(invoked, true);
     });
+
+    testWidgets("should pop the filter_bottom_sheet when onApply invoked",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        _TestFilterBottomSheet(
+          onApply: () {},
+          onClear: () {},
+        ),
+      );
+
+      //verification
+      await tester.tap(find.byKey(const Key("show_filter_bottom_sheet")));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key("filter_bottom_sheet")), findsOneWidget);
+      expect(find.byKey(const Key("apply_filter_button")), findsOneWidget);
+
+      //act
+      await tester.tap(find.byKey(const Key("apply_filter_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byKey(const Key("filter_bottom_sheet")), findsNothing);
+    });
+
+    testWidgets("should pop the filter_bottom_sheet when onClear invoked",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        _TestFilterBottomSheet(
+          onApply: () {},
+          onClear: () {},
+        ),
+      );
+
+      //verification
+      await tester.tap(find.byKey(const Key("show_filter_bottom_sheet")));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key("filter_bottom_sheet")), findsOneWidget);
+      expect(find.byKey(const Key("clear_filter_button")), findsOneWidget);
+
+      //act
+      await tester.tap(find.byKey(const Key("clear_filter_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byKey(const Key("filter_bottom_sheet")), findsNothing);
+    });
   });
 }
 

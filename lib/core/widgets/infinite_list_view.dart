@@ -129,6 +129,6 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: const CircularProgressIndicator(),
           )
-        : Container();
+        : const SizedBox.shrink();
   }
 }

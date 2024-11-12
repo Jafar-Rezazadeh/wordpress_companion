@@ -143,9 +143,10 @@ void main() {
           onScrolledToBottom: onScrolledToBottom,
           showBottomLoading: false,
           showFullScreenLoading: false,
+          separatorWidget: const Divider(),
         ),
       );
-      final listViewFinder = find.byType(ListView).first;
+      final listViewFinder = find.byType(Scrollable).first;
 
       //verification
       expect(invoked, false);
@@ -159,7 +160,7 @@ void main() {
       expect(invoked, true);
     });
     testWidgets(
-        "should NOT invoke the onScrolledToBottom method when listView is scrolled to bottom but it is in loading",
+        "should NOT invoke the onScrolledToBottom method when listView is scrolled to bottom but it is loading",
         (tester) async {
       //arrange
       bool invoked = false;
@@ -212,14 +213,17 @@ class _TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: InfiniteListView(
-        onRefresh: onRefresh,
-        separatorWidget: separatorWidget,
-        onScrolledToBottom: onScrolledToBottom,
-        data: data ?? [],
-        itemBuilder: (item) => Text(item),
-        showBottomLoadingWhen: showBottomLoading ?? false,
-        showFullScreenLoadingWhen: showFullScreenLoading ?? false,
+      home: SizedBox(
+        height: 200,
+        child: InfiniteListView(
+          onRefresh: onRefresh,
+          separatorWidget: separatorWidget,
+          onScrolledToBottom: onScrolledToBottom,
+          data: data ?? [],
+          itemBuilder: (item) => Text(item),
+          showBottomLoadingWhen: showBottomLoading ?? false,
+          showFullScreenLoadingWhen: showFullScreenLoading ?? false,
+        ),
       ),
     );
   }
