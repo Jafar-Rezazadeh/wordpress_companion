@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import 'package:wordpress_companion/features/posts/presentation/pages/posts_page.dart';
+import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
@@ -54,6 +55,65 @@ void main() {
 
         //assert
         expect(find.byKey(const Key("filter_bottom_sheet")), findsOneWidget);
+      });
+
+      testWidgets("should call the getFirstPageData when onApply invoked",
+          (tester) async {
+        //arrange
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byType(FilterButton), findsOneWidget);
+
+        //act
+        await tester.tap(find.byType(FilterButton));
+        await tester.pumpAndSettle();
+
+        tester
+            .widget<PostsFilterWidget>(find.byType(PostsFilterWidget))
+            .onApply();
+
+        //assert
+        verify(() => postsCubit.getFirstPage(any())).called(2);
+      });
+
+      testWidgets(
+          "should call the getFirstPageData when with default No filters when onClear invoked",
+          (tester) async {
+        //arrange
+
+        await tester.pumpWidget(_testWidget(postsCubit));
+        await tester.pumpAndSettle();
+
+        //verification
+        expect(find.byType(FilterButton), findsOneWidget);
+
+        //act
+        await tester.tap(find.byType(FilterButton));
+        await tester.pumpAndSettle();
+
+        tester
+            .widget<PostsFilterWidget>(find.byType(PostsFilterWidget))
+            .onClear();
+
+        //assert
+        verify(
+          () => postsCubit.getFirstPage(
+            any(
+              that: isA<GetPostsFilters>().having(
+                (filters) =>
+                    filters.after == null &&
+                    filters.before == null &&
+                    filters.categories == null &&
+                    filters.search == null &&
+                    filters.status == PostStatus.values,
+                "is default params",
+                true,
+              ),
+            ),
+          ),
+        ).called(2);
       });
     });
     group("search input -", () {

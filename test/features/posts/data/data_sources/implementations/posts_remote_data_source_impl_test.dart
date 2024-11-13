@@ -267,9 +267,11 @@ void main() {
       //assert
       expect(params.keys, contains("page"));
       expect(params.keys, contains("per_page"));
+      expect(params.keys, contains("status"));
       expect(params.keys, contains("_embed"));
 
       expect(params["_embed"], contains("author,wp:featuredmedia"));
+      expect(params["status"], "publish,future,draft,pending,private");
     });
 
     test(
@@ -298,11 +300,12 @@ void main() {
       //act
       await postsRemoteDataSourceImpl.getPostsPerPage(
         GetPostsPerPageParams(
-            search: "test",
-            after: "test",
-            before: "test",
-            categories: [1, 2, 3],
-            status: PostStatus.publish),
+          search: "test",
+          after: "test",
+          before: "test",
+          categories: [1, 2, 3],
+          status: [PostStatus.publish],
+        ),
       );
 
       //assert
@@ -319,6 +322,7 @@ void main() {
         expect(params.keys, contains(key));
       }
       expect(params["categories"], "1,2,3");
+      expect(params["status"], "publish");
     });
 
     test("should Not Add Nullable params when they are null", () async {
@@ -345,7 +349,7 @@ void main() {
       await postsRemoteDataSourceImpl.getPostsPerPage(GetPostsPerPageParams());
 
       //assert
-      final expectedKeys = ["page", "per_page", "_embed"];
+      final expectedKeys = ["page", "per_page", "_embed", "status"];
       for (var key in expectedKeys) {
         expect(params.keys, contains(key));
       }

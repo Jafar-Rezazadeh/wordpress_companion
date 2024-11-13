@@ -63,17 +63,20 @@ class _FilterBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 20,
-        horizontal: edgeToEdgePaddingHorizontal,
-      ),
-      height: 0.8.sh,
-      child: Column(
-        children: [
-          _actions(),
-          _children(),
-        ],
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: edgeToEdgePaddingHorizontal,
+        ),
+        height: 0.8.sh,
+        child: Column(
+          children: [
+            _actions(),
+            _children(),
+          ],
+        ),
       ),
     );
   }

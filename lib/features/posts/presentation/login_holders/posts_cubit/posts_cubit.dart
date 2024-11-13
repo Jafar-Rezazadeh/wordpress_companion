@@ -29,12 +29,7 @@ class PostsCubit extends Cubit<PostsState> {
     if (_stateIsNotLoading()) {
       emit(const PostsState.loading());
 
-      getPostsPerPageParams = GetPostsPerPageParams(
-        search: filters.search,
-        after: filters.after,
-        before: filters.before,
-        categories: filters.categories,
-      );
+      getPostsPerPageParams = _setFiltersToParams(filters);
 
       final result = await _getPostsPerPage(getPostsPerPageParams);
 
@@ -43,6 +38,16 @@ class PostsCubit extends Cubit<PostsState> {
         (postsPageResult) => emit(PostsState.loaded(postsPageResult)),
       );
     }
+  }
+
+  GetPostsPerPageParams _setFiltersToParams(GetPostsFilters filters) {
+    return GetPostsPerPageParams(
+      search: filters.search,
+      after: filters.after,
+      before: filters.before,
+      categories: filters.categories,
+      status: filters.status,
+    );
   }
 
   bool _stateIsNotLoading() =>
@@ -60,7 +65,14 @@ class PostsCubit extends Cubit<PostsState> {
     if (previousPage?.hasNextPage == true) {
       emit(const PostsState.loading());
 
-      getPostsPerPageParams = _increasePageAndSetFilters(filters);
+      getPostsPerPageParams = getPostsPerPageParams.copyWith(
+        page: getPostsPerPageParams.page + 1,
+        search: filters.search,
+        after: filters.after,
+        before: filters.before,
+        categories: filters.categories,
+        status: filters.status,
+      );
 
       final result = await _getPostsPerPage(getPostsPerPageParams);
 
@@ -76,16 +88,6 @@ class PostsCubit extends Cubit<PostsState> {
         },
       );
     }
-  }
-
-  GetPostsPerPageParams _increasePageAndSetFilters(GetPostsFilters filters) {
-    return GetPostsPerPageParams(
-      page: getPostsPerPageParams.page + 1,
-      search: filters.search,
-      after: filters.after,
-      before: filters.before,
-      categories: filters.categories,
-    );
   }
 
   deletePost(int id) async {

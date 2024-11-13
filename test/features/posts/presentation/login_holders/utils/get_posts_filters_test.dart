@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 void main() {
@@ -11,6 +12,7 @@ void main() {
       ..setSearch("test")
       ..setAfter("after")
       ..setBefore("before")
+      ..setStatus([PostStatus.pending])
       ..setCategories([1, 2]);
 
     //assert
@@ -18,9 +20,10 @@ void main() {
     expect(postsFilters.after, "after");
     expect(postsFilters.before, "before");
     expect(postsFilters.categories, [1, 2]);
+    expect(postsFilters.status, [PostStatus.pending]);
   });
 
-  test("should set all props to null when reset() invoked", () {
+  test("should set all props to initial values when reset() invoked", () {
     //arrange
     final postsFilters = GetPostsFilters();
 
@@ -29,6 +32,7 @@ void main() {
       ..setSearch("test")
       ..setAfter("after")
       ..setBefore("before")
+      ..setStatus([PostStatus.publish])
       ..setCategories([1, 2]);
 
     postsFilters.reset();
@@ -38,5 +42,6 @@ void main() {
     expect(postsFilters.after, null);
     expect(postsFilters.before, null);
     expect(postsFilters.categories, null);
+    expect(postsFilters.status, PostStatus.values);
   });
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
-import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/post_item_widget.dart';
+import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 
 class PostsPage extends StatefulWidget {
   const PostsPage({super.key});
@@ -41,23 +41,11 @@ class _PostsPageState extends State<PostsPage> {
 
   Widget _header() {
     return PageHeaderLayout(
-      rightWidget: FilterButton(
-        onPressed: () async {
-          await CustomBottomSheets.showFilterBottomSheet(
-            context: context,
-            onApply: () {},
-            onClear: () {},
-            children: [],
-          );
-        },
-      ),
-      leftWidget: CustomSearchInput(
-        onSubmit: (value) {
-          if (value != null) {
-            filters.setSearch(value);
-            _clearPosts();
-            _getFirstPage();
-          }
+      rightWidget: PostsFilterWidget(
+        filters: filters,
+        onApply: () {
+          _clearPosts();
+          _getFirstPage();
         },
         onClear: () {
           _clearPosts();
@@ -65,6 +53,24 @@ class _PostsPageState extends State<PostsPage> {
           _getFirstPage();
         },
       ),
+      leftWidget: _searchInput(),
+    );
+  }
+
+  Widget _searchInput() {
+    return CustomSearchInput(
+      onSubmit: (value) {
+        if (value != null) {
+          filters.setSearch(value);
+          _clearPosts();
+          _getFirstPage();
+        }
+      },
+      onClear: () {
+        _clearPosts();
+        filters.reset();
+        _getFirstPage();
+      },
     );
   }
 

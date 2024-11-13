@@ -3,7 +3,6 @@ import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
-import 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_translator.dart';
 
 class PostItemWidget extends StatefulWidget {
   final PostEntity post;
@@ -54,12 +53,35 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text("توسط: ${widget.post.authorName}"),
-        Text(
-          widget.post.status.translate(),
-          style: TextStyle(color: ColorPallet.blue),
-        ),
+        _authorName(),
+        _status(),
       ].withGapInBetween(5),
     );
+  }
+
+  Text _authorName() => Text("توسط: ${widget.post.authorName}");
+
+  Text _status() {
+    return Text(
+      key: const Key("status_text"),
+      widget.post.status.translate(),
+      style: TextStyle(color: _colorBasedOnStatus),
+    );
+  }
+
+  Color get _colorBasedOnStatus {
+    switch (widget.post.status) {
+      case PostStatus.publish:
+        return ColorPallet.lightGreen;
+
+      case PostStatus.pending:
+        return ColorPallet.yellow;
+
+      case PostStatus.draft:
+        return ColorPallet.yellowishGreen;
+
+      default:
+        return ColorPallet.blue;
+    }
   }
 }
