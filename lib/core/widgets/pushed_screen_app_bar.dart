@@ -22,15 +22,18 @@ class PushedScreenAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 5,
-      title: title != null ? Text(title ?? "") : null,
-      centerTitle: true,
-      shadowColor: Colors.black54,
-      backgroundColor: ColorPallet.white,
-      foregroundColor: ColorPallet.text,
-      surfaceTintColor: ColorPallet.white,
-      bottom: _hasBottomActions ? _bottomSection() : null,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: AppBar(
+        elevation: 5,
+        title: title != null ? Text(title ?? "") : null,
+        centerTitle: true,
+        shadowColor: Colors.black54,
+        backgroundColor: ColorPallet.white,
+        foregroundColor: ColorPallet.text,
+        surfaceTintColor: ColorPallet.white,
+        bottom: _hasBottomActions ? _bottomSection() : null,
+      ),
     );
   }
 

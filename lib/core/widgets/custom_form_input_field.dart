@@ -51,11 +51,11 @@ class CustomFormInputField extends StatelessWidget {
         color: ColorPallet.text,
         fontSize: 12.sp,
       ),
-      decoration: _inputDecoration(),
+      decoration: _inputDecoration(context),
     );
   }
 
-  InputDecoration _inputDecoration() {
+  InputDecoration _inputDecoration(context) {
     return InputDecoration(
       labelText: label,
       suffixIcon: suffixIcon,
@@ -72,7 +72,7 @@ class CustomFormInputField extends StatelessWidget {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(smallCornerRadius),
-        borderSide: BorderSide(color: ColorPallet.midBlue),
+        borderSide: BorderSide(color: ColorPallet.lightBlue),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(smallCornerRadius),

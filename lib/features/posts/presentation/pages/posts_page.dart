@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
-import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 
 class PostsPage extends StatefulWidget {
   const PostsPage({super.key});
@@ -11,7 +10,8 @@ class PostsPage extends StatefulWidget {
   State<PostsPage> createState() => _PostsPageState();
 }
 
-class _PostsPageState extends State<PostsPage> {
+class _PostsPageState extends State<PostsPage>
+    with AutomaticKeepAliveClientMixin {
   List<PostEntity> posts = [];
   bool isLoading = false;
   final filters = GetPostsFilters();
@@ -26,6 +26,7 @@ class _PostsPageState extends State<PostsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -121,4 +122,7 @@ class _PostsPageState extends State<PostsPage> {
 
   bool _isLoading(PostsState state) =>
       state.maybeWhen(loading: () => true, orElse: () => false);
+
+  @override
+  bool get wantKeepAlive => true;
 }

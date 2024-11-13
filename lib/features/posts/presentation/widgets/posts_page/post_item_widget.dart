@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
+import 'package:go_router/go_router.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
@@ -20,9 +22,7 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       shadowColor: ColorPallet.lowBackGround,
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        onTap: () {
-          // TODO: go to edit page
-        },
+        onTap: () => context.goNamed(editOrCreatePostRoute, extra: widget.post),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         leading: _featuredImage(),
@@ -40,10 +40,11 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       ),
       width: 50,
       height: 50,
-      child: Image.network(
-        widget.post.featureMediaLink,
+      child: CachedNetworkImage(
+        imageUrl: widget.post.featureMediaLink,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.image),
+        errorListener: (value) {},
+        errorWidget: (context, error, stackTrace) => const Icon(Icons.image),
       ),
     );
   }

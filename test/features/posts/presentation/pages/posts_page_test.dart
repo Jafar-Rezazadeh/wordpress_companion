@@ -7,7 +7,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import 'package:wordpress_companion/features/posts/presentation/pages/posts_page.dart';
-import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
