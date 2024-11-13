@@ -42,6 +42,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
         if (params.before != null) "before": params.before,
         if (params.categories != null)
           "categories": params.categories?.join(","),
+        if (params.status != null) "status": params.status?.name,
       },
     );
     final jsonData = ApiResponseHandler.convertToJsonList(response.data);

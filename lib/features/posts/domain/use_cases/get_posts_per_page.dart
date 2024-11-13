@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
+import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 
 import '../../posts_exports.dart';
@@ -27,6 +28,7 @@ class GetPostsPerPageParams {
   String? after;
   String? before;
   List<int>? categories;
+  PostStatus? status;
 
   GetPostsPerPageParams({
     this.page = 1,
@@ -35,6 +37,7 @@ class GetPostsPerPageParams {
     this.after,
     this.before,
     this.categories,
+    this.status,
   })  : assert(page >= 1, "page can't be less than 1"),
         assert(perPage >= 10, "perPage can't be less than 10");
 
@@ -45,6 +48,7 @@ class GetPostsPerPageParams {
     String? after,
     String? before,
     List<int>? categories,
+    PostStatus? status,
   }) {
     if (_pageIsLessThan_1(page) || _perPageIsLessThan_10(perPage)) {
       throw AssertionError("page can't be less than 1");
@@ -57,6 +61,7 @@ class GetPostsPerPageParams {
       after: after ?? this.after,
       before: before ?? this.before,
       categories: categories ?? this.categories,
+      status: status ?? this.status,
     );
   }
 

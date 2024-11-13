@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
@@ -58,6 +59,7 @@ void main() {
           search: "test",
           after: "test",
           before: "test",
+          status: PostStatus.pending,
           categories: [1, 2, 3],
         );
 
@@ -68,6 +70,7 @@ void main() {
         expect(result.search, "test");
         expect(result.after, "test");
         expect(result.before, "test");
+        expect(result.status, PostStatus.pending);
         expect(result.categories, [1, 2, 3]);
       });
 
@@ -85,6 +88,7 @@ void main() {
         expect(result.after, params.after);
         expect(result.before, params.before);
         expect(result.categories, params.categories);
+        expect(result.status, params.status);
       });
 
       test("should throw assertion error when page is less than 1", () {

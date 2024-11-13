@@ -253,10 +253,6 @@ void main() {
 
       dioAdapter.onGet(
         "$wpV2EndPoint/posts",
-        queryParameters: {
-          "page": Matchers.any,
-          "per_page": Matchers.any,
-        },
         (server) => server.reply(
           HttpStatus.ok,
           [JsonResponseSimulator.post],
@@ -293,14 +289,6 @@ void main() {
 
       dioAdapter.onGet(
         "$wpV2EndPoint/posts",
-        queryParameters: {
-          "page": Matchers.any,
-          "per_page": Matchers.any,
-          "search": Matchers.any,
-          "after": Matchers.any,
-          "before": Matchers.any,
-          "categories": "1,2,3",
-        },
         (server) => server.reply(
           HttpStatus.ok,
           [JsonResponseSimulator.post],
@@ -310,11 +298,11 @@ void main() {
       //act
       await postsRemoteDataSourceImpl.getPostsPerPage(
         GetPostsPerPageParams(
-          search: "test",
-          after: "test",
-          before: "test",
-          categories: [1, 2, 3],
-        ),
+            search: "test",
+            after: "test",
+            before: "test",
+            categories: [1, 2, 3],
+            status: PostStatus.publish),
       );
 
       //assert
@@ -324,7 +312,8 @@ void main() {
         "search",
         "after",
         "before",
-        "categories"
+        "categories",
+        "status",
       ];
       for (var key in expectedKeys) {
         expect(params.keys, contains(key));
