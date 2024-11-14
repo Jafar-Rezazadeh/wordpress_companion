@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_delta_from_html/flutter_quill_delta_from_html.dart';
 import 'package:gap/gap.dart';
-import 'package:quill_html_editor/quill_html_editor.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
@@ -15,11 +17,22 @@ class EditOrCreatePostScreen extends StatefulWidget {
 }
 
 class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
-  final contentHtmlEditorController = QuillEditorController();
+  late final QuillController contentController;
+
+  final inputHtmlStringSample = '<p><em>awdawdawdawdawd</em></p>';
 
   @override
   void initState() {
     super.initState();
+    contentController = QuillController.basic();
+    contentController.document =
+        Document.fromDelta(HtmlToDelta().convert(inputHtmlStringSample));
+  }
+
+  @override
+  void dispose() {
+    contentController.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,7 +53,12 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
       bottomLeadingWidgets: [
         SaveButton(
           key: const Key("submit_button"),
-          onPressed: () {},
+          onPressed: () {
+            final delta = contentController.document.toDelta();
+            final htmlText =
+                QuillDeltaToHtmlConverter(delta.toJson()).convert();
+            print(htmlText);
+          },
         ),
       ],
       bottomActionWidgets: [
@@ -68,28 +86,41 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   }
 
   Widget _body() {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 50,
-        horizontal: edgeToEdgePaddingHorizontal,
-      ),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 50,
+          horizontal: edgeToEdgePaddingHorizontal,
+        ),
         child: Form(
           child: Column(
             children: [
-              CustomFormInputField(
-                initialValue: widget.post?.title,
-                label: "عنوان",
-              ),
-              CustomFormInputField(
-                initialValue: widget.post?.slug,
-                label: "نامک",
-              ),
+              _title(),
+              _slug(),
+
               _contentHtmlEditor(),
-            ].withGapInBetween(30),
+              _excerpt(),
+              // TODO: category input
+              const TagInputWidget(),
+              const FeaturedImageInput(),
+            ].withGapInBetween(40),
           ),
         ),
       ),
+    );
+  }
+
+  CustomFormInputField _title() {
+    return CustomFormInputField(
+      initialValue: widget.post?.title,
+      label: "عنوان",
+    );
+  }
+
+  CustomFormInputField _slug() {
+    return CustomFormInputField(
+      initialValue: widget.post?.slug,
+      label: "نامک",
     );
   }
 
@@ -100,22 +131,35 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
         borderRadius: BorderRadius.circular(smallCornerRadius),
       ),
       padding: const EdgeInsets.all(10),
+      height: 500,
       child: Column(
         children: [
-          ToolBar.scroll(
-            controller: contentHtmlEditorController,
-            textDirection: TextDirection.rtl,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: QuillSimpleToolbar(
+              controller: contentController,
+              configurations: const QuillSimpleToolbarConfigurations(
+                axis: Axis.horizontal,
+              ),
+            ),
           ),
-          Divider(color: ColorPallet.border, height: 10),
-          QuillHtmlEditor(
-            controller: contentHtmlEditorController,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            autoFocus: true,
-            minHeight: 300,
-            onTextChanged: (p0) async {},
-          ),
+          Divider(color: ColorPallet.border, thickness: 1),
+          Expanded(
+            child: QuillEditor.basic(
+              controller: contentController,
+              configurations:
+                  const QuillEditorConfigurations(padding: EdgeInsets.all(10)),
+            ),
+          )
         ],
       ),
+    );
+  }
+
+  Widget _excerpt() {
+    return const CustomFormInputField(
+      label: "چکیده",
+      maxLines: 4,
     );
   }
 }

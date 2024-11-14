@@ -41,11 +41,12 @@ void main() {
         (tester) async {
       //arrange
       await _makeTestWidgetForRouter(tester);
+      await tester.pumpAndSettle();
 
       //verification
 
       //act
-      await tester.tap(find.byType(PostItemWidget));
+      await tester.tap(find.byType(PostItemWidget).first);
       await tester.pumpAndSettle();
 
       //assert
@@ -60,7 +61,7 @@ void main() {
       //verification
 
       //act
-      await tester.tap(find.byType(PostItemWidget));
+      await tester.tap(find.byType(ListTile));
       await tester.pumpAndSettle();
 
       //assert
@@ -166,7 +167,8 @@ Future<Null> _makeTestWidgetForRouter(WidgetTester tester) async {
                       final post = state.extra as PostEntity?;
 
                       return Material(
-                          child: EditOrCreatePostScreen(post: post));
+                        child: EditOrCreatePostScreen(post: post),
+                      );
                     },
                   )
                 ],

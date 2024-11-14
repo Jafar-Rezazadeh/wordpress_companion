@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockImageListCubit extends MockCubit<ImageListState>
     implements ImageListCubit {}
@@ -29,58 +28,49 @@ void main() {
     ).thenAnswer((_) => const ImageListState.initial());
   });
 
+  Widget makeTestWidget({
+    Function(MediaEntity media)? onSelect,
+    Function()? onBack,
+  }) {
+    return MaterialApp(
+      home: Material(
+        child: BlocProvider(
+          create: (context) => imageListCubit,
+          child: ImageSelectorScreen(
+            onSelect: onSelect ?? (media) {},
+            onBack: onBack ?? () {},
+          ),
+        ),
+      ),
+    );
+  }
+
   group("backButton -", () {
-    testWidgets("should close the dialog when back_button is tapped",
+    testWidgets("should invoke the onBack when back_button tapped",
         (tester) async {
       //arrange
-      await _makeTestWidgetAsDialogOpener(tester, imageListCubit);
-
-      //verification
-      await _openImageListDialog(tester);
+      bool isBackInvoked = false;
+      await tester.pumpWidget(
+        makeTestWidget(
+          onBack: () {
+            isBackInvoked = true;
+          },
+        ),
+      );
 
       //act
       await tester.tap(find.byKey(const Key("back_button")));
       await tester.pumpAndSettle();
 
       //assert
-      expect(find.byType(ImageSelectorDialog), findsNothing);
+      expect(isBackInvoked, true);
     });
   });
 
-  group("SequentialList -", () {
-    testWidgets(
-        "should invoke the ImageSelector onSelect with the selected media and pop the dialog",
-        (tester) async {
-      //arrange
-      bool isSelectedInvoked = false;
-
-      await _makeTestWidgetAsDialogOpener(
-        tester,
-        imageListCubit,
-        onSelect: (media) => isSelectedInvoked = true,
-      );
-
-      await _openImageListDialog(tester);
-
-      //verification
-      expect(find.byType(SequentialImageList), findsOneWidget);
-
-      //act
-      final sequentialList = tester.widget<SequentialImageList>(
-        find.byType(SequentialImageList),
-      );
-      sequentialList.onSelect(FakeMediaEntity());
-      await tester.pumpAndSettle();
-
-      //assert
-      expect(isSelectedInvoked, isTrue);
-      expect(find.byType(ImageSelectorDialog), findsNothing);
-    });
-  });
   group("imageListCubit -", () {
     testWidgets("should call the getFirstPage when initState", (tester) async {
       //arrange
-      await _testWidget(tester, imageListCubit);
+      await tester.pumpWidget(makeTestWidget());
       await tester.pump(Durations.short1);
 
       //assert
@@ -91,7 +81,7 @@ void main() {
       testWidgets("should invoke the searchImage when (onSubmit) is called",
           (tester) async {
         //arrange
-        await _testWidget(tester, imageListCubit);
+        await tester.pumpWidget(makeTestWidget());
         await tester.pump(Durations.short1);
 
         //verification
@@ -110,7 +100,7 @@ void main() {
       testWidgets("should invoke the getFirstPage when (onClear) is called",
           (tester) async {
         //arrange
-        await _testWidget(tester, imageListCubit);
+        await tester.pumpWidget(makeTestWidget());
         await tester.pump(Durations.short1);
 
         //verification
@@ -129,6 +119,31 @@ void main() {
       });
     });
     group("SequentialList -", () {
+      testWidgets("should invoke the onSelect when user tapped on an image",
+          (tester) async {
+        //arrange
+        bool isSelectedInvoked = false;
+
+        await tester.pumpWidget(
+          makeTestWidget(
+            onSelect: (media) {
+              isSelectedInvoked = true;
+            },
+          ),
+        );
+        //verification
+        expect(find.byType(SequentialImageList), findsOneWidget);
+
+        //act
+        final sequentialList = tester.widget<SequentialImageList>(
+          find.byType(SequentialImageList),
+        );
+        sequentialList.onSelect(FakeMediaEntity());
+        await tester.pumpAndSettle();
+
+        //assert
+        expect(isSelectedInvoked, isTrue);
+      });
       testWidgets(
           "should invoke the getNextPageData when onScrolledToBottom is called",
           (tester) async {
@@ -141,7 +156,7 @@ void main() {
             ),
           ]),
         );
-        await _testWidget(tester, imageListCubit);
+        await tester.pumpWidget(makeTestWidget());
         await tester.pump(Durations.short1);
 
         //verification
@@ -173,7 +188,7 @@ void main() {
           ]),
         );
 
-        await _testWidget(tester, imageListCubit);
+        await tester.pumpWidget(makeTestWidget());
         await tester.pump(Durations.short1);
 
         //assert
@@ -181,66 +196,4 @@ void main() {
       });
     });
   });
-}
-
-Future<void> _testWidget(
-    WidgetTester tester, ImageListCubit imageListCubit) async {
-  await tester.pumpWidget(
-    MaterialApp(
-      home: BlocProvider(
-        create: (context) => imageListCubit,
-        child: Builder(
-          builder: (context) {
-            return Material(
-              child: ImageSelectorDialog(
-                dialogContext: context,
-                onSelect: (media) {},
-              ),
-            );
-          },
-        ),
-      ),
-    ),
-  );
-}
-
-Future<void> _openImageListDialog(WidgetTester tester) async {
-  expect(find.text("open dialog"), findsOneWidget);
-  await tester.tap(find.text("open dialog"));
-  await tester.pump();
-  expect(find.byKey(const Key("image_list_dialog")), findsOneWidget);
-}
-
-Future<void> _makeTestWidgetAsDialogOpener(
-  WidgetTester tester,
-  ImageListCubit imageListCubit, {
-  Function(MediaEntity media)? onSelect,
-}) async {
-  await tester.pumpWidget(
-    MaterialApp(
-      home: Builder(builder: (context) {
-        return Material(
-          child: ElevatedButton(
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (dialogContext) => BlocProvider(
-                  create: (context) => imageListCubit,
-                  child: Material(
-                    child: ImageSelectorDialog(
-                      dialogContext: dialogContext,
-                      onSelect: onSelect ?? (media) {},
-                    ),
-                  ),
-                ),
-              );
-            },
-            child: const Text("open dialog"),
-          ),
-        );
-      }),
-    ),
-  );
-
-  await tester.pumpAndSettle();
 }

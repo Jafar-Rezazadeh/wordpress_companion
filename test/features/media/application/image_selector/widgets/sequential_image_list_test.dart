@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
-import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/utils/image_cache_tracker.dart';
-import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
+import 'package:wordpress_companion/features/media/application/image_selector/utils/image_cache_tracker.dart';
+import 'package:wordpress_companion/features/media/media_exports.dart';
 
 class FakeMediaEntity extends Fake implements MediaEntity {
   @override

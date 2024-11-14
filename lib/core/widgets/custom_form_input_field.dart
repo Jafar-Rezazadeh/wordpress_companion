@@ -58,10 +58,15 @@ class CustomFormInputField extends StatelessWidget {
   InputDecoration _inputDecoration(context) {
     return InputDecoration(
       labelText: label,
+      alignLabelWithHint: true,
       suffixIcon: suffixIcon,
       hintText: hintText,
-      contentPadding:
-          EdgeInsets.fromLTRB(16, _verticalPadding(), 16, _verticalPadding()),
+      contentPadding: EdgeInsets.fromLTRB(
+        16,
+        _verticalPadding(),
+        16,
+        _verticalPadding(),
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(smallCornerRadius),
         borderSide: BorderSide(color: ColorPallet.border),

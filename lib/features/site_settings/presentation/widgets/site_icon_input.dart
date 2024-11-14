@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_finder_cubit/image_finder_cubit.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_list_cubit/image_list_cubit.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/widgets/image_list/image_selector_widget.dart';
 import '../../../../core/core_export.dart';
+import '../../site_settings_exports.dart';
 
 class SiteIconInput extends StatefulWidget {
   final int? initialImageId;
@@ -80,26 +79,13 @@ class _SiteIconInputState extends State<SiteIconInput> {
   }
 
   Future<void> _openSelectMedialDialog(BuildContext context) async {
-    final imageListCubit = getIt.get<ImageListCubit>();
+    final MediaEntity? image = await context.push(imageSelectorRoute);
 
-    await showDialog<MediaEntity>(
-      context: context,
-      builder: (dialogContext) => Dialog(
-        key: const Key("select_media_dialog"),
-        insetPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: BlocProvider(
-          create: (context) => imageListCubit,
-          child: ImageSelectorDialog(
-            dialogContext: dialogContext,
-            onSelect: (media) {
-              setState(() => selectedImage = media);
-              if (selectedImage != null) {
-                widget.onSelect(selectedImage!.id);
-              }
-            },
-          ),
-        ),
-      ),
-    );
+    if (image != null) {
+      setState(() => selectedImage = image);
+      if (selectedImage != null) {
+        widget.onSelect(selectedImage!.id);
+      }
+    }
   }
 }

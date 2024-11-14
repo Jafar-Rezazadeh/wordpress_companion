@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
-import 'package:wordpress_companion/features/posts/presentation/screens/edit_or_create_post_screen.dart';
 import '../../features/site_settings/site_settings_exports.dart';
 import '../presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import '../presentation/screens/main_screen.dart';
@@ -20,6 +19,7 @@ const String profileScreenRoute = "profile";
 const String siteSettingsScreenRoute = "siteSettings";
 const String editMediaScreenRoute = "editMediaScreen";
 const String editOrCreatePostRoute = "editOrCreatePostScreen";
+const String imageSelectorRoute = "/imageSelectorDialog";
 
 final GetIt getIt = GetIt.instance;
 
@@ -28,6 +28,7 @@ final goRouter = GoRouter(
   routes: [
     _loginScreenRoute(),
     _mainScreenRoute(),
+    _imageSelectorDialog(),
   ],
 );
 
@@ -92,7 +93,7 @@ ShellRoute _mainScreenRoute() {
               ],
               child: const SiteSettingsScreen(),
             ),
-          )
+          ),
         ],
       ),
     ],
@@ -110,5 +111,25 @@ Widget _mainScreenProvider(context, state, child) {
       BlocProvider(create: (context) => getIt<PostsCubit>()),
     ],
     child: child,
+  );
+}
+
+_imageSelectorDialog() {
+  return GoRoute(
+    name: imageSelectorRoute,
+    path: imageSelectorRoute,
+    builder: (context, state) => Builder(builder: (context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => getIt<ImageListCubit>()),
+        ],
+        child: Scaffold(
+          body: ImageSelectorScreen(
+            onSelect: (media) => Navigator.of(context).pop(media),
+            onBack: () => Navigator.of(context).pop(),
+          ),
+        ),
+      );
+    }),
   );
 }
