@@ -402,7 +402,11 @@ void main() {
           mediaFilterButtonFinder,
         );
         mediaFilterButton.onApply(
-          (after: "after-date", before: "before-date", type: MediaType.image),
+          (
+            after: "after-date",
+            before: "before-date",
+            type: MediaTypeEnum.image
+          ),
         );
         await tester.pumpAndSettle();
 
@@ -414,7 +418,7 @@ void main() {
                 (params) =>
                     params.after == "after-date" &&
                     params.before == "before-date" &&
-                    params.type == MediaType.image,
+                    params.type == MediaTypeEnum.image,
                 "is params set",
                 true,
               ),
@@ -465,7 +469,7 @@ void main() {
         find.byType(MediaFilter),
       );
       mediaFilterButton.onApply(
-        (after: "after-date", before: "before-date", type: MediaType.video),
+        (after: "after-date", before: "before-date", type: MediaTypeEnum.video),
       );
       await tester.pumpAndSettle();
 
@@ -484,7 +488,7 @@ void main() {
               (params) =>
                   params.page == 1 &&
                   params.search == null &&
-                  params.type == MediaType.video,
+                  params.type == MediaTypeEnum.video,
               "is params set",
               true,
             ),

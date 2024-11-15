@@ -13,7 +13,7 @@ class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
 class FakePostEntity extends Fake implements PostEntity {
   @override
-  PostStatus get status => PostStatus.publish;
+  PostStatusEnum get status => PostStatusEnum.publish;
 
   @override
   String get title => "title";
@@ -146,7 +146,7 @@ void main() {
                     filters.before == null &&
                     filters.categories == null &&
                     filters.search == null &&
-                    filters.status == PostStatus.values,
+                    filters.status == PostStatusEnum.values,
                 "is default params",
                 true,
               ),

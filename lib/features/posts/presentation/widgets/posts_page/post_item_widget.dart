@@ -72,16 +72,16 @@ class _PostItemWidgetState extends State<PostItemWidget> {
 
   Color get _colorBasedOnStatus {
     switch (widget.post.status) {
-      case PostStatus.publish:
+      case PostStatusEnum.publish:
         return ColorPallet.lightGreen;
 
-      case PostStatus.pending:
+      case PostStatusEnum.pending:
         return ColorPallet.yellow;
 
-      case PostStatus.draft:
+      case PostStatusEnum.draft:
         return ColorPallet.yellowishGreen;
 
-      case PostStatus.trash:
+      case PostStatusEnum.trash:
         return ColorPallet.crimson;
 
       default:

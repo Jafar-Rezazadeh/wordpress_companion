@@ -331,7 +331,7 @@ void main() {
           after: "test",
           before: "test",
           categories: [1, 2, 3],
-          status: [PostStatus.publish],
+          status: [PostStatusEnum.publish],
         ),
       );
 

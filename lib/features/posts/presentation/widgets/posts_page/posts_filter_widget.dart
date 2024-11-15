@@ -20,7 +20,7 @@ class PostsFilterWidget extends StatefulWidget {
 }
 
 class _PostsFilterWidgetState extends State<PostsFilterWidget> {
-  List<PostStatus> selectedStatus = PostStatus.values;
+  List<PostStatusEnum> selectedStatus = PostStatusEnum.values;
   String? afterDate;
   String? beforeDate;
 
@@ -59,7 +59,7 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
     if (widget.filters.before != null) {
       count++;
     }
-    if (widget.filters.status != PostStatus.values) {
+    if (widget.filters.status != PostStatusEnum.values) {
       count++;
     }
     return count == 0 ? null : count;
@@ -70,7 +70,7 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
       children: [
         Text("وضعیت: ", style: Theme.of(context).textTheme.titleMedium),
         Expanded(
-          child: CustomDropDownButton<PostStatus>(
+          child: CustomDropDownButton<PostStatusEnum>(
             initialValue: _initialStatus(),
             items: [
               _allStatus(),
@@ -80,7 +80,7 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
               if (value != null) {
                 selectedStatus = [value];
               } else {
-                selectedStatus = PostStatus.values;
+                selectedStatus = PostStatusEnum.values;
               }
             },
           ),
@@ -89,21 +89,21 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
     );
   }
 
-  PostStatus? _initialStatus() {
+  PostStatusEnum? _initialStatus() {
     return widget.filters.status.length == 1
         ? widget.filters.status.first
         : null;
   }
 
-  DropdownMenuItem<PostStatus> _allStatus() {
+  DropdownMenuItem<PostStatusEnum> _allStatus() {
     return const DropdownMenuItem(
       value: null,
       child: Text("همه ی موارد"),
     );
   }
 
-  Iterable<DropdownMenuItem<PostStatus>> _statusItems() {
-    return PostStatus.values.map(
+  Iterable<DropdownMenuItem<PostStatusEnum>> _statusItems() {
+    return PostStatusEnum.values.map(
       (e) => DropdownMenuItem(
         value: e,
         child: Text(e.translate()),

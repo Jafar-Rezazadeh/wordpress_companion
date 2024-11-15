@@ -32,7 +32,7 @@ void main() {
     guid: "guid",
     modified: DateTime(1),
     slug: "slug",
-    status: PostStatus.draft,
+    status: PostStatusEnum.draft,
     type: "type",
     link: "link",
     title: "title",
@@ -103,7 +103,8 @@ void main() {
       await tester.pumpWidget(makeTestWidget(dummyPost));
       await tester.pumpAndSettle();
       //verification
-      final statusInputFinder = find.byType(CustomDropDownButton<PostStatus>);
+      final statusInputFinder =
+          find.byType(CustomDropDownButton<PostStatusEnum>);
       final customInputFinder = find.byType(CustomFormInputField);
       final contentEditorFinder = find.byType(QuillEditor);
       final featuredImageInputFinder = find.byType(FeaturedImageInput);
@@ -115,8 +116,8 @@ void main() {
 
       //act
       await tester
-          .widget<CustomDropDownButton<PostStatus>>(statusInputFinder)
-          .onChanged(PostStatus.private);
+          .widget<CustomDropDownButton<PostStatusEnum>>(statusInputFinder)
+          .onChanged(PostStatusEnum.private);
 
       for (int i = 0; i < 4; i++) {
         await tester.enterText(customInputFinder.at(i), "test");
@@ -138,7 +139,7 @@ void main() {
       final params = postParamsBuilder.build();
 
       //assert
-      expect(params.status, PostStatus.private);
+      expect(params.status, PostStatusEnum.private);
       expect(params.title, "test");
       expect(params.slug, "test");
       expect(params.content, "<p>test</p>");

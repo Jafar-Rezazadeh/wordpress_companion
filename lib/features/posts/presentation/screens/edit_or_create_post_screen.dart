@@ -23,7 +23,7 @@ class EditOrCreatePostScreen extends StatefulWidget {
 class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   late final QuillController contentController;
   late final PostParamsBuilder _postParamsBuilder;
-  final List<PostStatus> validPostStatusAsParams =
+  final List<PostStatusEnum> validPostStatusAsParams =
       PostStatusFilter.validPostStatusAsParam();
 
   @override
@@ -143,11 +143,11 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   }
 
   Widget _statusInput() {
-    return CustomDropDownButton<PostStatus>(
+    return CustomDropDownButton<PostStatusEnum>(
       initialValue: _validateStatusAsParams(),
       items: validPostStatusAsParams
           .map(
-            (status) => DropdownMenuItem<PostStatus>(
+            (status) => DropdownMenuItem<PostStatusEnum>(
               value: status,
               child: Text(status.translate()),
             ),
@@ -161,7 +161,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
     );
   }
 
-  PostStatus? _validateStatusAsParams() {
+  PostStatusEnum? _validateStatusAsParams() {
     if (validPostStatusAsParams.contains(_postParamsBuilder.status)) {
       return _postParamsBuilder.status;
     }

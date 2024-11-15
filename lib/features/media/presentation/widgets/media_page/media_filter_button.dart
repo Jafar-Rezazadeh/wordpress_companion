@@ -17,7 +17,7 @@ class MediaFilter extends StatefulWidget {
 }
 
 typedef MediaFilters = ({
-  MediaType? type,
+  MediaTypeEnum? type,
   String? before,
   String? after,
 });
@@ -59,7 +59,7 @@ class _MediaFilterState extends State<MediaFilter> {
   SizedBox _typeFilterWidget() {
     return SizedBox(
       width: double.infinity,
-      child: CustomDropDownButton<MediaType>(
+      child: CustomDropDownButton<MediaTypeEnum>(
         initialValue: filtersBuilder.type,
         onChanged: (value) => filtersBuilder.setType = value,
         items: [
@@ -68,7 +68,7 @@ class _MediaFilterState extends State<MediaFilter> {
             value: null,
             child: Text("همه ی موارد"),
           ),
-          ...MediaType.values.map(
+          ...MediaTypeEnum.values.map(
             (type) => DropdownMenuItem(
               alignment: Alignment.centerRight,
               value: type,
@@ -119,11 +119,11 @@ class _MediaFilterState extends State<MediaFilter> {
 }
 
 class _MediaFiltersBuilder {
-  MediaType? type;
+  MediaTypeEnum? type;
   String? before;
   String? after;
 
-  set setType(MediaType? type) => this.type = type;
+  set setType(MediaTypeEnum? type) => this.type = type;
   set setBefore(String? before) => this.before = before;
   set setAfter(String? after) => this.after = after;
 

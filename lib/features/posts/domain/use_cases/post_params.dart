@@ -4,7 +4,7 @@ class PostParams {
   final int id;
   final String title;
   final String slug;
-  final PostStatus status;
+  final PostStatusEnum status;
   final String content;
   final String excerpt;
   final List<int> categories;

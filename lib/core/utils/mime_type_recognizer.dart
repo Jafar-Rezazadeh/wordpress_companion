@@ -1,13 +1,13 @@
 import '../constants/enums.dart';
 
 class MimeTypeRecognizer {
-  static MimeType fromString(String value) {
+  static MimeTypeEnum fromString(String value) {
     if (value.contains("image")) {
-      return MimeType.image;
+      return MimeTypeEnum.image;
     }
     if (value.contains("video")) {
-      return MimeType.video;
+      return MimeTypeEnum.video;
     }
-    return MimeType.file;
+    return MimeTypeEnum.file;
   }
 }

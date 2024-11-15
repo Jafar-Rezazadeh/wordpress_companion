@@ -5,11 +5,11 @@ import 'package:wordpress_companion/features/posts/presentation/login_holders/ut
 void main() {
   test("should return expect strings base on status ", () {
     //arrange
-    String publish = PostStatus.publish.translate();
-    String private = PostStatus.private.translate();
-    String pending = PostStatus.pending.translate();
-    String future = PostStatus.future.translate();
-    String draft = PostStatus.draft.translate();
+    String publish = PostStatusEnum.publish.translate();
+    String private = PostStatusEnum.private.translate();
+    String pending = PostStatusEnum.pending.translate();
+    String future = PostStatusEnum.future.translate();
+    String draft = PostStatusEnum.draft.translate();
 
     //assert
     expect(publish, "انتشار داده شده");

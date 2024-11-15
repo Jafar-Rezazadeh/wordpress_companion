@@ -4,7 +4,7 @@ class GetPostsFilters {
   String? _search;
   String? _after;
   String? _before;
-  List<PostStatus> _status = PostStatus.values;
+  List<PostStatusEnum> _status = PostStatusEnum.values;
   List<int>? _categories;
 
   setSearch(String? value) {
@@ -27,7 +27,7 @@ class GetPostsFilters {
     return this;
   }
 
-  setStatus(List<PostStatus> status) {
+  setStatus(List<PostStatusEnum> status) {
     _status = status;
     return this;
   }
@@ -36,13 +36,13 @@ class GetPostsFilters {
   String? get after => _after;
   String? get before => _before;
   List<int>? get categories => _categories;
-  List<PostStatus> get status => _status;
+  List<PostStatusEnum> get status => _status;
 
   void reset() {
     _search = null;
     _after = null;
     _before = null;
     _categories = null;
-    _status = PostStatus.values;
+    _status = PostStatusEnum.values;
   }
 }

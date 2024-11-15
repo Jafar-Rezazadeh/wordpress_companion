@@ -42,9 +42,9 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
     };
 
 const _$UserRoleEnumMap = {
-  UserRole.subscriber: 'subscriber',
-  UserRole.contributor: 'contributor',
-  UserRole.author: 'author',
-  UserRole.editor: 'editor',
-  UserRole.administrator: 'administrator',
+  UserRoleEnum.subscriber: 'subscriber',
+  UserRoleEnum.contributor: 'contributor',
+  UserRoleEnum.author: 'author',
+  UserRoleEnum.editor: 'editor',
+  UserRoleEnum.administrator: 'administrator',
 };

@@ -50,7 +50,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
           "categories": params.categories?.join(","),
         "status": params.status != null
             ? params.status?.map((e) => e.name).join(",")
-            : PostStatus.values.map((e) => e.name).join(","),
+            : PostStatusEnum.values.map((e) => e.name).join(","),
       },
     );
     final jsonData = ApiResponseHandler.convertToJsonList(response.data);

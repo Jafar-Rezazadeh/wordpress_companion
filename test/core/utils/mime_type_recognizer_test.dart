@@ -10,8 +10,8 @@ void main() {
       final video = MimeTypeRecognizer.fromString("video/mp4");
 
       //assert
-      expect(image, MimeType.image);
-      expect(video, MimeType.video);
+      expect(image, MimeTypeEnum.image);
+      expect(video, MimeTypeEnum.video);
     });
 
     test("should return file when not recognized by given String", () {
@@ -19,7 +19,7 @@ void main() {
       final file = MimeTypeRecognizer.fromString("file");
 
       //assert
-      expect(file, MimeType.file);
+      expect(file, MimeTypeEnum.file);
     });
   });
 }

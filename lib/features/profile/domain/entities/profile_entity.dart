@@ -42,7 +42,7 @@ class ProfileEntity extends Equatable {
   final String slug;
 
   @JsonKey(defaultValue: [], includeToJson: false)
-  final List<UserRole> roles;
+  final List<UserRoleEnum> roles;
 
   // implemented in model
   final ProfileAvatarUrlsEntity avatarUrls;

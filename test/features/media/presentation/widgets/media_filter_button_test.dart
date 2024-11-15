@@ -87,11 +87,11 @@ void main() {
 
       //act
       await _tapFilterButton(tester);
-      await _selectMediaType(tester, MediaType.image);
+      await _selectMediaType(tester, MediaTypeEnum.image);
       await tester.tap(find.byKey(applyFilterKey));
 
       //assert
-      expect(selectedFilters?.type, MediaType.image);
+      expect(selectedFilters?.type, MediaTypeEnum.image);
     });
   });
 
@@ -150,11 +150,13 @@ Future<void> _selectDates(WidgetTester tester, Finder afterDateSelectorFinder,
   beforeDate.onSelected(DateTime(2020, 1, 5));
 }
 
-Future<void> _selectMediaType(WidgetTester tester, MediaType mediaType) async {
+Future<void> _selectMediaType(
+    WidgetTester tester, MediaTypeEnum mediaType) async {
   final customDropDownButtonFinder =
-      find.byType(CustomDropDownButton<MediaType>);
+      find.byType(CustomDropDownButton<MediaTypeEnum>);
   expect(customDropDownButtonFinder, findsOneWidget);
-  final customDropDownButton = tester.widget<CustomDropDownButton<MediaType>>(
+  final customDropDownButton =
+      tester.widget<CustomDropDownButton<MediaTypeEnum>>(
     customDropDownButtonFinder,
   );
   customDropDownButton.onChanged(mediaType);

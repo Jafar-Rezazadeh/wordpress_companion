@@ -10,10 +10,10 @@ void main() {
 
       //assert
       final expectedStatus = [
-        PostStatus.publish,
-        PostStatus.pending,
-        PostStatus.private,
-        PostStatus.draft,
+        PostStatusEnum.publish,
+        PostStatusEnum.pending,
+        PostStatusEnum.private,
+        PostStatusEnum.draft,
       ];
 
       for (var status in expectedStatus) {
@@ -27,8 +27,8 @@ void main() {
 
       //assert
       final notIncludedStatus = [
-        PostStatus.future,
-        PostStatus.trash,
+        PostStatusEnum.future,
+        PostStatusEnum.trash,
       ];
 
       for (var status in notIncludedStatus) {

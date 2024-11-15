@@ -46,10 +46,10 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
     };
 
 const _$PostStatusEnumMap = {
-  PostStatus.publish: 'publish',
-  PostStatus.future: 'future',
-  PostStatus.draft: 'draft',
-  PostStatus.pending: 'pending',
-  PostStatus.private: 'private',
-  PostStatus.trash: 'trash',
+  PostStatusEnum.publish: 'publish',
+  PostStatusEnum.future: 'future',
+  PostStatusEnum.draft: 'draft',
+  PostStatusEnum.pending: 'pending',
+  PostStatusEnum.private: 'private',
+  PostStatusEnum.trash: 'trash',
 };

@@ -22,13 +22,13 @@ class MediaListItemLeading extends StatelessWidget {
 
   Widget _content() {
     final mimeTypeEnum = MimeTypeRecognizer.fromString(mimeType);
-    if (mimeTypeEnum == MimeType.video) {
+    if (mimeTypeEnum == MimeTypeEnum.video) {
       return _iconBox(
         key: const Key("video_box"),
         icon: Icons.video_file,
       );
     }
-    if (mimeTypeEnum == MimeType.image) {
+    if (mimeTypeEnum == MimeTypeEnum.image) {
       return _imageBox();
     }
     return _iconBox(

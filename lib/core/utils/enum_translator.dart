@@ -1,17 +1,17 @@
 import '../constants/enums.dart';
 
 class EnumTranslator {
-  static String translateUserRole(UserRole role) {
+  static String translateUserRole(UserRoleEnum role) {
     switch (role) {
-      case UserRole.subscriber:
+      case UserRoleEnum.subscriber:
         return "مشترک";
-      case UserRole.contributor:
+      case UserRoleEnum.contributor:
         return "مشارکت کننده";
-      case UserRole.author:
+      case UserRoleEnum.author:
         return "نویسنده";
-      case UserRole.editor:
+      case UserRoleEnum.editor:
         return "ویرایشگر";
-      case UserRole.administrator:
+      case UserRoleEnum.administrator:
         return "مدیر کل";
     }
   }

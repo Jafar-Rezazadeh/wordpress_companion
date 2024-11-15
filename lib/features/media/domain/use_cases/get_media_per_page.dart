@@ -27,7 +27,7 @@ class GetMediaPerPageParams {
   final String? search;
   final String? after;
   final String? before;
-  final MediaType? type;
+  final MediaTypeEnum? type;
 
   GetMediaPerPageParams({
     this.page = 1,
@@ -45,7 +45,7 @@ class GetMediaPerPageParams {
     String? search,
     String? after,
     String? before,
-    MediaType? type,
+    MediaTypeEnum? type,
   }) {
     return GetMediaPerPageParams(
       page: page ?? this.page,

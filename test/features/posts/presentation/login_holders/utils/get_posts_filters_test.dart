@@ -12,7 +12,7 @@ void main() {
       ..setSearch("test")
       ..setAfter("after")
       ..setBefore("before")
-      ..setStatus([PostStatus.pending])
+      ..setStatus([PostStatusEnum.pending])
       ..setCategories([1, 2]);
 
     //assert
@@ -20,7 +20,7 @@ void main() {
     expect(postsFilters.after, "after");
     expect(postsFilters.before, "before");
     expect(postsFilters.categories, [1, 2]);
-    expect(postsFilters.status, [PostStatus.pending]);
+    expect(postsFilters.status, [PostStatusEnum.pending]);
   });
 
   test("should set all props to initial values when reset() invoked", () {
@@ -32,7 +32,7 @@ void main() {
       ..setSearch("test")
       ..setAfter("after")
       ..setBefore("before")
-      ..setStatus([PostStatus.publish])
+      ..setStatus([PostStatusEnum.publish])
       ..setCategories([1, 2]);
 
     postsFilters.reset();
@@ -42,6 +42,6 @@ void main() {
     expect(postsFilters.after, null);
     expect(postsFilters.before, null);
     expect(postsFilters.categories, null);
-    expect(postsFilters.status, PostStatus.values);
+    expect(postsFilters.status, PostStatusEnum.values);
   });
 }

@@ -11,15 +11,15 @@ import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 // ignore: must_be_immutable
 class FakePostEntity extends Fake implements PostEntity {
-  PostStatus _status = PostStatus.publish;
+  PostStatusEnum _status = PostStatusEnum.publish;
 
   @override
   int get id => 20;
 
   @override
-  PostStatus get status => _status;
+  PostStatusEnum get status => _status;
 
-  setStatus(PostStatus status) {
+  setStatus(PostStatusEnum status) {
     _status = status;
     return this;
   }
@@ -148,7 +148,7 @@ void main() {
         "should color be (ColorPallet.lightGreen) when status is (published)",
         (tester) async {
       //arrange
-      final post = FakePostEntity().setStatus(PostStatus.publish);
+      final post = FakePostEntity().setStatus(PostStatusEnum.publish);
 
       await _makeSimpleTestWidget(tester, post);
 
@@ -165,7 +165,7 @@ void main() {
     testWidgets("should color be (ColorPallet.yellow) when status is (pending)",
         (tester) async {
       //arrange
-      final post = FakePostEntity().setStatus(PostStatus.pending);
+      final post = FakePostEntity().setStatus(PostStatusEnum.pending);
       await _makeSimpleTestWidget(tester, post);
 
       //verification
@@ -182,7 +182,7 @@ void main() {
         "should color be (ColorPallet.yellowishGreen) when status is (draft)",
         (tester) async {
       //arrange
-      final post = FakePostEntity().setStatus(PostStatus.draft);
+      final post = FakePostEntity().setStatus(PostStatusEnum.draft);
       await _makeSimpleTestWidget(tester, post);
 
       //verification
@@ -197,7 +197,7 @@ void main() {
     testWidgets("should color be (ColorPallet.crimson) when status is (trash)",
         (tester) async {
       //arrange
-      final post = FakePostEntity().setStatus(PostStatus.trash);
+      final post = FakePostEntity().setStatus(PostStatusEnum.trash);
       await _makeSimpleTestWidget(tester, post);
 
       //verification
@@ -214,7 +214,7 @@ void main() {
         "should color be (ColorPallet.blue) when status is NOT (publish,pending,draft)",
         (tester) async {
       //arrange
-      final post = FakePostEntity().setStatus(PostStatus.private);
+      final post = FakePostEntity().setStatus(PostStatusEnum.private);
       await _makeSimpleTestWidget(tester, post);
 
       //verification
