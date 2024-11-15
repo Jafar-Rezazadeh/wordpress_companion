@@ -572,4 +572,53 @@ class JsonResponseSimulator {
       ]
     }
   };
+
+  static Map<String, dynamic> forcePostDeleted = {
+    "deleted": true,
+    "previous": {
+      "id": 143,
+      "date": "2024-11-12T12:53:13",
+      "date_gmt": "2024-11-12T09:23:13",
+      "guid": {
+        "rendered": "https://syntaxforge.ir/?p=143",
+        "raw": "https://syntaxforge.ir/?p=143"
+      },
+      "modified": "2024-11-14T22:49:46",
+      "modified_gmt": "2024-11-14T19:19:46",
+      "password": "",
+      "slug": "test11",
+      "status": "pending",
+      "type": "post",
+      "link": "https://syntaxforge.ir/?p=143",
+      "title": {"raw": "test11 updated5", "rendered": "test11 updated5"},
+      "content": {
+        "raw": "",
+        "rendered": "",
+        "protected": false,
+        "block_version": 0
+      },
+      "excerpt": {"raw": "", "rendered": "", "protected": false},
+      "author": 1,
+      "featured_media": 0,
+      "comment_status": "open",
+      "ping_status": "open",
+      "sticky": false,
+      "template": "",
+      "format": "standard",
+      "meta": {"footnotes": ""},
+      "categories": [1],
+      "tags": [],
+      "permalink_template": "https://syntaxforge.ir/2024/11/12/%postname%/",
+      "generated_slug": "test11-updated5",
+      "class_list": [
+        "post-143",
+        "post",
+        "type-post",
+        "status-pending",
+        "format-standard",
+        "hentry",
+        "category-uncategorized"
+      ]
+    }
+  };
 }

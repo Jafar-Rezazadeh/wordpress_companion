@@ -78,11 +78,11 @@ void main() {
   });
 
   group("deletePost -", () {
-    test("should return deleted post as (PostEntity) when success", () async {
+    test("should return (bool) when delete request is success", () async {
       //arrange
       when(
         () => mockPostsRemoteDataSource.deletePost(any()),
-      ).thenAnswer((_) async => FakePostModel());
+      ).thenAnswer((_) async => true);
 
       //act
       final result = await postsRepositoryImpl.deletePost(1);
@@ -90,7 +90,7 @@ void main() {
 
       //assert
       expect(result.isRight(), true);
-      expect(rightValue, isA<PostEntity>());
+      expect(rightValue, isA<bool>());
     });
 
     test("should return (ServerFailure) when DioException is thrown", () async {

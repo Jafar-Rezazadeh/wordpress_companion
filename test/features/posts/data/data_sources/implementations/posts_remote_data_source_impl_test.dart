@@ -92,16 +92,14 @@ void main() {
   });
 
   group("deletePost -", () {
-    test(
-        "should return updated post as(PostModel) when success with (json) response",
-        () async {
+    test("should return (true) when success with (json) response", () async {
       //arrange
       final params = DummyParams.postParams;
       dioAdapter.onDelete(
         "$wpV2EndPoint/posts/${params.id}",
         (server) => server.reply(
           HttpStatus.ok,
-          JsonResponseSimulator.post,
+          JsonResponseSimulator.forcePostDeleted,
         ),
       );
 
@@ -109,11 +107,10 @@ void main() {
       final result = await postsRemoteDataSourceImpl.deletePost(params.id);
 
       //assert
-      expect(result, isA<PostModel>());
+      expect(result, true);
     });
 
-    test(
-        "should return updated post as (PostModel) when success with (jsonString) response",
+    test("should return true when success with (jsonString) response",
         () async {
       //arrange
       final params = DummyParams.postParams;
@@ -121,7 +118,7 @@ void main() {
         "$wpV2EndPoint/posts/${params.id}",
         (server) => server.reply(
           HttpStatus.ok,
-          jsonEncode(JsonResponseSimulator.post),
+          jsonEncode(JsonResponseSimulator.forcePostDeleted),
         ),
       );
 
@@ -129,7 +126,37 @@ void main() {
       final result = await postsRemoteDataSourceImpl.deletePost(params.id);
 
       //assert
-      expect(result, isA<PostModel>());
+      expect(result, true);
+    });
+
+    test("should has the force param", () async {
+      //arrange
+      const id = 1;
+      Map<String, dynamic> requestParams = {};
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            requestParams = options.queryParameters;
+            return handler.next(options);
+          },
+        ),
+      );
+      dioAdapter.onDelete(
+        "$wpV2EndPoint/posts/$id",
+        (server) {
+          server.reply(
+            HttpStatus.ok,
+            jsonEncode(JsonResponseSimulator.forcePostDeleted),
+          );
+        },
+      );
+
+      //act
+      await postsRemoteDataSourceImpl.deletePost(id);
+
+      //assert
+      expect(requestParams.keys, contains("force"));
+      expect(requestParams["force"], true);
     });
 
     test("should throw (DioException) when response is a failure", () {
@@ -271,7 +298,7 @@ void main() {
       expect(params.keys, contains("_embed"));
 
       expect(params["_embed"], contains("author,wp:featuredmedia"));
-      expect(params["status"], "publish,future,draft,pending,private");
+      expect(params["status"], "publish,future,draft,pending,private,trash");
     });
 
     test(

@@ -26,4 +26,5 @@ enum PostStatus {
   draft,
   pending,
   private,
+  trash,
 }

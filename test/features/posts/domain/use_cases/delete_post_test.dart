@@ -18,11 +18,11 @@ void main() {
     deletePost = DeletePost(postsRepository: mockPostsRepository);
   });
 
-  test("should return deleted post as (PostEntity) when success", () async {
+  test("should return (bool) when delete request is success", () async {
     //arrange
     when(
       () => mockPostsRepository.deletePost(any()),
-    ).thenAnswer((_) async => right(FakePostEntity()));
+    ).thenAnswer((_) async => right(true));
 
     //act
     final result = await deletePost(1);
@@ -30,7 +30,7 @@ void main() {
 
     //assert
     expect(result.isRight(), true);
-    expect(rightValue, isA<PostEntity>());
+    expect(rightValue, isA<bool>());
   });
 
   test("should return kind of (Failure) when fails", () async {

@@ -8,5 +8,5 @@ abstract class PostsRepository {
   );
   Future<Either<Failure, PostEntity>> createPost(PostParams params);
   Future<Either<Failure, PostEntity>> updatePost(PostParams params);
-  Future<Either<Failure, PostEntity>> deletePost(int id);
+  Future<Either<Failure, bool>> deletePost(int id);
 }

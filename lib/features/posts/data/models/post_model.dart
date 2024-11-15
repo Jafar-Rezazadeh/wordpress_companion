@@ -80,7 +80,7 @@ class PostModel extends PostEntity {
   @JsonKey(readValue: _authorNameReadValue, includeToJson: false)
   String get authorName => super.authorName;
   static _authorNameReadValue(Map<dynamic, dynamic> json, String key) =>
-      json["_embedded"]["author"][0]["name"];
+      json["_embedded"]["author"]?[0]?["name"];
 
   @override
   @JsonKey(name: "featured_media")

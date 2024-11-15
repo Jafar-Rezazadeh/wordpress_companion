@@ -6,7 +6,11 @@ import '../../../posts_exports.dart';
 class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
   final Dio _dio;
 
-  PostsRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
+  PostsRemoteDataSourceImpl({required Dio dio}) : _dio = dio {
+    _dio.options.queryParameters.addAll({
+      "_embed": "author,wp:featuredmedia",
+    });
+  }
   @override
   Future<PostModel> createPost(PostParams params) async {
     final response = await _dio.post(
@@ -20,13 +24,16 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
   }
 
   @override
-  Future<PostModel> deletePost(int id) async {
+  Future<bool> deletePost(int id) async {
     final response = await _dio.delete(
       "$wpV2EndPoint/posts/$id",
+      queryParameters: {
+        "force": true,
+      },
     );
     final jsonData = ApiResponseHandler.convertToJson(response.data);
 
-    return PostModel.fromJson(jsonData);
+    return jsonData["deleted"];
   }
 
   @override
@@ -36,7 +43,6 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
       queryParameters: {
         "page": params.page,
         "per_page": params.perPage,
-        "_embed": "author,wp:featuredmedia",
         if (params.search != null) "search": params.search,
         if (params.after != null) "after": params.after,
         if (params.before != null) "before": params.before,

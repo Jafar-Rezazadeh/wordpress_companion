@@ -51,4 +51,5 @@ const _$PostStatusEnumMap = {
   PostStatus.draft: 'draft',
   PostStatus.pending: 'pending',
   PostStatus.private: 'private',
+  PostStatus.trash: 'trash',
 };
