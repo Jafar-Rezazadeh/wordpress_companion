@@ -26,3 +26,4 @@ export 'package:wordpress_companion/features/posts/presentation/screens/edit_or_
 // utils
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/get_posts_filters.dart';
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_translator.dart';
+export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_params_builder.dart';

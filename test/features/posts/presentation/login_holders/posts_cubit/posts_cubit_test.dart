@@ -347,7 +347,7 @@ void main() {
       setUp: () {
         when(
           () => mockDeletePost.call(any()),
-        ).thenAnswer((_) async => right(FakePostEntity()));
+        ).thenAnswer((_) async => right(true));
       },
       build: () => postsCubit,
       act: (cubit) => cubit.deletePost(1),

@@ -64,13 +64,14 @@ class FailureWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          HttpStatusHelper.translateToMessage(
-              failure.response?.statusCode ?? 0),
+          "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const Gap(5),
         Text(
-          "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
-          overflow: TextOverflow.ellipsis,
+          HttpStatusHelper.translateToMessage(
+              failure.response?.statusCode ?? 0),
         ),
       ],
     );
@@ -90,7 +91,7 @@ class FailureWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("خطای ناشناخته"),
+          const Text("Internal Failure"),
           const Gap(10),
           Text(failure.message),
           const Gap(10),

@@ -71,9 +71,7 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
         Text("وضعیت: ", style: Theme.of(context).textTheme.titleMedium),
         Expanded(
           child: CustomDropDownButton<PostStatus>(
-            initialValue: widget.filters.status.length == 1
-                ? widget.filters.status.first
-                : null,
+            initialValue: _initialStatus(),
             items: [
               _allStatus(),
               ..._statusItems(),
@@ -89,6 +87,12 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
         ),
       ],
     );
+  }
+
+  PostStatus? _initialStatus() {
+    return widget.filters.status.length == 1
+        ? widget.filters.status.first
+        : null;
   }
 
   DropdownMenuItem<PostStatus> _allStatus() {

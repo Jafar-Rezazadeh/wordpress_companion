@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_delta_from_html/flutter_quill_delta_from_html.dart';
@@ -6,11 +7,14 @@ import 'package:gap/gap.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
+import 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_filter.dart';
 
 class EditOrCreatePostScreen extends StatefulWidget {
   final PostEntity? post;
+  final PostParamsBuilder? postParamsBuilderTest;
 
-  const EditOrCreatePostScreen({super.key, this.post});
+  const EditOrCreatePostScreen(
+      {super.key, this.post, this.postParamsBuilderTest});
 
   @override
   State<EditOrCreatePostScreen> createState() => _EditOrCreatePostScreenState();
@@ -18,15 +22,46 @@ class EditOrCreatePostScreen extends StatefulWidget {
 
 class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   late final QuillController contentController;
-
-  final inputHtmlStringSample = '<p><em>awdawdawdawdawd</em></p>';
+  late final PostParamsBuilder _postParamsBuilder;
+  final List<PostStatus> validPostStatusAsParams =
+      PostStatusFilter.validPostStatusAsParam();
 
   @override
   void initState() {
     super.initState();
+    _initializeQuillController();
+    _initializeParamsBuilder();
+  }
+
+  void _initializeQuillController() {
     contentController = QuillController.basic();
-    contentController.document =
-        Document.fromDelta(HtmlToDelta().convert(inputHtmlStringSample));
+
+    if (widget.post?.content.isNotEmpty == true) {
+      contentController.document = Document.fromDelta(
+        HtmlToDelta().convert(
+          widget.post?.content ?? "",
+        ),
+      );
+    }
+
+    contentController.addListener(() {
+      final delta = contentController.document.toDelta();
+      final htmlText = QuillDeltaToHtmlConverter(delta.toJson()).convert();
+
+      _postParamsBuilder.setContent(htmlText);
+    });
+  }
+
+  void _initializeParamsBuilder() {
+    _postParamsBuilder = widget.postParamsBuilderTest ?? PostParamsBuilder();
+    if (widget.post != null) {
+      _postParamsBuilder.setInitialValues(widget.post!);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -50,39 +85,87 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
     return PushedScreenAppBar(
       context: context,
       title: widget.post != null ? "ویرایش پست" : "ایجاد پست",
-      bottomLeadingWidgets: [
-        SaveButton(
-          key: const Key("submit_button"),
-          onPressed: () {
-            final delta = contentController.document.toDelta();
-            final htmlText =
-                QuillDeltaToHtmlConverter(delta.toJson()).convert();
-            print(htmlText);
-          },
-        ),
-      ],
+      showLoading: _ifStateIsLoading(context),
+      bottomLeadingWidgets: [_saveButton(context)],
       bottomActionWidgets: [
-        if (widget.post != null)
-          IconButton(
-            key: const Key("delete_button"),
-            icon: const Icon(Icons.delete_outline),
-            color: ColorPallet.crimson,
-            iconSize: 30,
-            onPressed: () {},
-          ),
+        if (widget.post != null) _deleteButton(),
         if (widget.post != null) const Gap(10),
-        CustomDropDownButton<PostStatus>(
-          initialValue: widget.post?.status ?? PostStatus.publish,
-          items: PostStatus.values
-              .map((status) => DropdownMenuItem<PostStatus>(
-                    value: status,
-                    child: Text(status.translate()),
-                  ))
-              .toList(),
-          onChanged: (value) {},
-        ),
+        _statusInput(),
       ],
     );
+  }
+
+  bool? _ifStateIsLoading(BuildContext context) {
+    return context
+        .watch<PostsCubit>()
+        .state
+        .maybeWhen(loading: () => true, orElse: () => false);
+  }
+
+  SaveButton _saveButton(BuildContext context) {
+    return SaveButton(
+      key: const Key("submit_button"),
+      onPressed: () => _createOrUpdatePost(),
+    );
+  }
+
+  void _createOrUpdatePost() {
+    if (widget.post != null) {
+      context.read<PostsCubit>().updatePosts(_postParamsBuilder.build());
+    } else {
+      context.read<PostsCubit>().createPosts(_postParamsBuilder.build());
+    }
+  }
+
+  IconButton _deleteButton() {
+    return IconButton(
+      key: const Key("delete_button"),
+      icon: const Icon(Icons.delete_outline),
+      color: ColorPallet.crimson,
+      iconSize: 30,
+      onPressed: () => _showAreYouSureDialog(),
+    );
+  }
+
+  void _showAreYouSureDialog() {
+    CustomDialogs.showAreYouSureDialog(
+      context: context,
+      title: "حذف برای همیشه!",
+      content:
+          "آیا مطمئن هستید که میخواهید (${widget.post?.title}) را برای همیشه حذف کنید ؟",
+      onConfirm: () {
+        if (widget.post != null) {
+          context.read<PostsCubit>().deletePost(widget.post!.id);
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
+
+  Widget _statusInput() {
+    return CustomDropDownButton<PostStatus>(
+      initialValue: _validateStatusAsParams(),
+      items: validPostStatusAsParams
+          .map(
+            (status) => DropdownMenuItem<PostStatus>(
+              value: status,
+              child: Text(status.translate()),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        if (value != null) {
+          _postParamsBuilder.setStatus(value);
+        }
+      },
+    );
+  }
+
+  PostStatus? _validateStatusAsParams() {
+    if (validPostStatusAsParams.contains(_postParamsBuilder.status)) {
+      return _postParamsBuilder.status;
+    }
+    return null;
   }
 
   Widget _body() {
@@ -97,12 +180,12 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
             children: [
               _title(),
               _slug(),
-
               _contentHtmlEditor(),
               _excerpt(),
               // TODO: category input
+              // TODO: make tags feature implemented it here
               const TagInputWidget(),
-              const FeaturedImageInput(),
+              _featuredImageInput(),
             ].withGapInBetween(40),
           ),
         ),
@@ -114,13 +197,15 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
     return CustomFormInputField(
       initialValue: widget.post?.title,
       label: "عنوان",
+      onChanged: (value) => _postParamsBuilder.setTitle(value),
     );
   }
 
   CustomFormInputField _slug() {
     return CustomFormInputField(
-      initialValue: widget.post?.slug,
+      initialValue: Uri.decodeComponent(widget.post?.slug ?? ""),
       label: "نامک",
+      onChanged: (value) => _postParamsBuilder.setSlug(value),
     );
   }
 
@@ -134,32 +219,51 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
       height: 500,
       child: Column(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: QuillSimpleToolbar(
-              controller: contentController,
-              configurations: const QuillSimpleToolbarConfigurations(
-                axis: Axis.horizontal,
-              ),
-            ),
-          ),
+          _htmlEditorToolBar(),
           Divider(color: ColorPallet.border, thickness: 1),
-          Expanded(
-            child: QuillEditor.basic(
-              controller: contentController,
-              configurations:
-                  const QuillEditorConfigurations(padding: EdgeInsets.all(10)),
-            ),
-          )
+          _htmlEditor()
         ],
       ),
     );
   }
 
+  Widget _htmlEditorToolBar() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: QuillSimpleToolbar(
+        controller: contentController,
+        configurations: const QuillSimpleToolbarConfigurations(
+          axis: Axis.horizontal,
+        ),
+      ),
+    );
+  }
+
+  Widget _htmlEditor() {
+    return Expanded(
+      child: QuillEditor.basic(
+        controller: contentController,
+        configurations: const QuillEditorConfigurations(
+          padding: EdgeInsets.all(10),
+        ),
+      ),
+    );
+  }
+
   Widget _excerpt() {
-    return const CustomFormInputField(
+    return CustomFormInputField(
+      initialValue: widget.post?.excerpt,
       label: "چکیده",
       maxLines: 4,
+      onChanged: (value) => _postParamsBuilder.setExcerpt(value),
+    );
+  }
+
+  Widget _featuredImageInput() {
+    return FeaturedImageInput(
+      initialPostImageLink: widget.post?.featureMediaLink,
+      onImageSelected: (image) => _postParamsBuilder.setFeaturedImage(image.id),
+      onClearImage: () => _postParamsBuilder.setFeaturedImage(0),
     );
   }
 }

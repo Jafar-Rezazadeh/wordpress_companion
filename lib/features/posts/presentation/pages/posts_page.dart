@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
@@ -30,6 +32,7 @@ class _PostsPageState extends State<PostsPage>
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        floatingActionButton: _createPostButton(),
         body: Column(
           children: [
             _header(),
@@ -37,6 +40,13 @@ class _PostsPageState extends State<PostsPage>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _createPostButton() {
+    return FloatingActionButton(
+      onPressed: () => context.goNamed(editOrCreatePostRoute),
+      child: const Icon(Icons.add),
     );
   }
 
@@ -48,14 +58,16 @@ class _PostsPageState extends State<PostsPage>
           _clearPosts();
           _getFirstPage();
         },
-        onClear: () {
-          _clearPosts();
-          filters.reset();
-          _getFirstPage();
-        },
+        onClear: () => _refresh(),
       ),
       leftWidget: _searchInput(),
     );
+  }
+
+  void _refresh() {
+    _clearPosts();
+    filters.reset();
+    _getFirstPage();
   }
 
   Widget _searchInput() {
@@ -67,47 +79,47 @@ class _PostsPageState extends State<PostsPage>
           _getFirstPage();
         }
       },
-      onClear: () {
-        _clearPosts();
-        filters.reset();
-        _getFirstPage();
-      },
+      onClear: () => _refresh(),
     );
   }
 
-  void _clearPosts() {
-    setState(() => posts.clear());
-  }
+  void _clearPosts() => setState(() => posts.clear());
 
   Widget _listOfPosts() {
     return BlocConsumer<PostsCubit, PostsState>(
       listener: _postsStateListener,
       builder: (context, state) => Expanded(
-        child: InfiniteListView<PostEntity>(
-          onRefresh: () async {
-            _clearPosts();
-            filters.reset();
-            _getFirstPage();
-          },
-          onScrolledToBottom: () {
-            context.read<PostsCubit>().getNextPageData(filters);
-          },
-          data: posts,
-          itemBuilder: (post) {
-            return Container(
-              key: const Key("post_item"),
-              child: PostItemWidget(post: post),
-            );
-          },
-          showBottomLoadingWhen: _isLoading(state) && posts.isNotEmpty,
-          showFullScreenLoadingWhen: _isLoading(state) && posts.isEmpty,
-        ),
+        child: _infiniteList(state),
       ),
+    );
+  }
+
+  Widget _infiniteList(PostsState state) {
+    return InfiniteListView<PostEntity>(
+      onRefresh: () async => _refresh(),
+      onScrolledToBottom: () => _getNextPageData(),
+      data: posts,
+      itemBuilder: _postItem,
+      separatorWidget: const Gap(10),
+      showBottomLoadingWhen: _isLoading(state) && posts.isNotEmpty,
+      showFullScreenLoadingWhen: _isLoading(state) && posts.isEmpty,
+    );
+  }
+
+  _getNextPageData() {
+    context.read<PostsCubit>().getNextPageData(filters);
+  }
+
+  Widget _postItem(post) {
+    return Container(
+      key: const Key("post_item"),
+      child: PostItemWidget(post: post),
     );
   }
 
   void _postsStateListener(_, PostsState state) {
     state.whenOrNull(
+      needRefresh: () => _refresh(),
       loaded: (postsPageResult) {
         setState(() => posts = postsPageResult.posts);
       },

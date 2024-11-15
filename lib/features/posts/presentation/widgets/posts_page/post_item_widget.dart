@@ -81,6 +81,9 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       case PostStatus.draft:
         return ColorPallet.yellowishGreen;
 
+      case PostStatus.trash:
+        return ColorPallet.crimson;
+
       default:
         return ColorPallet.blue;
     }

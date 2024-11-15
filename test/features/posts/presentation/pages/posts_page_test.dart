@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
@@ -37,6 +38,45 @@ void main() {
     when(() => postsCubit.state).thenAnswer((_) => const PostsState.initial());
   });
 
+  group("floating action button -", () {
+    testWidgets("should go to createOrEditPostRoute when tapped",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: GoRouter(
+            routes: [
+              GoRoute(
+                path: "/",
+                builder: (context, state) => _testWidget(postsCubit),
+                routes: [
+                  GoRoute(
+                    name: editOrCreatePostRoute,
+                    path: editOrCreatePostRoute,
+                    builder: (context, state) => BlocProvider(
+                      create: (context) => postsCubit,
+                      child: const EditOrCreatePostScreen(),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+
+      //act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byType(EditOrCreatePostScreen), findsOneWidget);
+    });
+  });
   group("header -", () {
     group("filters -", () {
       testWidgets("should open filter_bottom_sheet when FilterButton is tapped",
@@ -276,6 +316,20 @@ void main() {
       //assert
       expect(find.byKey(const Key("failure_bottom_sheet")), findsOneWidget);
     });
+
+    testWidgets("should refresh(getFirstPage) the when state is needRefresh",
+        (tester) async {
+      //arrange
+      whenListen(
+        postsCubit,
+        Stream.fromIterable([const PostsState.needRefresh()]),
+      );
+      await tester.pumpWidget(_testWidget(postsCubit));
+      await tester.pumpAndSettle();
+
+      //assert
+      verify(() => postsCubit.getFirstPage(any())).called(2);
+    });
   });
 
   group("InfiniteListView -", () {
@@ -324,16 +378,6 @@ void main() {
             ),
           ),
         ).called(3);
-      });
-
-      testWidgets("should get when ", (tester) async {
-        //arrange
-
-        //verification
-
-        //act
-
-        //assert
       });
     });
 

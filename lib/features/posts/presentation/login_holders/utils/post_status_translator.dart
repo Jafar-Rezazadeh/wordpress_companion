@@ -17,6 +17,9 @@ extension PostStatusTranslator on PostStatus {
 
       case PostStatus.draft:
         return "پیش نویس";
+
+      case PostStatus.trash:
+        return "زباله دان";
     }
   }
 }

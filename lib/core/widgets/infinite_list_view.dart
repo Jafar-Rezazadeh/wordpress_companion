@@ -97,6 +97,7 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
       onRefresh: widget.onRefresh,
       child: ListView.separated(
         controller: scrollController,
+        padding: const EdgeInsets.only(bottom: 80),
         physics: const AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
         separatorBuilder: (context, index) => _separatorWidget(),
