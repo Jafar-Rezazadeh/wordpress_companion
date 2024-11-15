@@ -34,4 +34,6 @@ initMediaInjections(GetIt getIt) {
       getSingleMedia: GetSingleMedia(mediaRepository: mediaRepository),
     ),
   );
+
+  getIt.registerFactory(() => ImageListCubit(mediaService: getIt()));
 }

@@ -5,11 +5,11 @@ import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 
 class CustomBottomSheets {
-  static showFailureBottomSheet({
+  static Future<void> showFailureBottomSheet({
     required BuildContext context,
     required Failure failure,
-  }) {
-    showModalBottomSheet(
+  }) async {
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(
@@ -22,21 +22,27 @@ class CustomBottomSheets {
     );
   }
 
-  static showFilterBottomSheet({
+  static Future<void> showFilterBottomSheet({
     required BuildContext context,
     required Function() onApply,
     required Function() onClear,
     required List<Widget> children,
-  }) {
-    showModalBottomSheet(
+  }) async {
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(
         maxHeight: 0.8.sh,
       ),
-      builder: (_) => _FilterBottomSheetWidget(
-        onApply: onApply,
-        onClear: onClear,
+      builder: (dialogContext) => _FilterBottomSheetWidget(
+        onApply: () {
+          Navigator.of(dialogContext).pop();
+          onApply();
+        },
+        onClear: () {
+          Navigator.of(dialogContext).pop();
+          onClear();
+        },
         children: children,
       ),
     );
@@ -57,17 +63,20 @@ class _FilterBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 20,
-        horizontal: edgeToEdgePaddingHorizontal,
-      ),
-      height: 0.8.sh,
-      child: Column(
-        children: [
-          _actions(),
-          _children(),
-        ],
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: edgeToEdgePaddingHorizontal,
+        ),
+        height: 0.8.sh,
+        child: Column(
+          children: [
+            _actions(),
+            _children(),
+          ],
+        ),
       ),
     );
   }

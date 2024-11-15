@@ -118,6 +118,7 @@ class _MediaPageState extends State<MediaPage>
           flex: 9,
           child: InfiniteListView<MediaEntity>(
             onRefresh: _refresh,
+            separatorWidget: Divider(color: ColorPallet.border),
             onScrolledToBottom: _goNextPage,
             data: listOfMedias,
             itemBuilder: (item) => MediaListItem(media: item),

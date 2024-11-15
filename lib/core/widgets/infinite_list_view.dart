@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../core_export.dart';
 
@@ -8,6 +7,7 @@ class InfiniteListView<T> extends StatefulWidget {
   final Function() onScrolledToBottom;
   final List<T> data;
   final Widget Function(T item) itemBuilder;
+  final Widget? separatorWidget;
   final bool showBottomLoadingWhen;
   final bool showFullScreenLoadingWhen;
 
@@ -19,6 +19,7 @@ class InfiniteListView<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.showBottomLoadingWhen,
     required this.showFullScreenLoadingWhen,
+    this.separatorWidget,
   });
 
   @override
@@ -96,11 +97,10 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
       onRefresh: widget.onRefresh,
       child: ListView.separated(
         controller: scrollController,
+        padding: const EdgeInsets.only(bottom: 80),
         physics: const AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
-        separatorBuilder: (context, index) => Divider(
-          color: ColorPallet.border,
-        ),
+        separatorBuilder: (context, index) => _separatorWidget(),
         itemCount: widget.data.length + 1,
         itemBuilder: (context, index) {
           if (index == widget.data.length) {
@@ -112,15 +112,24 @@ class _InfiniteListViewState<T> extends State<InfiniteListView<T>> {
     );
   }
 
+  Container _separatorWidget() {
+    return widget.separatorWidget != null
+        ? Container(
+            key: const Key("separator_widget"),
+            child: widget.separatorWidget,
+          )
+        : Container();
+  }
+
   Widget _onScrollLoadingWidget() {
-    return Container(
-      key: const Key("load_on_scroll_widget"),
-      height: 80,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: const CircularProgressIndicator(),
-    ).animate(
-      target: widget.showBottomLoadingWhen ? 1 : 0,
-    )..show(maintain: widget.showBottomLoadingWhen);
+    return widget.showBottomLoadingWhen
+        ? Container(
+            key: const Key("on_scroll_loading_widget"),
+            height: 80,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: const CircularProgressIndicator(),
+          )
+        : const SizedBox.shrink();
   }
 }

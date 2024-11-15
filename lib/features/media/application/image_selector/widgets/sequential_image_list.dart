@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/utils/image_cache_tracker.dart';
+part of 'image_selector_widget.dart';
 
 class SequentialImageList extends StatefulWidget {
   final List<MediaEntity> medias;

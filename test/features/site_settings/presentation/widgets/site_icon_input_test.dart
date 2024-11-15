@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
-import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
+import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockImageListCubit extends MockCubit<ImageListState>
@@ -29,8 +31,11 @@ void main() {
 
   setUp(() {
     imageListCubit = MockImageListCubit();
+    when(
+      () => imageListCubit.state,
+    ).thenAnswer((_) => const ImageListState.initial());
+
     imageFinderCubit = MockImageFinderCubit();
-    _initImageListCubit(imageListCubit, getIt);
     _initImageFinderCubit(imageFinderCubit);
   });
 
@@ -38,10 +43,53 @@ void main() {
     getIt.reset();
   });
 
+  Future<void> makeTestWidget(WidgetTester tester) async {
+    await mockNetworkImagesFor(() async {
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: GoRouter(
+            initialLocation: "/",
+            routes: [
+              GoRoute(
+                path: "/",
+                builder: (context, state) => Material(
+                  child: BlocProvider(
+                    create: (context) => imageFinderCubit,
+                    child: SiteIconInput(
+                      initialImageId: 2,
+                      onSelect: (value) {},
+                    ),
+                  ),
+                ),
+              ),
+              GoRoute(
+                name: imageSelectorRoute,
+                path: imageSelectorRoute,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => imageListCubit,
+                  child: Material(
+                    child: Scaffold(
+                      body: ImageSelectorScreen(
+                        onSelect: (media) => Navigator.of(context).pop(media),
+                        onBack: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    });
+
+    await tester.pumpAndSettle();
+  }
+
   group("imageFinderCubit -", () {
     testWidgets("should invoke the findImage when widget init", (tester) async {
       //arrange
-      await _makeTestWidget(tester, imageFinderCubit);
+      await makeTestWidget(tester);
 
       //verification
       verify(() => imageFinderCubit.findImage(any())).called(1);
@@ -56,7 +104,7 @@ void main() {
             ImageFinderState.imageFound(FakeMediaEntity()),
           ]),
         );
-        await _makeTestWidget(tester, imageFinderCubit);
+        await makeTestWidget(tester);
 
         //assert
         expect(find.byType(Image), findsOneWidget);
@@ -65,35 +113,36 @@ void main() {
   });
 
   group("image input -", () {
-    testWidgets("should open ImageSelectorDialog when taped on the imageBox",
+    testWidgets(
+        "should push the ImageSelectorScreen when taped on the imageBox",
         (tester) async {
       //arrange
-      await _makeTestWidget(tester, imageFinderCubit);
+      await makeTestWidget(tester);
 
       //act
       await _openImageSelectorDialog(tester);
 
       //assert
-      expect(find.byKey(const Key("select_media_dialog")), findsOneWidget);
+      expect(find.byType(ImageSelectorScreen), findsOneWidget);
     });
 
     testWidgets(
         "should show an image widget when an image is selected via ImageSelectorDialog ",
         (tester) async {
       //arrange
-      await _makeTestWidget(tester, imageFinderCubit);
+      await makeTestWidget(tester);
       await _openImageSelectorDialog(tester);
 
       //verification
       expect(find.byType(Image), findsNothing);
-      expect(find.byType(ImageSelectorDialog), findsOneWidget);
+      expect(find.byType(ImageSelectorScreen), findsOneWidget);
 
       //act
 
       tester
-          .widget<ImageSelectorDialog>(find.byType(ImageSelectorDialog))
+          .widget<ImageSelectorScreen>(find.byType(ImageSelectorScreen))
           .onSelect(FakeMediaEntity());
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       //assert
       expect(find.byType(Image), findsOneWidget);
@@ -103,12 +152,12 @@ void main() {
   group("Image -", () {
     testWidgets("should show error icon when Image is fails", (tester) async {
       //arrange
-      await _makeTestWidget(tester, imageFinderCubit);
+      await makeTestWidget(tester);
       await _openImageSelectorDialog(tester);
 
       //verification
       tester
-          .widget<ImageSelectorDialog>(find.byType(ImageSelectorDialog))
+          .widget<ImageSelectorScreen>(find.byType(ImageSelectorScreen))
           .onSelect(FakeMediaEntity());
       await tester.pump();
       expect(find.byType(Image), findsOneWidget);
@@ -120,38 +169,10 @@ void main() {
   });
 }
 
-void _initImageListCubit(ImageListCubit imageListCubit, GetIt getIt) {
-  when(
-    () => imageListCubit.state,
-  ).thenAnswer((invocation) => const ImageListState.initial());
-  getIt.registerSingleton<ImageListCubit>(imageListCubit);
-}
-
 void _initImageFinderCubit(ImageFinderCubit imageFinderCubit) {
   when(
     () => imageFinderCubit.state,
   ).thenAnswer((invocation) => const ImageFinderState.initial());
-}
-
-Future<void> _makeTestWidget(
-    WidgetTester tester, ImageFinderCubit imageFinderCubit) async {
-  await mockNetworkImagesFor(() async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: BlocProvider(
-            create: (context) => imageFinderCubit,
-            child: SiteIconInput(
-              initialImageId: 2,
-              onSelect: (value) {},
-            ),
-          ),
-        ),
-      ),
-    );
-  });
-
-  await tester.pumpAndSettle();
 }
 
 Future<void> _openImageSelectorDialog(WidgetTester tester) async {

@@ -3,26 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_list_cubit/image_list_cubit.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/utils/image_cache_tracker.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/widgets/image_list/sequential_image_list.dart';
+import 'package:wordpress_companion/features/media/application/image_selector/utils/image_cache_tracker.dart';
 
-class ImageSelectorDialog extends StatefulWidget {
+part 'sequential_image_list.dart';
+
+class ImageSelectorScreen extends StatefulWidget {
   @override
   Key? get key => const Key("image_list_dialog");
-  final BuildContext dialogContext;
+
   final Function(MediaEntity media) onSelect;
-  const ImageSelectorDialog({
+  final VoidCallback onBack;
+  const ImageSelectorScreen({
     super.key,
-    required this.dialogContext,
     required this.onSelect,
+    required this.onBack,
   });
 
   @override
-  State<ImageSelectorDialog> createState() => _ImageSelectorDialogState();
+  State<ImageSelectorScreen> createState() => _ImageSelectorScreenState();
 }
 
-class _ImageSelectorDialogState extends State<ImageSelectorDialog> {
+class _ImageSelectorScreenState extends State<ImageSelectorScreen> {
   List<MediaEntity> listOfMedias = [];
   bool isLoading = false;
 
@@ -67,7 +68,7 @@ class _ImageSelectorDialogState extends State<ImageSelectorDialog> {
       alignment: Alignment.topLeft,
       child: TextButton.icon(
         key: const Key("back_button"),
-        onPressed: () => Navigator.of(widget.dialogContext).pop(),
+        onPressed: widget.onBack,
         style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
         iconAlignment: IconAlignment.end,
         label: const Text("بازگشت"),
@@ -123,10 +124,7 @@ class _ImageSelectorDialogState extends State<ImageSelectorDialog> {
     return SequentialImageList(
       medias: listOfMedias,
       imageCacheTracker: ImageCacheTracker(),
-      onSelect: (media) {
-        widget.onSelect(media);
-        Navigator.of(widget.dialogContext).pop();
-      },
+      onSelect: (media) => widget.onSelect(media),
       onScrolledToBottom: () => _goNextPage(),
     );
   }

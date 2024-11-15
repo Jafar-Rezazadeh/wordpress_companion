@@ -100,7 +100,7 @@ void main() {
 
   group("mediaStateListener -", () {
     testWidgets(
-        "should show a load_on_scroll_widget when (state is loading && listOfMedias.isNotEmpty)",
+        "should show a on_scroll_loading_widget when (state is loading && listOfMedias.isNotEmpty)",
         (tester) async {
       //arrange
       whenListen(
@@ -127,7 +127,7 @@ void main() {
       await tester.pump(Durations.short1);
 
       //assert
-      expect(find.byKey(const Key("load_on_scroll_widget")), findsOneWidget);
+      expect(find.byKey(const Key("on_scroll_loading_widget")), findsOneWidget);
     });
 
     testWidgets(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:uuid/v4.dart';
+import 'package:uuid/uuid.dart';
 
 class Downloader {
   String? _tempPath;
@@ -22,7 +22,7 @@ class Downloader {
       saveInPublicStorage: true,
       requiresStorageNotLow: true,
       showNotification: true,
-      fileName: "${const UuidV4().generate()}-$fileFullName",
+      fileName: "${const Uuid().v4()}-$fileFullName",
     );
   }
 }

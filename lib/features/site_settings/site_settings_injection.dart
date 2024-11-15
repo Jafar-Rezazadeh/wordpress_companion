@@ -21,7 +21,5 @@ initSiteSettingsInjections(GetIt getIt) {
       ),
     ),
   );
-
-  getIt.registerFactory(() => ImageListCubit(mediaService: getIt()));
   getIt.registerFactory(() => ImageFinderCubit(mediaService: getIt()));
 }

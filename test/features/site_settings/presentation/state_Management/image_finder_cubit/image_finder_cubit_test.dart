@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/services/media_service.dart';
-import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
+import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_exports.dart';
 
 class MockMediaService extends Mock implements MediaService {}

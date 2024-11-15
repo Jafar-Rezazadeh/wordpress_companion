@@ -7,26 +7,49 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
 import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
+import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
     implements GlobalProfileCubit {}
 
+class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
+
 void main() {
   late GlobalProfileCubit globalProfileCubit;
+  late PostsCubit postsCubit;
 
   setUp(() {
     globalProfileCubit = MockGlobalProfileCubit();
+    postsCubit = MockPostsCubit();
     when(
       () => globalProfileCubit.state,
     ).thenAnswer((_) => const GlobalProfileState.initial());
+    when(
+      () => postsCubit.state,
+    ).thenAnswer((_) => const PostsState.initial());
   });
+
+  Widget testWidget() {
+    return ScreenUtilInit(
+      designSize: const Size(600, 812),
+      child: MaterialApp(
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => globalProfileCubit),
+            BlocProvider(create: (context) => postsCubit),
+          ],
+          child: const MainScreen(),
+        ),
+      ),
+    );
+  }
 
   group("page control -", () {
     testWidgets(
         "should show the correct page base on use interact with bottomNavBar when ",
         (tester) async {
       //arrange
-      await tester.pumpWidget(_testWidget(globalProfileCubit));
+      await tester.pumpWidget(testWidget());
       await tester.pumpAndSettle();
 
       //verification
@@ -58,7 +81,7 @@ void main() {
       //arrange
 
       BottomNavigationBar bottomNavBar;
-      await tester.pumpWidget(_testWidget(globalProfileCubit));
+      await tester.pumpWidget(testWidget());
       await tester.pumpAndSettle();
 
       //verification
@@ -87,7 +110,7 @@ void main() {
     testWidgets("should open the drawer when user tap on it", (tester) async {
       //arrange
 
-      await tester.pumpWidget(_testWidget(globalProfileCubit));
+      await tester.pumpWidget(testWidget());
       await tester.pumpAndSettle();
 
       //verification
@@ -101,16 +124,4 @@ void main() {
       expect(find.byType(CustomDrawer), findsOneWidget);
     });
   });
-}
-
-Widget _testWidget(GlobalProfileCubit globalProfileCubit) {
-  return ScreenUtilInit(
-    designSize: const Size(600, 812),
-    child: MaterialApp(
-      home: BlocProvider(
-        create: (context) => globalProfileCubit,
-        child: const MainScreen(),
-      ),
-    ),
-  );
 }

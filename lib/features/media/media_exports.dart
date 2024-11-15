@@ -23,3 +23,7 @@ export 'package:wordpress_companion/features/media/presentation/pages/media_page
 export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_filter_button.dart';
 export 'package:wordpress_companion/features/media/presentation/widgets/media_page/media_list_item.dart';
 export 'package:wordpress_companion/features/media/presentation/screens/edit_media_screen.dart';
+
+//application
+export 'package:wordpress_companion/features/media/application/image_selector/state_management/image_list_cubit/image_list_cubit.dart';
+export 'package:wordpress_companion/features/media/application/image_selector/widgets/image_selector_widget.dart';

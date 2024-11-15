@@ -243,4 +243,382 @@ class JsonResponseSimulator {
     media,
     media,
   ];
+
+  static Map<String, dynamic> post = {
+    "id": 1,
+    "date": "2024-11-03T06:48:42",
+    "date_gmt": "2024-11-03T06:48:42",
+    "guid": {
+      "rendered": "https://syntaxforge.ir/?p=1",
+      "raw": "https://syntaxforge.ir/?p=1"
+    },
+    "modified": "2024-11-09T18:29:50",
+    "modified_gmt": "2024-11-09T14:59:50",
+    "password": "",
+    "slug": "hello-world",
+    "status": "publish",
+    "type": "post",
+    "link": "https://syntaxforge.ir/2024/11/03/hello-world/",
+    "title": {"raw": "Hello world!", "rendered": "Hello world!"},
+    "content": {
+      "raw":
+          "<!-- wp:paragraph -->\r\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\r\n<!-- /wp:paragraph -->",
+      "rendered":
+          "\r\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\r\n",
+      "protected": false,
+      "block_version": 1
+    },
+    "excerpt": {
+      "raw": "",
+      "rendered":
+          "<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 102,
+    "comment_status": "open",
+    "ping_status": "open",
+    "sticky": false,
+    "template": "",
+    "format": "standard",
+    "meta": {"footnotes": ""},
+    "categories": [1],
+    "tags": [3],
+    "permalink_template": "https://syntaxforge.ir/2024/11/03/%postname%/",
+    "generated_slug": "hello-world",
+    "class_list": [
+      "post-1",
+      "post",
+      "type-post",
+      "status-publish",
+      "format-standard",
+      "has-post-thumbnail",
+      "hentry",
+      "category-uncategorized",
+      "tag-test"
+    ],
+    "_links": {
+      "self": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "collection": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts"}
+      ],
+      "about": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/types/post"}
+      ],
+      "author": [
+        {
+          "embeddable": true,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/users/1"
+        }
+      ],
+      "replies": [
+        {
+          "embeddable": true,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/comments?post=1"
+        }
+      ],
+      "version-history": [
+        {
+          "count": 1,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1/revisions"
+        }
+      ],
+      "predecessor-version": [
+        {
+          "id": 119,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1/revisions/119"
+        }
+      ],
+      "wp:featuredmedia": [
+        {
+          "embeddable": true,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/media/102"
+        }
+      ],
+      "wp:attachment": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/media?parent=1"}
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "category",
+          "embeddable": true,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/categories?post=1"
+        },
+        {
+          "taxonomy": "post_tag",
+          "embeddable": true,
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/tags?post=1"
+        }
+      ],
+      "wp:action-publish": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-unfiltered-html": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-sticky": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-assign-author": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-create-categories": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-assign-categories": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-create-tags": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "wp:action-assign-tags": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts/1"}
+      ],
+      "curies": [
+        {"name": "wp", "href": "https://api.w.org/{rel}", "templated": true}
+      ]
+    },
+    "_embedded": {
+      "author": [
+        {
+          "id": 1,
+          "name": "syntax",
+          "url": "https://syntaxforge.ir",
+          "description": "",
+          "link": "https://syntaxforge.ir/author/syntax/",
+          "slug": "syntax",
+          "avatar_urls": {
+            "24":
+                "https://secure.gravatar.com/avatar/0952786969e4f4a931e353563ebabd68?s=24&d=mm&r=g",
+            "48":
+                "https://secure.gravatar.com/avatar/0952786969e4f4a931e353563ebabd68?s=48&d=mm&r=g",
+            "96":
+                "https://secure.gravatar.com/avatar/0952786969e4f4a931e353563ebabd68?s=96&d=mm&r=g"
+          },
+          "_links": {
+            "self": [
+              {"href": "https://syntaxforge.ir/wp-json/wp/v2/users/1"}
+            ],
+            "collection": [
+              {"href": "https://syntaxforge.ir/wp-json/wp/v2/users"}
+            ]
+          }
+        }
+      ],
+      "wp:featuredmedia": [
+        {
+          "id": 102,
+          "date": "2024-11-05T17:35:04",
+          "slug": "edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-4",
+          "type": "attachment",
+          "link":
+              "https://syntaxforge.ir/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-4/",
+          "title": {"rendered": "edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu"},
+          "author": 1,
+          "featured_media": 0,
+          "caption": {"rendered": ""},
+          "alt_text": "",
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "media_details": {
+            "width": 564,
+            "height": 1006,
+            "file": "2024/11/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3.jpg",
+            "filesize": 85166,
+            "sizes": {
+              "medium": {
+                "file":
+                    "edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3-168x300.jpg",
+                "width": 168,
+                "height": 300,
+                "filesize": 13758,
+                "mime_type": "image/jpeg",
+                "source_url":
+                    "https://syntaxforge.ir/wp-content/uploads/2024/11/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3-168x300.jpg"
+              },
+              "thumbnail": {
+                "file":
+                    "edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3-150x150.jpg",
+                "width": 150,
+                "height": 150,
+                "filesize": 8151,
+                "mime_type": "image/jpeg",
+                "source_url":
+                    "https://syntaxforge.ir/wp-content/uploads/2024/11/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3-150x150.jpg"
+              },
+              "full": {
+                "file": "edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3.jpg",
+                "width": 564,
+                "height": 1006,
+                "mime_type": "image/jpeg",
+                "source_url":
+                    "https://syntaxforge.ir/wp-content/uploads/2024/11/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3.jpg"
+              }
+            },
+            "image_meta": {
+              "aperture": "0",
+              "credit": "",
+              "camera": "",
+              "caption": "",
+              "created_timestamp": "0",
+              "copyright": "",
+              "focal_length": "0",
+              "iso": "0",
+              "shutter_speed": "0",
+              "title": "",
+              "orientation": "0",
+              "keywords": []
+            }
+          },
+          "source_url":
+              "https://syntaxforge.ir/wp-content/uploads/2024/11/edcf8ba0-2809-47f0-a40a-f8432e5e7867-cpu-3.jpg",
+          "_links": {
+            "self": [
+              {"href": "https://syntaxforge.ir/wp-json/wp/v2/media/102"}
+            ],
+            "collection": [
+              {"href": "https://syntaxforge.ir/wp-json/wp/v2/media"}
+            ],
+            "about": [
+              {"href": "https://syntaxforge.ir/wp-json/wp/v2/types/attachment"}
+            ],
+            "author": [
+              {
+                "embeddable": true,
+                "href": "https://syntaxforge.ir/wp-json/wp/v2/users/1"
+              }
+            ],
+            "replies": [
+              {
+                "embeddable": true,
+                "href": "https://syntaxforge.ir/wp-json/wp/v2/comments?post=102"
+              }
+            ]
+          }
+        }
+      ],
+      "wp:term": [
+        [
+          {
+            "id": 1,
+            "link": "https://syntaxforge.ir/category/uncategorized/",
+            "name": "Uncategorized",
+            "slug": "uncategorized",
+            "taxonomy": "category",
+            "_links": {
+              "self": [
+                {"href": "https://syntaxforge.ir/wp-json/wp/v2/categories/1"}
+              ],
+              "collection": [
+                {"href": "https://syntaxforge.ir/wp-json/wp/v2/categories"}
+              ],
+              "about": [
+                {
+                  "href":
+                      "https://syntaxforge.ir/wp-json/wp/v2/taxonomies/category"
+                }
+              ],
+              "wp:post_type": [
+                {
+                  "href":
+                      "https://syntaxforge.ir/wp-json/wp/v2/posts?categories=1"
+                }
+              ],
+              "curies": [
+                {
+                  "name": "wp",
+                  "href": "https://api.w.org/{rel}",
+                  "templated": true
+                }
+              ]
+            }
+          }
+        ],
+        [
+          {
+            "id": 3,
+            "link": "https://syntaxforge.ir/tag/test/",
+            "name": "test",
+            "slug": "test",
+            "taxonomy": "post_tag",
+            "_links": {
+              "self": [
+                {"href": "https://syntaxforge.ir/wp-json/wp/v2/tags/3"}
+              ],
+              "collection": [
+                {"href": "https://syntaxforge.ir/wp-json/wp/v2/tags"}
+              ],
+              "about": [
+                {
+                  "href":
+                      "https://syntaxforge.ir/wp-json/wp/v2/taxonomies/post_tag"
+                }
+              ],
+              "wp:post_type": [
+                {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts?tags=3"}
+              ],
+              "curies": [
+                {
+                  "name": "wp",
+                  "href": "https://api.w.org/{rel}",
+                  "templated": true
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  };
+
+  static Map<String, dynamic> forcePostDeleted = {
+    "deleted": true,
+    "previous": {
+      "id": 143,
+      "date": "2024-11-12T12:53:13",
+      "date_gmt": "2024-11-12T09:23:13",
+      "guid": {
+        "rendered": "https://syntaxforge.ir/?p=143",
+        "raw": "https://syntaxforge.ir/?p=143"
+      },
+      "modified": "2024-11-14T22:49:46",
+      "modified_gmt": "2024-11-14T19:19:46",
+      "password": "",
+      "slug": "test11",
+      "status": "pending",
+      "type": "post",
+      "link": "https://syntaxforge.ir/?p=143",
+      "title": {"raw": "test11 updated5", "rendered": "test11 updated5"},
+      "content": {
+        "raw": "",
+        "rendered": "",
+        "protected": false,
+        "block_version": 0
+      },
+      "excerpt": {"raw": "", "rendered": "", "protected": false},
+      "author": 1,
+      "featured_media": 0,
+      "comment_status": "open",
+      "ping_status": "open",
+      "sticky": false,
+      "template": "",
+      "format": "standard",
+      "meta": {"footnotes": ""},
+      "categories": [1],
+      "tags": [],
+      "permalink_template": "https://syntaxforge.ir/2024/11/12/%postname%/",
+      "generated_slug": "test11-updated5",
+      "class_list": [
+        "post-143",
+        "post",
+        "type-post",
+        "status-pending",
+        "format-standard",
+        "hentry",
+        "category-uncategorized"
+      ]
+    }
+  };
 }

@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/core/services/media_service.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
-import 'package:wordpress_companion/features/site_settings/presentation/state_Management/image_list_cubit/image_list_cubit.dart';
 
 class MockMediaService extends Mock implements MediaService {}
 
@@ -169,6 +168,7 @@ void main() {
 
     blocTest<ImageListCubit, ImageListState>(
       'emits [loading , error] when fails',
+      seed: () => ImageListState.loaded(FakeCurrentPageMediasEntity()),
       setUp: () {
         when(
           () => mockMediaService.getMediaPerPage(any()),
