@@ -1,4 +1,5 @@
 // Data
+export 'package:wordpress_companion/features/categories/data/data_sources/implementations/categories_remote_data_source_impl.dart';
 export 'package:wordpress_companion/features/categories/data/data_sources/abstracts/categories_remote_data_source.dart';
 export 'package:wordpress_companion/features/categories/data/models/category_model.dart';
 export 'package:wordpress_companion/features/categories/data/repositories/categories_repository_impl.dart';
