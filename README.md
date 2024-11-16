@@ -1,7 +1,7 @@
 [![Coverage](https://img.shields.io/badge/Test--Coverage-97.45%25-success)](https://github.com/Jafar-Rezazadeh/wordpress_companion/blob/develop/coverage/lcov.info)
 
 
-# مدیریت وردپرس از طریق اپلیکیشن موبایل (Flutter)
+# نرم افزار وردپرس یار (Flutter)
 
 این اپلیکیشن Flutter به شما اجازه می‌دهد بخش‌هایی از وب‌سایت وردپرسی خود را از طریق REST API مدیریت کنید. قابلیت‌های این برنامه شامل مدیریت پست‌ها، دسته‌بندی‌ها و مدیا می‌باشد. این پروژه از **Clean Architecture** استفاده می‌کند تا توسعه و نگهداری کد را ساده‌تر کند.
 
