@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import '../../features/site_settings/site_settings_exports.dart';
@@ -104,11 +105,13 @@ Widget _mainScreenProvider(context, state, child) {
   return MultiBlocProvider(
     providers: [
       BlocProvider(
-        create: (context) =>
-            GlobalProfileCubit(profileService: getIt<ProfileService>()),
+        create: (context) => GlobalProfileCubit(
+          profileService: getIt<ProfileService>(),
+        ),
       ),
       BlocProvider(create: (context) => getIt<MediaCubit>()),
       BlocProvider(create: (context) => getIt<PostsCubit>()),
+      BlocProvider(create: (context) => getIt<CategoriesCubit>()),
     ],
     child: child,
   );

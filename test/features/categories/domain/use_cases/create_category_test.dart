@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
-import 'package:wordpress_companion/features/categories/domain/use_cases/create_category.dart';
 
 class MockCategoriesRepository extends Mock implements CategoriesRepository {}
 
@@ -25,7 +24,7 @@ void main() {
   setUp(() {
     mockCategoriesRepository = MockCategoriesRepository();
     createCategory =
-        CreateCategory(categoryRepository: mockCategoriesRepository);
+        CreateCategory(categoriesRepository: mockCategoriesRepository);
   });
 
   test("should return create category as (CategoryEntity) when success",

@@ -8,8 +8,8 @@ class CreateCategory
   final CategoriesRepository _categoryRepository;
 
   CreateCategory({
-    required CategoriesRepository categoryRepository,
-  }) : _categoryRepository = categoryRepository;
+    required CategoriesRepository categoriesRepository,
+  }) : _categoryRepository = categoriesRepository;
 
   @override
   Future<Either<Failure, CategoryEntity>> call(

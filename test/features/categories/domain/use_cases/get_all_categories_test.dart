@@ -18,7 +18,7 @@ void main() {
   setUp(() {
     mockCategoriesRepository = MockCategoriesRepository();
     getAllCategories =
-        GetAllCategories(categoryRepository: mockCategoriesRepository);
+        GetAllCategories(categoriesRepository: mockCategoriesRepository);
   });
 
   test("should return (List<CategoryEntity>) when success", () async {

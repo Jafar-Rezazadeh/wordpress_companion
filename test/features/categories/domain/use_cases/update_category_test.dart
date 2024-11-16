@@ -25,7 +25,7 @@ void main() {
   setUp(() {
     mockCategoriesRepository = MockCategoriesRepository();
     updateCategory = UpdateCategory(
-      categoryRepository: mockCategoriesRepository,
+      categoriesRepository: mockCategoriesRepository,
     );
   });
 

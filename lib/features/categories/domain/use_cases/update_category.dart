@@ -8,8 +8,8 @@ class UpdateCategory
   final CategoriesRepository _categoryRepository;
 
   UpdateCategory({
-    required CategoriesRepository categoryRepository,
-  }) : _categoryRepository = categoryRepository;
+    required CategoriesRepository categoriesRepository,
+  }) : _categoryRepository = categoriesRepository;
 
   @override
   Future<Either<Failure, CategoryEntity>> call(

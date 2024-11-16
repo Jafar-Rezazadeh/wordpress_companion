@@ -8,8 +8,8 @@ class GetAllCategories
   final CategoriesRepository _categoryRepository;
 
   GetAllCategories({
-    required CategoriesRepository categoryRepository,
-  }) : _categoryRepository = categoryRepository;
+    required CategoriesRepository categoriesRepository,
+  }) : _categoryRepository = categoriesRepository;
   @override
   Future<Either<Failure, List<CategoryEntity>>> call(params) {
     return _categoryRepository.getAllCategories(params);
