@@ -15,3 +15,4 @@ export 'package:wordpress_companion/features/categories/domain/use_cases/create_
 
 // Presentation
 export 'package:wordpress_companion/features/categories/presentation/logic_holders/categories_cubit/categories_cubit.dart';
+export 'package:wordpress_companion/features/categories/presentation/logic_holders/utils/create_or_update_category_params_builder.dart';

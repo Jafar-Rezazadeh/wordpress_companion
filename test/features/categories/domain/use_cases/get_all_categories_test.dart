@@ -21,39 +21,57 @@ void main() {
         GetAllCategories(categoriesRepository: mockCategoriesRepository);
   });
 
-  test("should return (List<CategoryEntity>) when success", () async {
-    //arrange
-    when(
-      () => mockCategoriesRepository.getAllCategories(any()),
-    ).thenAnswer((_) async => right([]));
+  group("getAllCategoriesParams", () {
+    test("should set and get the field", () {
+      //arrange
+      final params = GetAllCategoriesParams();
 
-    //act
-    final result = await getAllCategories(params);
-    final rightValue = result.fold((l) => null, (r) => r);
+      //act
+      params
+        ..setSearch("test")
+        ..setOrderBy(CategoryOrderByEnum.count);
 
-    //assert
-    expect(result.isRight(), true);
-    expect(rightValue, isA<List<CategoryEntity>>());
+      //assert
+      expect(params.search, "test");
+      expect(params.orderby, CategoryOrderByEnum.count);
+    });
   });
 
-  test("should return kind of (Failure) when fails", () async {
-    //arrange
-    when(
-      () => mockCategoriesRepository.getAllCategories(any()),
-    ).thenAnswer(
-      (_) async => left(
-        InternalFailure(
-            message: "message",
-            stackTrace: StackTrace.fromString("stackTraceString")),
-      ),
-    );
+  group("use case-", () {
+    test("should return (List<CategoryEntity>) when success", () async {
+      //arrange
+      when(
+        () => mockCategoriesRepository.getAllCategories(any()),
+      ).thenAnswer((_) async => right([]));
 
-    //act
-    final result = await getAllCategories(params);
-    final leftValue = result.fold((l) => l, (r) => null);
+      //act
+      final result = await getAllCategories(params);
+      final rightValue = result.fold((l) => null, (r) => r);
 
-    //assert
-    expect(result.isLeft(), true);
-    expect(leftValue, isA<Failure>());
+      //assert
+      expect(result.isRight(), true);
+      expect(rightValue, isA<List<CategoryEntity>>());
+    });
+
+    test("should return kind of (Failure) when fails", () async {
+      //arrange
+      when(
+        () => mockCategoriesRepository.getAllCategories(any()),
+      ).thenAnswer(
+        (_) async => left(
+          InternalFailure(
+              message: "message",
+              stackTrace: StackTrace.fromString("stackTraceString")),
+        ),
+      );
+
+      //act
+      final result = await getAllCategories(params);
+      final leftValue = result.fold((l) => l, (r) => null);
+
+      //assert
+      expect(result.isLeft(), true);
+      expect(leftValue, isA<Failure>());
+    });
   });
 }

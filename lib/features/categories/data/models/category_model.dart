@@ -38,11 +38,11 @@ class CategoryModel extends CategoryEntity {
     return CategoryModel(
       id: 0,
       count: 0,
-      description: params.description,
+      description: params.description ?? "",
       link: "",
       name: params.name,
-      slug: params.slug,
-      parent: params.parent,
+      slug: params.slug ?? "",
+      parent: params.parent ?? 0,
     ).toJson();
   }
 }

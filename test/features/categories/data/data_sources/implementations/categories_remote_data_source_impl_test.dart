@@ -320,10 +320,9 @@ void main() {
 
         //act
         await categoriesRemoteDataSourceImpl.getAllCategories(
-          GetAllCategoriesParams(
-            orderby: CategoryOrderByEnum.slug,
-            search: "search",
-          ),
+          GetAllCategoriesParams()
+            ..setOrderBy(CategoryOrderByEnum.slug)
+            ..setSearch("search"),
         );
 
         //assert

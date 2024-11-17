@@ -17,11 +17,20 @@ class GetAllCategories
 }
 
 class GetAllCategoriesParams {
-  final CategoryOrderByEnum? orderby;
-  final String? search;
+  CategoryOrderByEnum? _orderby;
+  String? _search;
 
-  GetAllCategoriesParams({
-    this.orderby,
-    this.search,
-  });
+  setSearch(String? value) {
+    _search = value;
+    return this;
+  }
+
+  setOrderBy(CategoryOrderByEnum? orderby) {
+    _orderby = orderby;
+    return this;
+  }
+
+  CategoryOrderByEnum? get orderby => _orderby;
+
+  String? get search => _search;
 }

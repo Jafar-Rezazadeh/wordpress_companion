@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordpress_companion/core/constants/constants.dart';
+import 'package:wordpress_companion/features/categories/presentation/pages/categories_page.dart';
 import 'package:wordpress_companion/features/media/presentation/pages/media_page.dart';
 import 'package:wordpress_companion/features/posts/presentation/pages/posts_page.dart';
 import '../cubits/global_profile_cubit/global_profile_cubit.dart';
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex = 1;
   late PageController pageController;
 
   @override
@@ -64,20 +65,16 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> get _pages {
     return [
       Container(
+        key: const Key("categories_page"),
+        child: const CategoriesPage(),
+      ),
+      Container(
         key: const Key("posts_page"),
         child: const PostsPage(),
       ),
       Container(
-        key: const Key("categories_page"),
-        child: const Center(child: Icon(Icons.category)),
-      ),
-      Container(
         key: const Key("media_page"),
         child: const MediaPage(),
-      ),
-      Container(
-        key: const Key("comments_page"),
-        child: const Center(child: Icon(Icons.comment)),
       ),
     ];
   }

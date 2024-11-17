@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
+import 'package:wordpress_companion/features/categories/presentation/screens/create_or_edit_category_screen.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import '../../features/site_settings/site_settings_exports.dart';
@@ -16,11 +17,12 @@ import '../../features/profile/profile_exports.dart';
 
 const String loginScreenRoute = "/login";
 const String mainScreenRoute = "/main";
+const String imageSelectorRoute = "/imageSelectorDialog";
 const String profileScreenRoute = "profile";
 const String siteSettingsScreenRoute = "siteSettings";
 const String editMediaScreenRoute = "editMediaScreen";
 const String editOrCreatePostRoute = "editOrCreatePostScreen";
-const String imageSelectorRoute = "/imageSelectorDialog";
+const String createOrEditCategoryRoute = "createOrEditCategoryScreen";
 
 final GetIt getIt = GetIt.instance;
 
@@ -69,6 +71,17 @@ ShellRoute _mainScreenRoute() {
             ),
           ),
           GoRoute(
+            name: siteSettingsScreenRoute,
+            path: siteSettingsScreenRoute,
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => getIt<SiteSettingsCubit>()),
+                BlocProvider(create: (context) => getIt<ImageFinderCubit>()),
+              ],
+              child: const SiteSettingsScreen(),
+            ),
+          ),
+          GoRoute(
             name: editMediaScreenRoute,
             path: editMediaScreenRoute,
             builder: (context, state) {
@@ -85,16 +98,13 @@ ShellRoute _mainScreenRoute() {
             },
           ),
           GoRoute(
-            name: siteSettingsScreenRoute,
-            path: siteSettingsScreenRoute,
-            builder: (context, state) => MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => getIt<SiteSettingsCubit>()),
-                BlocProvider(create: (context) => getIt<ImageFinderCubit>()),
-              ],
-              child: const SiteSettingsScreen(),
-            ),
-          ),
+            name: createOrEditCategoryRoute,
+            path: createOrEditCategoryRoute,
+            builder: (context, state) {
+              final category = state.extra as CategoryEntity?;
+              return CreateOrEditCategoryScreen(category: category);
+            },
+          )
         ],
       ),
     ],
