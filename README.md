@@ -1,4 +1,4 @@
-[![Coverage](https://img.shields.io/badge/Test--Coverage-97.45%25-success)](https://github.com/Jafar-Rezazadeh/wordpress_companion/blob/develop/coverage/lcov.info)
+[![Coverage](https://img.shields.io/badge/Test--Coverage-97.61%25-success)](https://github.com/Jafar-Rezazadeh/wordpress_companion/blob/develop/coverage/lcov.info)
 
 
 # نرم افزار وردپرس یار (Flutter)
