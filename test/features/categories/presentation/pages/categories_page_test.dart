@@ -8,7 +8,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/categories/presentation/pages/categories_page.dart';
-import 'package:wordpress_companion/features/categories/presentation/widgets/category_item_widget.dart';
 
 class MockCategoriesCubit extends MockCubit<CategoriesState>
     implements CategoriesCubit {}

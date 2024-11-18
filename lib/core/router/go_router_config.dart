@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
-import 'package:wordpress_companion/features/categories/presentation/screens/create_or_edit_category_screen.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import '../../features/site_settings/site_settings_exports.dart';
