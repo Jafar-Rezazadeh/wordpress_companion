@@ -17,10 +17,16 @@ class CategoryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
+      clipBehavior: Clip.antiAlias,
       child: ListTile(
+        onTap: () =>
+            context.goNamed(createOrEditCategoryRoute, extra: category),
         leading: _name(context),
-        contentPadding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
-        trailing: _trailing(context, category),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: edgeToEdgePaddingHorizontal,
+          vertical: 5,
+        ),
+        trailing: _count(context),
       ),
     );
   }
@@ -39,29 +45,11 @@ class CategoryItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _trailing(BuildContext context, CategoryEntity category) {
-    return SizedBox(
-      width: 120,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Flexible(
-            child: Text(
-              "تعداد: ${category.count}",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-          ),
-          IconButton(
-            key: const Key("edit_category"),
-            onPressed: () {
-              context.goNamed(createOrEditCategoryRoute, extra: category);
-            },
-            style: IconButton.styleFrom(foregroundColor: ColorPallet.lightBlue),
-            icon: const Icon(Icons.edit),
-          ),
-        ],
-      ),
+  Widget _count(BuildContext context) {
+    return Text(
+      "تعداد: ${category.count}",
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.labelSmall,
     );
   }
 }

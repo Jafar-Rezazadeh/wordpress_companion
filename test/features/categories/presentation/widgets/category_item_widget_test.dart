@@ -65,10 +65,11 @@ void main() {
       await tester.pumpWidget(testWidget());
 
       //verification
-      expect(find.byKey(const Key("edit_category")), findsOneWidget);
+      final listTileFinder = find.byType(ListTile);
+      expect(listTileFinder, findsOneWidget);
 
       //act
-      await tester.tap(find.byKey(const Key("edit_category")));
+      await tester.tap(listTileFinder);
       await tester.pumpAndSettle();
 
       //assert
@@ -80,10 +81,9 @@ void main() {
       //arrange
       await tester.pumpWidget(testWidget());
 
-      //verification
-
       //act
-      await tester.tap(find.byKey(const Key("edit_category")));
+      final listTileFinder = find.byType(ListTile);
+      await tester.tap(listTileFinder);
       await tester.pumpAndSettle();
 
       //assert
