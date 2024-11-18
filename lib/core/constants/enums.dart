@@ -1,4 +1,4 @@
-enum UserRole {
+enum UserRoleEnum {
   subscriber,
   contributor,
   author,
@@ -6,7 +6,7 @@ enum UserRole {
   administrator,
 }
 
-enum MediaType {
+enum MediaTypeEnum {
   image,
   video,
   text,
@@ -14,17 +14,24 @@ enum MediaType {
   audio,
 }
 
-enum MimeType {
+enum MimeTypeEnum {
   image,
   video,
   file,
 }
 
-enum PostStatus {
+enum PostStatusEnum {
   publish,
   future,
   draft,
   pending,
   private,
   trash,
+}
+
+enum CategoryOrderByEnum {
+  name,
+  slug,
+  description,
+  count,
 }

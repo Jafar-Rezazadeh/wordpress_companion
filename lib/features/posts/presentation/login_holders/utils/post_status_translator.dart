@@ -1,24 +1,24 @@
 import 'package:wordpress_companion/core/core_export.dart';
 
-extension PostStatusTranslator on PostStatus {
+extension PostStatusTranslator on PostStatusEnum {
   String translate() {
     switch (this) {
-      case PostStatus.publish:
+      case PostStatusEnum.publish:
         return "انتشار داده شده";
 
-      case PostStatus.private:
+      case PostStatusEnum.private:
         return "خصوصی";
 
-      case PostStatus.pending:
+      case PostStatusEnum.pending:
         return "در انتظار بازبینی";
 
-      case PostStatus.future:
+      case PostStatusEnum.future:
         return "انتشار در آینده";
 
-      case PostStatus.draft:
+      case PostStatusEnum.draft:
         return "پیش نویس";
 
-      case PostStatus.trash:
+      case PostStatusEnum.trash:
         return "زباله دان";
     }
   }

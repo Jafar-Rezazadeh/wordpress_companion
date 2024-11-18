@@ -36,7 +36,7 @@ void main() {
       size48px: "",
       size96px: "",
     ),
-    roles: const [UserRole.administrator],
+    roles: const [UserRoleEnum.administrator],
   );
 
   setUpAll(() {

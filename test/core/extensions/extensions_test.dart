@@ -7,11 +7,11 @@ void main() {
     group("translate -", () {
       test("should translate to expected string ", () {
         //arrange
-        const image = MediaType.image;
-        const video = MediaType.video;
-        const audio = MediaType.audio;
-        const text = MediaType.text;
-        const application = MediaType.application;
+        const image = MediaTypeEnum.image;
+        const video = MediaTypeEnum.video;
+        const audio = MediaTypeEnum.audio;
+        const text = MediaTypeEnum.text;
+        const application = MediaTypeEnum.application;
 
         //assert
         expect(image.translate, "تصویر");

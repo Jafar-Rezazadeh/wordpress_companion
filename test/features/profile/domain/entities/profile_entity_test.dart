@@ -18,7 +18,7 @@ void main() {
       nickName: "nickName",
       slug: "slug",
       registeredDate: DateTime(1),
-      roles: const [UserRole.administrator],
+      roles: const [UserRoleEnum.administrator],
       avatarUrls: const ProfileAvatarUrlsEntity(
         size24px: "",
         size48px: "",

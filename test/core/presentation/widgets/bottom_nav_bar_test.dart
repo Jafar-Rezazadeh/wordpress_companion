@@ -4,7 +4,7 @@ import 'package:wordpress_companion/core/presentation/widgets/bottom_nav_bar.dar
 
 void main() {
   testWidgets("should show active icon when user tap on item", (tester) async {
-    int selectedIndex = 0;
+    int selectedIndex = 1;
 
     //arrange
     await tester.pumpWidget(
@@ -21,15 +21,15 @@ void main() {
     await tester.pumpAndSettle();
 
     // verification
-    expect(selectedIndex, 0);
+    expect(selectedIndex, 1);
     expect(find.text("پست ها"), findsOneWidget);
-    expect(find.text("دسته بندی"), findsOneWidget);
+    expect(find.text("دسته بندی ها"), findsOneWidget);
 
     //act
-    await tester.tap(find.text("دسته بندی"));
+    await tester.tap(find.text("دسته بندی ها"));
     await tester.pump();
 
     //assert
-    expect(selectedIndex, 1);
+    expect(selectedIndex, 0);
   });
 }

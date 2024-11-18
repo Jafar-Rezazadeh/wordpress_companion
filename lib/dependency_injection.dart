@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:wordpress_companion/features/categories/categories_injections.dart';
 import 'package:wordpress_companion/features/media/media_injections.dart';
 import 'package:wordpress_companion/features/posts/posts_injections.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_injection.dart';
@@ -18,6 +19,7 @@ class DependencyInjection {
     await initSiteSettingsInjections(getIt);
     await initMediaInjections(getIt);
     await initPostsInjections(getIt);
+    await initCategoriesInjections(getIt);
   }
 
   _initDio() {

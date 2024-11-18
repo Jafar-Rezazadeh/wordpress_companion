@@ -6,7 +6,7 @@ class PostParamsBuilder {
   int _id = 0;
   String _title = "";
   String _slug = "";
-  PostStatus _status = PostStatus.publish;
+  PostStatusEnum _status = PostStatusEnum.publish;
   String _content = "";
   String _excerpt = "";
   List<int> _categories = [];
@@ -35,7 +35,7 @@ class PostParamsBuilder {
     return this;
   }
 
-  setStatus(PostStatus value) {
+  setStatus(PostStatusEnum value) {
     _status = value;
     return this;
   }
@@ -65,7 +65,7 @@ class PostParamsBuilder {
     return this;
   }
 
-  PostStatus get status => _status;
+  PostStatusEnum get status => _status;
 
   PostParams build() {
     return PostParams(

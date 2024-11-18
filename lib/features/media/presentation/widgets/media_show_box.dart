@@ -11,10 +11,10 @@ abstract class MediaBoxBuilder {
 
   Widget render(String sourceUrl, String label);
 
-  bool canRender(MimeType mimeType);
+  bool canRender(MimeTypeEnum mimeType);
 
   Widget build({
-    required MimeType mimetype,
+    required MimeTypeEnum mimetype,
     required String sourceUrl,
     required String label,
   }) {
@@ -32,7 +32,7 @@ class ImageBoxBuilder extends MediaBoxBuilder {
   ImageBoxBuilder({required super.nextBuilder});
 
   @override
-  bool canRender(MimeType mimeType) => mimeType == MimeType.image;
+  bool canRender(MimeTypeEnum mimeType) => mimeType == MimeTypeEnum.image;
 
   @override
   Widget render(String sourceUrl, String label) {
@@ -49,7 +49,7 @@ class VideoBoxBuilder extends MediaBoxBuilder {
   VideoBoxBuilder({required super.nextBuilder});
 
   @override
-  bool canRender(MimeType mimeType) => mimeType == MimeType.video;
+  bool canRender(MimeTypeEnum mimeType) => mimeType == MimeTypeEnum.video;
 
   @override
   Widget render(String sourceUrl, String label) {
@@ -61,8 +61,8 @@ class FileBoxBuilder extends MediaBoxBuilder {
   FileBoxBuilder({required super.nextBuilder});
 
   @override
-  bool canRender(MimeType mimeType) =>
-      mimeType != MimeType.image && mimeType != MimeType.video;
+  bool canRender(MimeTypeEnum mimeType) =>
+      mimeType != MimeTypeEnum.image && mimeType != MimeTypeEnum.video;
 
   @override
   Widget render(String sourceUrl, String label) {

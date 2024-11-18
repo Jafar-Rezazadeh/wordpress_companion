@@ -33,7 +33,7 @@ class DummyParams {
     id: 2,
     title: "title",
     slug: "slug",
-    status: PostStatus.publish,
+    status: PostStatusEnum.publish,
     content: "content",
     excerpt: "excerpt",
     categories: [],

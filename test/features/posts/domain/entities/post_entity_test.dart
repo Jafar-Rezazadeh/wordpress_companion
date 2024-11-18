@@ -43,7 +43,7 @@ PostEntity _createPostEntity(int id) {
       guid: "guid",
       modified: DateTime(1),
       slug: "slug",
-      status: PostStatus.publish,
+      status: PostStatusEnum.publish,
       type: "type",
       link: "link",
       title: "title",

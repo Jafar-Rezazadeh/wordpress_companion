@@ -56,6 +56,7 @@ class EditMediaScreenAppBar {
           onConfirm: _onDeleteConfirmed,
         );
       },
+      iconSize: 30,
       color: ColorPallet.crimson,
       icon: const Icon(Icons.delete_outline),
     );

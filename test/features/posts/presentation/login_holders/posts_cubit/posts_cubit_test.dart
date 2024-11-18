@@ -123,7 +123,7 @@ void main() {
           ..setAfter("after")
           ..setBefore("before")
           ..setCategories([1, 2, 3])
-          ..setStatus([PostStatus.publish]),
+          ..setStatus([PostStatusEnum.publish]),
       ),
       verify: (_) {
         verify(
@@ -135,7 +135,7 @@ void main() {
                     params.after == "after" &&
                     params.before == "before" &&
                     params.categories!.length == 3 &&
-                    params.status?.contains(PostStatus.publish) == true,
+                    params.status?.contains(PostStatusEnum.publish) == true,
                 "has expected params",
                 true,
               ),
@@ -287,7 +287,7 @@ void main() {
           ..setAfter("after")
           ..setBefore("before")
           ..setCategories([2])
-          ..setStatus([PostStatus.publish]);
+          ..setStatus([PostStatusEnum.publish]);
 
         return cubit.getNextPageData(filters);
       },
@@ -300,7 +300,7 @@ void main() {
                   params.after == "after" &&
                   params.before == "before" &&
                   params.categories?.length == 1 &&
-                  params.status?.contains(PostStatus.publish) == true,
+                  params.status?.contains(PostStatusEnum.publish) == true,
               "has expected Params",
               true,
             ),

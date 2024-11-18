@@ -18,7 +18,7 @@ void main() {
       () async => await tester.pumpWidget(
         Builder(builder: (context) {
           return mediaBoxBuilder.build(
-            mimetype: MimeType.image,
+            mimetype: MimeTypeEnum.image,
             sourceUrl: "sourceUrl",
             label: "label",
           );
@@ -36,7 +36,7 @@ void main() {
 
   testWidgets("should build image_box when MimeType is image", (tester) async {
     //arrange
-    await _buildTestWidget(tester, MimeType.image, "sourceUrl");
+    await _buildTestWidget(tester, MimeTypeEnum.image, "sourceUrl");
 
     //assert
     expect(imageBoxFinder, findsOneWidget);
@@ -44,7 +44,7 @@ void main() {
 
   testWidgets("should build videoBox when MimeType is video", (tester) async {
     //arrange
-    await _buildTestWidget(tester, MimeType.video, "sourceUrl");
+    await _buildTestWidget(tester, MimeTypeEnum.video, "sourceUrl");
 
     //assert
     expect(videoBoxFinder, findsOneWidget);
@@ -52,7 +52,7 @@ void main() {
 
   testWidgets("should build fileBox when MimeType is file", (tester) async {
     //arrange
-    await _buildTestWidget(tester, MimeType.file, "sourceUrl");
+    await _buildTestWidget(tester, MimeTypeEnum.file, "sourceUrl");
 
     //act
 
@@ -62,7 +62,7 @@ void main() {
 }
 
 Future<void> _buildTestWidget(
-    WidgetTester tester, MimeType mimeType, String sourceUrl) async {
+    WidgetTester tester, MimeTypeEnum mimeType, String sourceUrl) async {
   final mediaBoxBuilder = FileBoxBuilder(
     nextBuilder: VideoBoxBuilder(
       nextBuilder: ImageBoxBuilder(nextBuilder: null),

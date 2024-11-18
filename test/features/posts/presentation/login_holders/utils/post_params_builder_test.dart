@@ -13,7 +13,7 @@ class FakePostEntity extends Fake implements PostEntity {
   String get slug => "SLUG";
 
   @override
-  PostStatus get status => PostStatus.future;
+  PostStatusEnum get status => PostStatusEnum.future;
 
   @override
   String get content => "content";
@@ -51,7 +51,7 @@ void main() {
     builder
       ..setTitle("title")
       ..setSlug("slug")
-      ..setStatus(PostStatus.pending)
+      ..setStatus(PostStatusEnum.pending)
       ..setContent("content")
       ..setExcerpt("excerpt")
       ..setCategories([1, 2])
@@ -62,7 +62,7 @@ void main() {
     //assert
     expect(result.title, "title");
     expect(result.slug, "slug");
-    expect(result.status, PostStatus.pending);
+    expect(result.status, PostStatusEnum.pending);
     expect(result.content, "content");
     expect(result.excerpt, "excerpt");
     expect(result.categories, [1, 2]);
@@ -96,9 +96,9 @@ void main() {
     final builder = PostParamsBuilder();
 
     //act
-    builder.setStatus(PostStatus.draft);
+    builder.setStatus(PostStatusEnum.draft);
 
     //assert
-    expect(builder.status, PostStatus.draft);
+    expect(builder.status, PostStatusEnum.draft);
   });
 }

@@ -621,4 +621,38 @@ class JsonResponseSimulator {
       ]
     }
   };
+
+  static Map<String, dynamic> category = {
+    "id": 10,
+    "count": 0,
+    "description": "",
+    "link": "https://syntaxforge.ir/category/test/",
+    "name": "test",
+    "slug": "test",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/categories/10",
+          "targetHints": {
+            "allow": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+          }
+        }
+      ],
+      "collection": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/categories"}
+      ],
+      "about": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/taxonomies/category"}
+      ],
+      "wp:post_type": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts?categories=10"}
+      ],
+      "curies": [
+        {"name": "wp", "href": "https://api.w.org/{rel}", "templated": true}
+      ]
+    }
+  };
 }

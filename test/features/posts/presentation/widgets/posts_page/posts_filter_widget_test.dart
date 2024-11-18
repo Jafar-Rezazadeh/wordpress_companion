@@ -15,7 +15,7 @@ void main() {
     filters
       ..setAfter("2022-01-01")
       ..setBefore("2022-01-01")
-      ..setStatus([PostStatus.pending]);
+      ..setStatus([PostStatusEnum.pending]);
 
     await _makeTestWidget(tester, filters);
 
@@ -37,42 +37,42 @@ void main() {
         (tester) async {
       //arrange
       final filters = GetPostsFilters();
-      filters.setStatus([PostStatus.pending]);
+      filters.setStatus([PostStatusEnum.pending]);
 
       await _makeTestWidget(tester, filters);
 
       await _openFilterBottomSheet(tester);
 
       //verification
-      expect(find.byType(CustomDropDownButton<PostStatus>), findsOneWidget);
+      expect(find.byType(CustomDropDownButton<PostStatusEnum>), findsOneWidget);
 
       //act
       final customDropDownButton =
-          tester.widget<CustomDropDownButton<PostStatus>>(
-        find.byType(CustomDropDownButton<PostStatus>),
+          tester.widget<CustomDropDownButton<PostStatusEnum>>(
+        find.byType(CustomDropDownButton<PostStatusEnum>),
       );
 
       //assert
-      expect(customDropDownButton.initialValue, PostStatus.pending);
+      expect(customDropDownButton.initialValue, PostStatusEnum.pending);
     });
 
     testWidgets("should set dropdownValue to null when filters.status is not 1",
         (tester) async {
       //arrange
       final filters = GetPostsFilters();
-      filters.setStatus(PostStatus.values);
+      filters.setStatus(PostStatusEnum.values);
 
       await _makeTestWidget(tester, filters);
       await _openFilterBottomSheet(tester);
 
       //verification
       final statusDropDownFinder =
-          find.byType(CustomDropDownButton<PostStatus>);
+          find.byType(CustomDropDownButton<PostStatusEnum>);
       expect(statusDropDownFinder, findsOneWidget);
 
       //act
       final customDropDownButton =
-          tester.widget<CustomDropDownButton<PostStatus>>(
+          tester.widget<CustomDropDownButton<PostStatusEnum>>(
         statusDropDownFinder,
       );
 
@@ -91,7 +91,7 @@ void main() {
 
       //verification
       final statusDropDownFinder =
-          find.byType(CustomDropDownButton<PostStatus>);
+          find.byType(CustomDropDownButton<PostStatusEnum>);
       final dateExpansionFinder =
           find.byKey(const Key("date_filter_expansion"));
       final afterDateInput = find.byKey(const Key("after_date_input"));
@@ -109,8 +109,8 @@ void main() {
 
       //act
       await tester
-          .widget<CustomDropDownButton<PostStatus>>(statusDropDownFinder)
-          .onChanged(PostStatus.pending);
+          .widget<CustomDropDownButton<PostStatusEnum>>(statusDropDownFinder)
+          .onChanged(PostStatusEnum.pending);
       await tester
           .widget<CustomPersianDateSelector>(afterDateInput)
           .onSelected(DateTime(1));
@@ -122,7 +122,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //assert
-      expect(filters.status, [PostStatus.pending]);
+      expect(filters.status, [PostStatusEnum.pending]);
       expect(filters.after, DateTime(1).toIso8601String());
       expect(filters.before, DateTime(1).toIso8601String());
     });

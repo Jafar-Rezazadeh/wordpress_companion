@@ -43,7 +43,7 @@ class _CustomDropDownButtonState<T> extends State<CustomDropDownButton<T>> {
     );
   }
 
-  DropdownButtonHideUnderline _dropDownButton() {
+  Widget _dropDownButton() {
     return DropdownButtonHideUnderline(
       child: DropdownButton2<T>(
         value: selectedValue,

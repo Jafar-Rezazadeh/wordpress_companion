@@ -6,14 +6,14 @@ void main() {
   group("translateUserRole -", () {
     test("should return expected String base on given role ", () {
       //assert
-      expect(_translateUserRole(UserRole.administrator), "مدیر کل");
-      expect(_translateUserRole(UserRole.author), "نویسنده");
-      expect(_translateUserRole(UserRole.contributor), "مشارکت کننده");
-      expect(_translateUserRole(UserRole.editor), "ویرایشگر");
-      expect(_translateUserRole(UserRole.subscriber), "مشترک");
+      expect(_translateUserRole(UserRoleEnum.administrator), "مدیر کل");
+      expect(_translateUserRole(UserRoleEnum.author), "نویسنده");
+      expect(_translateUserRole(UserRoleEnum.contributor), "مشارکت کننده");
+      expect(_translateUserRole(UserRoleEnum.editor), "ویرایشگر");
+      expect(_translateUserRole(UserRoleEnum.subscriber), "مشترک");
     });
   });
 }
 
-String _translateUserRole(UserRole role) =>
+String _translateUserRole(UserRoleEnum role) =>
     EnumTranslator.translateUserRole(role);

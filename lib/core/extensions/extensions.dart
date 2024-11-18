@@ -1,17 +1,17 @@
 import '../constants/enums.dart';
 
-extension MimeTypeExtension on MediaType {
+extension MimeTypeExtension on MediaTypeEnum {
   String get translate {
     switch (this) {
-      case MediaType.image:
+      case MediaTypeEnum.image:
         return "تصویر";
-      case MediaType.video:
+      case MediaTypeEnum.video:
         return "ویدیو";
-      case MediaType.text:
+      case MediaTypeEnum.text:
         return "متن";
-      case MediaType.application:
+      case MediaTypeEnum.application:
         return "فایل";
-      case MediaType.audio:
+      case MediaTypeEnum.audio:
         return "صدا";
     }
   }

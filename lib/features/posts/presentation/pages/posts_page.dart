@@ -45,6 +45,7 @@ class _PostsPageState extends State<PostsPage>
 
   Widget _createPostButton() {
     return FloatingActionButton(
+      heroTag: "create_post_hero_tag",
       onPressed: () => context.goNamed(editOrCreatePostRoute),
       child: const Icon(Icons.add),
     );

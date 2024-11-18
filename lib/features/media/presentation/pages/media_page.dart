@@ -51,6 +51,7 @@ class _MediaPageState extends State<MediaPage>
 
   Widget _uploadMedia() {
     return FloatingActionButton(
+      heroTag: "upload_media_hero_tag",
       key: const Key("upload_media_button"),
       onPressed: () async {
         await showDialog(

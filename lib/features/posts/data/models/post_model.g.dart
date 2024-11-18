@@ -12,7 +12,7 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       guid: PostModel._guidReadValue(json, 'guid') as String,
       modified: DateTime.parse(json['modified'] as String),
       slug: json['slug'] as String,
-      status: $enumDecode(_$PostStatusEnumMap, json['status']),
+      status: $enumDecode(_$PostStatusEnumEnumMap, json['status']),
       type: json['type'] as String,
       link: json['link'] as String,
       title: PostModel._titleReadValue(json, 'title') as String,
@@ -36,7 +36,7 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
 
 Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'slug': instance.slug,
-      'status': _$PostStatusEnumMap[instance.status]!,
+      'status': _$PostStatusEnumEnumMap[instance.status]!,
       'categories': instance.categories,
       'tags': instance.tags,
       'title': instance.title,
@@ -45,11 +45,11 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'featured_media': instance.featuredMedia,
     };
 
-const _$PostStatusEnumMap = {
-  PostStatus.publish: 'publish',
-  PostStatus.future: 'future',
-  PostStatus.draft: 'draft',
-  PostStatus.pending: 'pending',
-  PostStatus.private: 'private',
-  PostStatus.trash: 'trash',
+const _$PostStatusEnumEnumMap = {
+  PostStatusEnum.publish: 'publish',
+  PostStatusEnum.future: 'future',
+  PostStatusEnum.draft: 'draft',
+  PostStatusEnum.pending: 'pending',
+  PostStatusEnum.private: 'private',
+  PostStatusEnum.trash: 'trash',
 };

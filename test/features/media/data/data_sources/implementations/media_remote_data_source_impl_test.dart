@@ -247,7 +247,7 @@ void main() {
             search: "search",
             after: "after",
             before: "before",
-            type: MediaType.text,
+            type: MediaTypeEnum.text,
           ),
         );
 

@@ -7,7 +7,7 @@ class PostEntity extends Equatable {
   final String guid;
   final DateTime modified;
   final String slug;
-  final PostStatus status;
+  final PostStatusEnum status;
   final String type;
   final String link;
   final String title;

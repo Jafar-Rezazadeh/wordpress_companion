@@ -27,7 +27,7 @@ class GetPostsPerPageParams {
   String? after;
   String? before;
   List<int>? categories;
-  List<PostStatus>? status;
+  List<PostStatusEnum>? status;
 
   GetPostsPerPageParams({
     this.page = 1,
@@ -47,7 +47,7 @@ class GetPostsPerPageParams {
     String? after,
     String? before,
     List<int>? categories,
-    List<PostStatus>? status,
+    List<PostStatusEnum>? status,
   }) {
     if (_pageIsLessThan_1(page) || _perPageIsLessThan_10(perPage)) {
       throw AssertionError("page can't be less than 1");

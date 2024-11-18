@@ -25,7 +25,7 @@ class CustomizedBottomNavBar extends StatelessWidget {
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
-        showUnselectedLabels: false,
+        showUnselectedLabels: true,
         showSelectedLabels: false,
         elevation: 5,
         backgroundColor: ColorPallet.white,
@@ -40,24 +40,19 @@ class CustomizedBottomNavBar extends StatelessWidget {
   List<BottomNavigationBarItem> get _bottomBavItems {
     return [
       BottomNavigationBarItem(
+        activeIcon: _bottomNavActiveIcon(svgIconPath: categoriesSvg),
+        icon: SvgPicture.asset(categoriesSvg),
+        label: "دسته بندی ها",
+      ),
+      BottomNavigationBarItem(
         activeIcon: _bottomNavActiveIcon(svgIconPath: listOfItemsSvg),
         icon: SvgPicture.asset(listOfItemsSvg),
         label: "پست ها",
       ),
       BottomNavigationBarItem(
-        activeIcon: _bottomNavActiveIcon(svgIconPath: categoriesSvg),
-        icon: SvgPicture.asset(categoriesSvg),
-        label: "دسته بندی",
-      ),
-      BottomNavigationBarItem(
         activeIcon: _bottomNavActiveIcon(svgIconPath: mediaSvg),
         icon: SvgPicture.asset(mediaSvg),
         label: "رسانه",
-      ),
-      BottomNavigationBarItem(
-        activeIcon: _bottomNavActiveIcon(svgIconPath: commentsSvg),
-        icon: SvgPicture.asset(commentsSvg),
-        label: "دیدگاه ها",
       ),
     ];
   }

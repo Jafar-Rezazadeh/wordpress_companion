@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/presentation/cubits/global_profile_cubit/global_profile_cubit.dart';
 import 'package:wordpress_companion/core/presentation/screens/main_screen.dart';
 import 'package:wordpress_companion/core/presentation/widgets/custom_drawer.dart';
+import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
@@ -14,19 +15,27 @@ class MockGlobalProfileCubit extends MockCubit<GlobalProfileState>
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
 void main() {
   late GlobalProfileCubit globalProfileCubit;
   late PostsCubit postsCubit;
+  late CategoriesCubit categoriesCubit;
 
   setUp(() {
     globalProfileCubit = MockGlobalProfileCubit();
     postsCubit = MockPostsCubit();
+    categoriesCubit = MockCategoriesCubit();
     when(
       () => globalProfileCubit.state,
     ).thenAnswer((_) => const GlobalProfileState.initial());
     when(
       () => postsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => categoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
   });
 
   Widget testWidget() {
@@ -37,6 +46,7 @@ void main() {
           providers: [
             BlocProvider(create: (context) => globalProfileCubit),
             BlocProvider(create: (context) => postsCubit),
+            BlocProvider(create: (context) => categoriesCubit)
           ],
           child: const MainScreen(),
         ),
@@ -63,16 +73,16 @@ void main() {
       );
       final pageView = tester.widget<PageView>(find.byType(PageView));
 
-      expect(pageView.controller?.page, 0.0);
+      expect(pageView.controller?.page, 1.0);
 
       //act
-      bottomNavBar.onTap!(1);
+      bottomNavBar.onTap!(0);
       await tester.pumpAndSettle();
 
       //assert
       expect(postsPageFinder, findsNothing);
       expect(find.byKey(const Key("categories_page")), findsOneWidget);
-      expect(pageView.controller?.page, 1.0);
+      expect(pageView.controller?.page, 0.0);
     });
 
     testWidgets(
@@ -90,7 +100,7 @@ void main() {
       );
       final pageView = tester.widget<PageView>(find.byType(PageView));
 
-      expect(bottomNavBar.currentIndex, 0);
+      expect(bottomNavBar.currentIndex, 1);
 
       //act
       pageView.onPageChanged!(2);
