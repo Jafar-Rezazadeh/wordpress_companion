@@ -16,3 +16,5 @@ export 'package:wordpress_companion/features/categories/domain/use_cases/create_
 // Presentation
 export 'package:wordpress_companion/features/categories/presentation/logic_holders/categories_cubit/categories_cubit.dart';
 export 'package:wordpress_companion/features/categories/presentation/logic_holders/utils/create_or_update_category_params_builder.dart';
+export 'package:wordpress_companion/features/categories/presentation/screens/create_or_edit_category_screen.dart';
+export 'package:wordpress_companion/features/categories/presentation/widgets/category_item_widget.dart';

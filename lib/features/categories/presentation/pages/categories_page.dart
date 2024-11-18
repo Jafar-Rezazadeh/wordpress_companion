@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/presentation/logic_holders/utils/category_order_by_enum_translator.dart';
-import 'package:wordpress_companion/features/categories/presentation/widgets/category_item_widget.dart';
 
 import '../../categories_exports.dart';
 
@@ -17,7 +16,9 @@ class CategoriesPage extends StatefulWidget {
   State<CategoriesPage> createState() => _CategoriesPageState();
 }
 
-class _CategoriesPageState extends State<CategoriesPage> {
+class _CategoriesPageState extends State<CategoriesPage>
+    with AutomaticKeepAliveClientMixin {
+  //
   Either<List<CategoryEntity>, List<TreeOutPutItem<CategoryEntity>>>
       categories = left([]);
   GetAllCategoriesParams params = GetAllCategoriesParams();
@@ -35,6 +36,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -52,6 +54,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   Widget _addNewCategory(BuildContext context) {
     return FloatingActionButton(
       heroTag: "add_category_hero_tag",
+      key: const Key("add_category"),
       onPressed: () {
         context.goNamed(createOrEditCategoryRoute);
       },
@@ -152,6 +155,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   void _categoriesStateListener(_, CategoriesState state) {
     state.whenOrNull(
+      error: (failure) => CustomBottomSheets.showFailureBottomSheet(
+        context: context,
+        failure: failure,
+      ),
       needRefresh: () {
         _resetParams();
         _getAllCategories();
@@ -207,4 +214,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

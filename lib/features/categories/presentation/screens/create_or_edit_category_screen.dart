@@ -23,6 +23,7 @@ class _CreateOrEditCategoryScreenState
   final formKey = GlobalKey<FormState>();
 
   late CreateOrUpdateCategoryParamsBuilder _paramsBuilder;
+  List<CategoryEntity> categories = [];
 
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _CreateOrEditCategoryScreenState
       context: context,
       showLoading: _isLoadingState(),
       bottomLeadingWidgets: [_saveButton()],
-      bottomActionWidgets: [_deleteButton()],
+      bottomActionWidgets: [if (widget.category != null) _deleteButton()],
     );
   }
 
@@ -100,8 +101,22 @@ class _CreateOrEditCategoryScreenState
 
   IconButton _deleteButton() {
     return IconButton(
+      key: const Key("delete_button"),
       onPressed: () {
-        // TODO: implement delete
+        CustomDialogs.showAreYouSureDialog(
+          context: context,
+          title: "حذف برای همیشه!",
+          content:
+              "آیا مطمئن هستید که میخواهید (${widget.category?.name}) حذف کنید؟",
+          onConfirm: () {
+            if (widget.category != null) {
+              context
+                  .read<CategoriesCubit>()
+                  .deleteCategory(widget.category!.id);
+              Navigator.of(context).pop();
+            }
+          },
+        );
       },
       iconSize: 30,
       color: ColorPallet.crimson,
@@ -133,6 +148,7 @@ class _CreateOrEditCategoryScreenState
 
   Widget _name() {
     return CustomFormInputField(
+      key: const Key("name_input"),
       initialValue: widget.category?.name,
       label: "نام",
       validator: InputValidator.isNotEmpty,
@@ -149,17 +165,20 @@ class _CreateOrEditCategoryScreenState
   }
 
   Widget _parent() {
-    return BlocBuilder<CategoriesCubit, CategoriesState>(
+    return BlocConsumer<CategoriesCubit, CategoriesState>(
+      listener: _categoriesStateListener,
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("دسته مادر:"),
             state.maybeWhen(
+              loaded: (categories) {
+                this.categories = categories;
+                return _parentCategoryDropDownButton();
+              },
               loading: () => const LoadingWidget(),
-              // TODO: implement error state
-              loaded: (categories) => _categoriesDropDownButton(categories),
-              orElse: () => Container(),
+              orElse: () => _parentCategoryDropDownButton(),
             )
           ],
         );
@@ -167,23 +186,33 @@ class _CreateOrEditCategoryScreenState
     );
   }
 
-  Widget _categoriesDropDownButton(List<CategoryEntity> categories) {
+  void _categoriesStateListener(_, CategoriesState state) {
+    state.whenOrNull(
+      error: (failure) => CustomBottomSheets.showFailureBottomSheet(
+        context: context,
+        failure: failure,
+      ),
+    );
+  }
+
+  Widget _parentCategoryDropDownButton() {
     return CustomDropDownButton<CategoryEntity>(
-      initialValue: _getInitialParent(categories),
-      items: _categoriesList(categories),
+      key: const Key("parent_selector"),
+      initialValue: _getInitialParent(),
+      items: _categoriesList(),
       onChanged: (value) => _paramsBuilder.setParent(value?.id),
     );
   }
 
-  CategoryEntity? _getInitialParent(List<CategoryEntity> categories) {
-    final parentCategory =
-        categories.where((element) => element.id == widget.category?.parent);
+  CategoryEntity? _getInitialParent() {
+    final parentCategory = categories.where(
+      (element) => element.id == widget.category?.parent,
+    );
 
     return parentCategory.isNotEmpty ? parentCategory.first : null;
   }
 
-  List<DropdownMenuItem<CategoryEntity>>? _categoriesList(
-      List<CategoryEntity> categories) {
+  List<DropdownMenuItem<CategoryEntity>>? _categoriesList() {
     return [
       const DropdownMenuItem(value: null, child: Text("هیچکدام")),
       ...categories.map((e) => DropdownMenuItem(value: e, child: Text(e.name)))

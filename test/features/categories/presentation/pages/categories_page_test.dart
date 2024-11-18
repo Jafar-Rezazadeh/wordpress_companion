@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
@@ -45,14 +46,56 @@ void main() {
   });
   testWidget() {
     return ScreenUtilInit(
-      child: MaterialApp(
-        home: BlocProvider(
-          create: (context) => categoriesCubit,
-          child: const CategoriesPage(),
+      child: MaterialApp.router(
+        routerConfig: GoRouter(
+          initialLocation: "/",
+          routes: [
+            ShellRoute(
+              builder: (context, state, child) => BlocProvider(
+                create: (context) => categoriesCubit,
+                child: child,
+              ),
+              routes: [
+                GoRoute(
+                  path: "/",
+                  builder: (context, state) => const CategoriesPage(),
+                  routes: [
+                    GoRoute(
+                      name: createOrEditCategoryRoute,
+                      path: createOrEditCategoryRoute,
+                      builder: (context, state) =>
+                          const CreateOrEditCategoryScreen(),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
+
+  group("floatingActionButton -", () {
+    testWidgets(
+        "should go to CreateOrEditCategoryScreen when add_category tapped",
+        (tester) async {
+      //arrange
+      await tester.pumpWidget(testWidget());
+      await tester.pumpAndSettle();
+
+      //verification
+      final addCategoryFinder = find.byKey(const Key("add_category"));
+      expect(addCategoryFinder, findsOneWidget);
+
+      //act
+      await tester.tap(addCategoryFinder);
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byType(CreateOrEditCategoryScreen), findsOneWidget);
+    });
+  });
 
   group("pageHeader -", () {
     group("searchInput -", () {
@@ -272,6 +315,44 @@ void main() {
         findsOneWidget,
       );
       expect(find.byType(CategoryItemWidget), findsWidgets);
+    });
+
+    testWidgets("should call getAllCategories when state is needRefresh ",
+        (tester) async {
+      //arrange
+      whenListen(
+        categoriesCubit,
+        Stream.fromIterable([
+          const CategoriesState.needRefresh(),
+        ]),
+      );
+      await tester.pumpWidget(testWidget());
+      await tester.pumpAndSettle();
+
+      //assert
+      verifyInOrder([
+        () => categoriesCubit.getAllCategories(any()), // init call
+        () => categoriesCubit.getAllCategories(any()), // needRefresh state call
+      ]);
+    });
+
+    testWidgets("should show failure_bottom_sheet when state is error",
+        (tester) async {
+      //arrange
+      whenListen(
+        categoriesCubit,
+        Stream.fromIterable([
+          CategoriesState.error(InternalFailure(
+            message: "message",
+            stackTrace: StackTrace.fromString("stackTraceString"),
+          ))
+        ]),
+      );
+      await tester.pumpWidget(testWidget());
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(find.byKey(const Key("failure_bottom_sheet")), findsOneWidget);
     });
   });
 

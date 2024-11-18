@@ -1,13 +1,18 @@
-import 'package:flutter/foundation.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
-import 'package:wordpress_companion/features/categories/presentation/screens/create_or_edit_category_screen.dart';
-import 'package:wordpress_companion/features/categories/presentation/widgets/category_item_widget.dart';
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
 
 void main() {
+  late CategoriesCubit categoryCubit;
   const fakeCategory = CategoryEntity(
     id: 1,
     count: 3,
@@ -17,11 +22,47 @@ void main() {
     slug: "slug",
     parent: 0,
   );
+  setUp(() {
+    categoryCubit = MockCategoriesCubit();
+
+    when(
+      () => categoryCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
+  });
+
+  MaterialApp testWidget() {
+    return MaterialApp.router(
+      routerConfig: GoRouter(routes: [
+        ShellRoute(
+          builder: (context, state, child) => BlocProvider(
+            create: (context) => categoryCubit,
+            child: ScreenUtilInit(child: child),
+          ),
+          routes: [
+            GoRoute(
+                path: "/",
+                builder: (context, state) =>
+                    const CategoryItemWidget(category: fakeCategory, depth: 0),
+                routes: [
+                  GoRoute(
+                    name: createOrEditCategoryRoute,
+                    path: createOrEditCategoryRoute,
+                    builder: (context, state) {
+                      final category = state.extra as CategoryEntity?;
+                      return CreateOrEditCategoryScreen(category: category);
+                    },
+                  )
+                ])
+          ],
+        ),
+      ]),
+    );
+  }
 
   group("onTap -", () {
     testWidgets("should go to createOrEditCategoryRoute ", (tester) async {
       //arrange
-      await tester.pumpWidget(_testWidget(fakeCategory));
+      await tester.pumpWidget(testWidget());
 
       //verification
       expect(find.byKey(const Key("edit_category")), findsOneWidget);
@@ -37,7 +78,7 @@ void main() {
     testWidgets("should send the category to createOrEditCategoryScreen ",
         (tester) async {
       //arrange
-      await tester.pumpWidget(_testWidget(fakeCategory));
+      await tester.pumpWidget(testWidget());
 
       //verification
 
@@ -51,25 +92,4 @@ void main() {
       expect(screen.category, isNot(null));
     });
   });
-}
-
-MaterialApp _testWidget(CategoryEntity fakeCategory) {
-  return MaterialApp.router(
-    routerConfig: GoRouter(routes: [
-      GoRoute(
-          path: "/",
-          builder: (context, state) =>
-              CategoryItemWidget(category: fakeCategory, depth: 0),
-          routes: [
-            GoRoute(
-              name: createOrEditCategoryRoute,
-              path: createOrEditCategoryRoute,
-              builder: (context, state) {
-                final category = state.extra as CategoryEntity?;
-                return CreateOrEditCategoryScreen(category: category);
-              },
-            )
-          ])
-    ]),
-  );
 }
