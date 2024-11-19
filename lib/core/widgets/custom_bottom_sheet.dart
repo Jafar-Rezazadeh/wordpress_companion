@@ -127,8 +127,10 @@ class _FilterBottomSheetWidget extends StatelessWidget {
   Widget _children() {
     return Expanded(
       flex: 3,
-      child: Column(
-        children: children.withGapInBetween(20),
+      child: SingleChildScrollView(
+        child: Column(
+          children: children.withGapInBetween(20),
+        ),
       ),
     );
   }

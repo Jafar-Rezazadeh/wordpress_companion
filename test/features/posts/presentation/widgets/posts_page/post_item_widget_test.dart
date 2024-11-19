@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/features/categories/presentation/logic_holders/categories_cubit/categories_cubit.dart';
+import 'package:wordpress_companion/features/categories/application/categories_cubit/categories_cubit.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 // ignore: must_be_immutable

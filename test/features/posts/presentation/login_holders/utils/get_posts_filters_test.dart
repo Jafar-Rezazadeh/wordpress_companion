@@ -44,4 +44,17 @@ void main() {
     expect(postsFilters.categories, null);
     expect(postsFilters.status, PostStatusEnum.values);
   });
+
+  group("conditional setters -", () {
+    test("should set the categories to null when empty list is given", () {
+      //arrange
+      final filters = GetPostsFilters();
+
+      //act
+      filters.setCategories([]);
+
+      //assert
+      expect(filters.categories, null);
+    });
+  });
 }

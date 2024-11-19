@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
 import 'package:wordpress_companion/features/categories/domain/entities/category_entity.dart';
-import 'package:wordpress_companion/features/categories/presentation/logic_holders/categories_cubit/categories_cubit.dart';
+import 'package:wordpress_companion/features/categories/application/categories_cubit/categories_cubit.dart';
 
 class MockCategoriesCubit extends MockCubit<CategoriesState>
     implements CategoriesCubit {}
@@ -92,11 +92,18 @@ void main() {
       await tester.pump();
 
       //assert
+      final parentFinder = find.byKey(
+        Key("category_node_${FakeCategoryEntity().id}"),
+      );
+      final childFinder = find.byKey(
+        Key("category_child_node_${FakeChildCategoryEntity().id}"),
+      );
+
       expect(find.byType(LoadingWidget), findsNothing);
 
       expect(find.byKey(const Key("categories_checkBoxes")), findsOneWidget);
-      expect(find.byKey(const Key("category_node")), findsWidgets);
-      expect(find.byKey(const Key("category_child_node")), findsOneWidget);
+      expect(parentFinder, findsWidgets);
+      expect(childFinder, findsOneWidget);
     });
 
     testWidgets("should show needRefresh_text when state is needRefresh",

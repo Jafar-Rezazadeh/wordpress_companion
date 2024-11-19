@@ -93,7 +93,7 @@ class _CategorySelectorWidgetState extends State<CategorySelectorWidget> {
 
   Column _nodeItem(TreeOutPutItem<CategoryEntity> node) {
     return Column(
-      key: const Key("category_node"),
+      key: Key("category_node_${node.data.id}"),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _categoryCheckBox(node.data),
@@ -123,7 +123,7 @@ class _CategorySelectorWidgetState extends State<CategorySelectorWidget> {
   Iterable<Widget> _children(List<TreeOutPutItem<CategoryEntity>> children) {
     return children.map(
       (child) => Padding(
-        key: const Key("category_child_node"),
+        key: Key("category_child_node_${child.data.id}"),
         padding: const EdgeInsets.only(right: 16),
         child: _nodeItem(child),
       ),

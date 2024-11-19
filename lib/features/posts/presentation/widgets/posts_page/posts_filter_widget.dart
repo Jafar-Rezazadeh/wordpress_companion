@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 import '../../../../../core/core_export.dart';
@@ -23,6 +24,7 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
   List<PostStatusEnum> selectedStatus = PostStatusEnum.values;
   String? afterDate;
   String? beforeDate;
+  List<int>? selectedCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +37,30 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
             widget.filters
               ..setStatus(selectedStatus)
               ..setAfter(afterDate)
-              ..setBefore(beforeDate);
+              ..setBefore(beforeDate)
+              ..setCategories(selectedCategories);
 
             widget.onApply();
           },
-          onClear: widget.onClear,
+          onClear: () {
+            _resetFilterVariables();
+            widget.onClear();
+          },
           children: [
             _statusFilter(),
             _dateFilter(),
-            // TODO: categoryFilter
+            _categorySelector(),
           ],
         );
       },
     );
+  }
+
+  void _resetFilterVariables() {
+    selectedStatus = PostStatusEnum.values;
+    afterDate = null;
+    beforeDate = null;
+    selectedCategories = null;
   }
 
   int? _countFilters() {
@@ -60,6 +73,9 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
       count++;
     }
     if (widget.filters.status != PostStatusEnum.values) {
+      count++;
+    }
+    if (widget.filters.categories?.isNotEmpty == true) {
       count++;
     }
     return count == 0 ? null : count;
@@ -147,6 +163,22 @@ class _PostsFilterWidgetState extends State<PostsFilterWidget> {
         beforeDate = value?.toIso8601String();
       },
       label: "تا:",
+    );
+  }
+
+  Widget _categorySelector() {
+    return ExpansionTile(
+      key: const Key("category_selector_expansion"),
+      title: const Text("دسته بندی ها"),
+      initiallyExpanded: widget.filters.categories?.isNotEmpty == true,
+      children: [
+        CategorySelectorWidget(
+          initialSelectedCategories: widget.filters.categories ?? [],
+          onSelect: (value) {
+            selectedCategories = value.map((e) => e.id).toList();
+          },
+        )
+      ],
     );
   }
 }
