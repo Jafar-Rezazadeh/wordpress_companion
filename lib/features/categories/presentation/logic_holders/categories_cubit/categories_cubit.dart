@@ -7,6 +7,8 @@ import '../../../../../core/core_export.dart';
 part 'categories_state.dart';
 part 'categories_cubit.freezed.dart';
 
+// TODO: put this cubit in application layer
+
 class CategoriesCubit extends Cubit<CategoriesState> {
   final GetAllCategories _getAllCategories;
   final CreateCategory _createCategory;

@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
-import 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_filter.dart';
+import 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
 
 class EditOrCreatePostScreen extends StatefulWidget {
   final PostEntity? post;
@@ -182,7 +182,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
               _slug(),
               _contentHtmlEditor(),
               _excerpt(),
-              // TODO: category input
+              _categorySelector(),
               // TODO: make tags feature implemented it here
               const TagInputWidget(),
               _featuredImageInput(),
@@ -256,6 +256,23 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
       label: "چکیده",
       maxLines: 4,
       onChanged: (value) => _postParamsBuilder.setExcerpt(value),
+    );
+  }
+
+  Widget _categorySelector() {
+    return Column(
+      children: [
+        const SectionTitle(title: "دسته بندی ها"),
+        const Gap(15),
+        CategorySelectorWidget(
+          // TODO: add initial categories
+          initialSelectedCategories: const [],
+          onSelect: (categories) {
+            final ids = categories.map((e) => e.id).toList();
+            _postParamsBuilder.setCategories(ids);
+          },
+        ),
+      ],
     );
   }
 

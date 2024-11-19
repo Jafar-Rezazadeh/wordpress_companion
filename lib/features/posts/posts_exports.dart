@@ -22,6 +22,7 @@ export 'package:wordpress_companion/features/posts/presentation/widgets/create_o
 export 'package:wordpress_companion/features/posts/presentation/widgets/create_or_edit_screen/tag_input.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/create_or_edit_screen/featured_image_input.dart';
 export 'package:wordpress_companion/features/posts/presentation/screens/edit_or_create_post_screen.dart';
+export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_filter.dart';
 
 // utils
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/get_posts_filters.dart';
