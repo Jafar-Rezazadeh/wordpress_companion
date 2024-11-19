@@ -265,8 +265,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
         const SectionTitle(title: "دسته بندی ها"),
         const Gap(15),
         CategorySelectorWidget(
-          // TODO: add initial categories
-          initialSelectedCategories: const [],
+          initialSelectedCategories: widget.post?.categories ?? [],
           onSelect: (categories) {
             final ids = categories.map((e) => e.id).toList();
             _postParamsBuilder.setCategories(ids);

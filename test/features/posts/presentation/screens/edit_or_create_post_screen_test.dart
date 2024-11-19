@@ -7,10 +7,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
+import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
 
 class FakePostParams extends Fake implements PostParams {}
 
@@ -22,9 +27,15 @@ class FakeMediaEntity extends Fake implements MediaEntity {
   String get sourceUrl => "source";
 }
 
+class FakeCategoryEntity extends Fake implements CategoryEntity {
+  @override
+  int get id => 10;
+}
+
 void main() {
   late PostParamsBuilder postParamsBuilder;
   late PostsCubit mockPostsCubit;
+  late CategoriesCubit mockCategoriesCubit;
 
   final dummyPost = PostEntity(
     id: 60,
@@ -48,8 +59,11 @@ void main() {
   );
 
   Widget makeTestWidget(PostEntity? post) => ScreenUtilInit(
-        child: BlocProvider(
-          create: (context) => mockPostsCubit,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => mockPostsCubit),
+            BlocProvider(create: (context) => mockCategoriesCubit),
+          ],
           child: MaterialApp(
             home: Material(
               child: EditOrCreatePostScreen(
@@ -68,9 +82,13 @@ void main() {
   setUp(() {
     postParamsBuilder = PostParamsBuilder();
     mockPostsCubit = MockPostsCubit();
+    mockCategoriesCubit = MockCategoriesCubit();
     when(
       () => mockPostsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => mockCategoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
   });
   group("postParamsBuilder -", () {
     testWidgets("should set the initial post to builder when it is NOT null",
@@ -107,11 +125,13 @@ void main() {
           find.byType(CustomDropDownButton<PostStatusEnum>);
       final customInputFinder = find.byType(CustomFormInputField);
       final contentEditorFinder = find.byType(QuillEditor);
+      final categorySelectorFinder = find.byType(CategorySelectorWidget);
       final featuredImageInputFinder = find.byType(FeaturedImageInput);
 
       expect(statusInputFinder, findsOneWidget);
       expect(customInputFinder, findsNWidgets(4));
       expect(contentEditorFinder, findsOneWidget);
+      expect(categorySelectorFinder, findsOneWidget);
       expect(featuredImageInputFinder, findsOneWidget);
 
       //act
@@ -136,6 +156,10 @@ void main() {
           .widget<FeaturedImageInput>(featuredImageInputFinder)
           .onImageSelected(FakeMediaEntity());
 
+      await tester
+          .widget<CategorySelectorWidget>(categorySelectorFinder)
+          .onSelect([FakeCategoryEntity()]);
+
       final params = postParamsBuilder.build();
 
       //assert
@@ -144,6 +168,7 @@ void main() {
       expect(params.slug, "test");
       expect(params.content, "<p>test</p>");
       expect(params.excerpt, "test");
+      expect(params.categories, [FakeCategoryEntity().id]);
       expect(params.featuredImage, 5);
     });
 

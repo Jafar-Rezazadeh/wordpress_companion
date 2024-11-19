@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/presentation/logic_holders/categories_cubit/categories_cubit.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 // ignore: must_be_immutable
@@ -57,15 +58,23 @@ class FakePostEntity extends Fake implements PostEntity {
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
 void main() {
   late PostsCubit postsCubit;
+  late CategoriesCubit categoriesCubit;
 
   setUp(() {
     postsCubit = MockPostsCubit();
+    categoriesCubit = MockCategoriesCubit();
 
     when(
       () => postsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => categoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
   });
 
   Future<Null> makeTestWidgetForRouter(WidgetTester tester) async {
@@ -89,8 +98,12 @@ void main() {
                         final post = state.extra as PostEntity?;
 
                         return Material(
-                          child: BlocProvider(
-                            create: (context) => postsCubit,
+                          child: MultiBlocProvider(
+                            providers: [
+                              BlocProvider(create: (context) => postsCubit),
+                              BlocProvider(
+                                  create: (context) => categoriesCubit),
+                            ],
                             child: EditOrCreatePostScreen(post: post),
                           ),
                         );
