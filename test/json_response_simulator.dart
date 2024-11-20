@@ -655,4 +655,37 @@ class JsonResponseSimulator {
       ]
     }
   };
+
+  static Map<String, dynamic> tag = {
+    "id": 29,
+    "count": 1,
+    "description": "some description",
+    "link": "https://syntaxforge.ir/tag/dsgvsve/",
+    "name": "tag name",
+    "slug": "tag-name",
+    "taxonomy": "post_tag",
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://syntaxforge.ir/wp-json/wp/v2/tags/29",
+          "targetHints": {
+            "allow": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+          }
+        }
+      ],
+      "collection": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/tags"}
+      ],
+      "about": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/taxonomies/post_tag"}
+      ],
+      "wp:post_type": [
+        {"href": "https://syntaxforge.ir/wp-json/wp/v2/posts?tags=29"}
+      ],
+      "curies": [
+        {"name": "wp", "href": "https://api.w.org/{rel}", "templated": true}
+      ]
+    }
+  };
 }
