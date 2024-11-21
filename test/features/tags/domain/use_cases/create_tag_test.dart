@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/tags/domain/use_cases/create_tag.dart';
 import 'package:wordpress_companion/features/tags/tags_exports.dart';
 
 class MockTagsRepository extends Mock implements TagsRepository {}

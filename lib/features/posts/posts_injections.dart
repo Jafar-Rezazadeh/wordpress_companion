@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
+import 'package:wordpress_companion/features/posts/presentation/login_holders/tags_cubit/tags_cubit.dart';
 
 initPostsInjections(GetIt getIt) {
   // data
@@ -17,5 +18,8 @@ initPostsInjections(GetIt getIt) {
       createPost: CreatePost(postsRepository: postsRepository),
       updatePost: UpdatePost(postsRepository: postsRepository),
     ),
+  );
+  getIt.registerFactory(
+    () => TagsCubit(tagsService: getIt()),
   );
 }
