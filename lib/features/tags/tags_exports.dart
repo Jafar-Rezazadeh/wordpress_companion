@@ -8,3 +8,5 @@ export 'package:wordpress_companion/features/tags/data/repositories/tags_reposit
 export 'package:wordpress_companion/features/tags/domain/repositories/tags_repository.dart';
 export 'package:wordpress_companion/features/tags/domain/entities/tag_entity.dart';
 export 'package:wordpress_companion/features/tags/domain/use_cases/search_tag.dart';
+export 'package:wordpress_companion/features/tags/domain/use_cases/create_tag.dart';
+export 'package:wordpress_companion/features/tags/domain/use_cases/get_tags_by_ids.dart';
