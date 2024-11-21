@@ -19,6 +19,10 @@ class TagsRemoteDataSourceImpl implements TagsRemoteDataSource {
 
   @override
   Future<List<TagModel>> getTagsByIds(List<int> ids) async {
+    if (ids.isEmpty) {
+      return [];
+    }
+
     final response = await _dio.get(
       "$wpV2EndPoint/tags",
       queryParameters: {

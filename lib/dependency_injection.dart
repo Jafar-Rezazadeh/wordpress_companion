@@ -3,6 +3,7 @@ import 'package:wordpress_companion/features/categories/categories_injections.da
 import 'package:wordpress_companion/features/media/media_injections.dart';
 import 'package:wordpress_companion/features/posts/posts_injections.dart';
 import 'package:wordpress_companion/features/site_settings/site_settings_injection.dart';
+import 'package:wordpress_companion/features/tags/tags_injections.dart';
 import 'core/utils/dio_generator.dart';
 import 'features/login/login_dependency_inj.dart';
 import 'features/profile/profile_injection.dart';
@@ -20,6 +21,7 @@ class DependencyInjection {
     await initMediaInjections(getIt);
     await initPostsInjections(getIt);
     await initCategoriesInjections(getIt);
+    await initTagsInjections(getIt);
   }
 
   _initDio() {

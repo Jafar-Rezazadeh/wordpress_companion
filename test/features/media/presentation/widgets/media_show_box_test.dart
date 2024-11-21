@@ -54,8 +54,6 @@ void main() {
     //arrange
     await _buildTestWidget(tester, MimeTypeEnum.file, "sourceUrl");
 
-    //act
-
     //assert
     expect(fileBoxFinder, findsOneWidget);
   });

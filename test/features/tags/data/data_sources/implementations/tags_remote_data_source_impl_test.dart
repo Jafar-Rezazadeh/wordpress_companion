@@ -112,6 +112,23 @@ void main() {
       expect(queryParams["include"], "5,2");
     });
 
+    test("should return empty List when input is empty List", () async {
+      //arrange
+      dioAdapter.onGet(
+        "$wpV2EndPoint/tags",
+        (server) => server.reply(
+          HttpStatus.ok,
+          [JsonResponseSimulator.tag],
+        ),
+      );
+
+      //act
+      final result = await tagsRemoteDataSourceImpl.getTagsByIds([]);
+
+      //assert
+      expect(result, isEmpty);
+    });
+
     test(
         "should return (List<TagModel>) when success with (json) response data",
         () async {

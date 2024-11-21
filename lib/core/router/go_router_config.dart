@@ -93,7 +93,10 @@ ShellRoute _mainScreenRoute() {
             path: editOrCreatePostRoute,
             builder: (context, state) {
               final post = state.extra as PostEntity?;
-              return EditOrCreatePostScreen(post: post);
+              return BlocProvider(
+                create: (context) => getIt<TagsCubit>(),
+                child: EditOrCreatePostScreen(post: post),
+              );
             },
           ),
           GoRoute(

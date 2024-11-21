@@ -25,6 +25,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   late final PostParamsBuilder _postParamsBuilder;
   final List<PostStatusEnum> validPostStatusAsParams =
       PostStatusFilter.validPostStatusAsParam();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -110,11 +111,20 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   }
 
   void _createOrUpdatePost() {
-    if (widget.post != null) {
-      context.read<PostsCubit>().updatePosts(_postParamsBuilder.build());
-    } else {
-      context.read<PostsCubit>().createPosts(_postParamsBuilder.build());
+    bool isFormValid = formKey.currentState?.validate() ?? false;
+
+    if (isFormValid) {
+      widget.post != null ? _updatePost() : _createPost();
     }
+  }
+
+  void _updatePost() {
+    context.read<PostsCubit>().updatePosts(_postParamsBuilder.build());
+  }
+
+  void _createPost() {
+    context.read<PostsCubit>().createPosts(_postParamsBuilder.build());
+    Navigator.of(context).pop();
   }
 
   IconButton _deleteButton() {
@@ -176,6 +186,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
           horizontal: edgeToEdgePaddingHorizontal,
         ),
         child: Form(
+          key: formKey,
           child: Column(
             children: [
               _title(),
@@ -184,7 +195,7 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
               _excerpt(),
               _categorySelector(),
               // TODO: make tags feature implemented it here
-              const TagInputWidget(),
+              _tags(),
               _featuredImageInput(),
             ].withGapInBetween(40),
           ),
@@ -195,6 +206,8 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
 
   CustomFormInputField _title() {
     return CustomFormInputField(
+      key: const Key("title_key"),
+      validator: InputValidator.isNotEmpty,
       initialValue: widget.post?.title,
       label: "عنوان",
       onChanged: (value) => _postParamsBuilder.setTitle(value),
@@ -272,6 +285,15 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
           },
         ),
       ],
+    );
+  }
+
+  Widget _tags() {
+    return TagInputWidget(
+      initialTags: widget.post?.tags ?? [],
+      onChanged: (tags) {
+        _postParamsBuilder.setTags(tags.map((e) => e.id).toList());
+      },
     );
   }
 

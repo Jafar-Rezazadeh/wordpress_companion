@@ -15,6 +15,8 @@ class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 class MockCategoriesCubit extends MockCubit<CategoriesState>
     implements CategoriesCubit {}
 
+class MockTagsCubit extends MockCubit<TagsState> implements TagsCubit {}
+
 class FakePostEntity extends Fake implements PostEntity {
   @override
   PostStatusEnum get status => PostStatusEnum.publish;
@@ -34,6 +36,7 @@ class FakePostEntity extends Fake implements PostEntity {
 
 void main() {
   late PostsCubit postsCubit;
+  late TagsCubit tagsCubit;
   late CategoriesCubit categoriesCubit;
   setUpAll(() {
     registerFallbackValue(GetPostsFilters());
@@ -41,7 +44,9 @@ void main() {
   setUp(() {
     postsCubit = MockPostsCubit();
     categoriesCubit = MockCategoriesCubit();
+    tagsCubit = MockTagsCubit();
     when(() => postsCubit.state).thenAnswer((_) => const PostsState.initial());
+    when(() => tagsCubit.state).thenAnswer((_) => const TagsState.initial());
     when(() => categoriesCubit.state)
         .thenAnswer((_) => const CategoriesState.initial());
   });
@@ -64,6 +69,7 @@ void main() {
                     builder: (context, state) => MultiBlocProvider(
                       providers: [
                         BlocProvider(create: (context) => postsCubit),
+                        BlocProvider(create: (context) => tagsCubit),
                         BlocProvider(create: (context) => categoriesCubit),
                       ],
                       child: const EditOrCreatePostScreen(),

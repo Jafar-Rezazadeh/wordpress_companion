@@ -15,16 +15,17 @@ export 'package:wordpress_companion/features/posts/domain/use_cases/delete_post.
 export 'package:wordpress_companion/features/posts/domain/use_cases/post_params.dart';
 
 // Presentation
-export 'package:wordpress_companion/features/posts/presentation/login_holders/posts_cubit/posts_cubit.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/post_item_widget.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/create_or_edit_screen/section_title.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/create_or_edit_screen/tag_input.dart';
 export 'package:wordpress_companion/features/posts/presentation/widgets/create_or_edit_screen/featured_image_input.dart';
 export 'package:wordpress_companion/features/posts/presentation/screens/edit_or_create_post_screen.dart';
-export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_filter.dart';
 
 // utils
+export 'package:wordpress_companion/features/posts/presentation/login_holders/posts_cubit/posts_cubit.dart';
+export 'package:wordpress_companion/features/posts/presentation/login_holders/tags_cubit/tags_cubit.dart';
+export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_filter.dart';
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/get_posts_filters.dart';
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_status_translator.dart';
 export 'package:wordpress_companion/features/posts/presentation/login_holders/utils/post_params_builder.dart';

@@ -58,20 +58,27 @@ class FakePostEntity extends Fake implements PostEntity {
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
+class MockTagsCubit extends MockCubit<TagsState> implements TagsCubit {}
+
 class MockCategoriesCubit extends MockCubit<CategoriesState>
     implements CategoriesCubit {}
 
 void main() {
   late PostsCubit postsCubit;
   late CategoriesCubit categoriesCubit;
+  late TagsCubit tagsCubit;
 
   setUp(() {
     postsCubit = MockPostsCubit();
     categoriesCubit = MockCategoriesCubit();
+    tagsCubit = MockTagsCubit();
 
     when(
       () => postsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => tagsCubit.state,
+    ).thenAnswer((_) => const TagsState.initial());
     when(
       () => categoriesCubit.state,
     ).thenAnswer((_) => const CategoriesState.initial());
@@ -101,6 +108,7 @@ void main() {
                           child: MultiBlocProvider(
                             providers: [
                               BlocProvider(create: (context) => postsCubit),
+                              BlocProvider(create: (context) => tagsCubit),
                               BlocProvider(
                                   create: (context) => categoriesCubit),
                             ],

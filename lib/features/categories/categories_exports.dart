@@ -18,3 +18,6 @@ export 'package:wordpress_companion/features/categories/application/categories_c
 export 'package:wordpress_companion/features/categories/presentation/logic_holders/utils/create_or_update_category_params_builder.dart';
 export 'package:wordpress_companion/features/categories/presentation/screens/create_or_edit_category_screen.dart';
 export 'package:wordpress_companion/features/categories/presentation/widgets/category_item_widget.dart';
+
+// application
+export 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
