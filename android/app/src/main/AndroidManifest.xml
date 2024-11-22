@@ -6,7 +6,7 @@
 
     
     <application
-        android:label="wordpress_companion"
+        android:label="وردپرس یار"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         
