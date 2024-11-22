@@ -10,6 +10,7 @@ import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
+import 'package:wordpress_companion/features/tags/domain/entities/tag_entity.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
@@ -31,6 +32,14 @@ class FakeMediaEntity extends Fake implements MediaEntity {
 class FakeCategoryEntity extends Fake implements CategoryEntity {
   @override
   int get id => 10;
+}
+
+class FakeTagEntity extends Fake implements TagEntity {
+  @override
+  int get id => 5;
+
+  @override
+  String get name => "tag";
 }
 
 void main() {
@@ -133,12 +142,14 @@ void main() {
       final customInputFinder = find.byType(CustomFormInputField);
       final contentEditorFinder = find.byType(QuillEditor);
       final categorySelectorFinder = find.byType(CategorySelectorWidget);
+      final tagInputFinder = find.byType(TagInputWidget);
       final featuredImageInputFinder = find.byType(FeaturedImageInput);
 
       expect(statusInputFinder, findsOneWidget);
       expect(customInputFinder, findsNWidgets(3));
       expect(contentEditorFinder, findsOneWidget);
       expect(categorySelectorFinder, findsOneWidget);
+      expect(tagInputFinder, findsOneWidget);
       expect(featuredImageInputFinder, findsOneWidget);
 
       //act
@@ -160,12 +171,16 @@ void main() {
           .setContents(delta);
 
       await tester
-          .widget<FeaturedImageInput>(featuredImageInputFinder)
-          .onImageSelected(FakeMediaEntity());
-
-      await tester
           .widget<CategorySelectorWidget>(categorySelectorFinder)
           .onSelect([FakeCategoryEntity()]);
+
+      await tester
+          .widget<TagInputWidget>(tagInputFinder)
+          .onChanged([FakeTagEntity()]);
+
+      await tester
+          .widget<FeaturedImageInput>(featuredImageInputFinder)
+          .onImageSelected(FakeMediaEntity());
 
       final params = postParamsBuilder.build();
 
@@ -176,6 +191,7 @@ void main() {
       expect(params.content, "<p>test</p>");
       expect(params.excerpt, "test");
       expect(params.categories, [FakeCategoryEntity().id]);
+      expect(params.tags, [FakeTagEntity().id]);
       expect(params.featuredImage, 5);
     });
 

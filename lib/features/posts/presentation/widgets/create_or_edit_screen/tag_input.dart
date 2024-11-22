@@ -48,17 +48,6 @@ class _TagInputWidgetState extends State<TagInputWidget> {
     );
   }
 
-  Column contents(TagsState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionTitle(title: "برچسب ها"),
-        _tagInput(state),
-        _assignedTags(),
-      ].withGapInBetween(15),
-    );
-  }
-
   void _tagsStateListener(_, TagsState state) {
     state.whenOrNull(
       tagsByIds: (tags) => assignedTags.addAll(tags),
@@ -72,8 +61,25 @@ class _TagInputWidgetState extends State<TagInputWidget> {
   }
 
   void _addNewTag(TagEntity tag) {
-    setState(() => assignedTags.add(tag));
+    if (_notAlreadyAssigned(tag)) {
+      setState(() => assignedTags.add(tag));
+    }
     widget.onChanged(assignedTags);
+  }
+
+  bool _notAlreadyAssigned(TagEntity? item) {
+    return item != null && !assignedTags.contains(item);
+  }
+
+  Column contents(TagsState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: "برچسب ها"),
+        _tagInput(state),
+        _assignedTags(),
+      ].withGapInBetween(15),
+    );
   }
 
   Row _tagInput(TagsState state) {
@@ -87,8 +93,62 @@ class _TagInputWidgetState extends State<TagInputWidget> {
     );
   }
 
+  Widget _tagInputField() {
+    return SizedBox(
+      width: 0.65.sw,
+      child: SearchField<TagEntity>(
+        searchInputDecoration: _searchInputDecoration(),
+        controller: textInputController,
+        suggestionAction: SuggestionAction.unfocus,
+        onSearchTextChanged: onSearchTextChanged,
+        onSuggestionTap: _onSuggestionTap,
+        suggestions: _searchResultSuggestions(),
+      ),
+    );
+  }
+
+  List<SearchFieldListItem<TagEntity>>? onSearchTextChanged(value) {
+    value.isNotEmpty ? _searchTag(value) : null;
+
+    return null;
+  }
+
+  _onSuggestionTap(suggestion) {
+    suggestion.item != null ? _addNewTag(suggestion.item!) : null;
+    textInputController.clear();
+  }
+
+  SearchInputDecoration _searchInputDecoration() {
+    return SearchInputDecoration(
+      cursorColor: ColorPallet.lightBlue,
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: ColorPallet.lightBlue),
+        borderRadius: BorderRadius.circular(smallCornerRadius),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: ColorPallet.border),
+        borderRadius: BorderRadius.circular(smallCornerRadius),
+      ),
+    );
+  }
+
+  void _searchTag(String value) => context.read<TagsCubit>().searchTag(value);
+
+  List<SearchFieldListItem<TagEntity>> _searchResultSuggestions() {
+    return searchResult.map(
+      (e) {
+        return SearchFieldListItem<TagEntity>(
+          e.name,
+          child: Text(key: const Key("suggestion_item"), e.name),
+          item: e,
+        );
+      },
+    ).toList();
+  }
+
   FilledButton _createTagButton(TagsState state) {
     return FilledButton(
+      key: const Key("add_tag_button"),
       onPressed: state.maybeWhen(
         loading: null,
         searching: null,
@@ -104,69 +164,21 @@ class _TagInputWidgetState extends State<TagInputWidget> {
         (element) => element.name == textInputController.text,
       );
 
-      if (tagInSearchResult.isNotEmpty) {
-        if (_notAlreadyAssigned(tagInSearchResult.first)) {
-          _addNewTag(tagInSearchResult.first);
-        }
-      } else {
-        context.read<TagsCubit>().createTag(textInputController.text);
-      }
+      tagInSearchResult.isNotEmpty
+          ? _getTagFromSearchResult(tagInSearchResult.first)
+          : _createNewTag();
 
       FocusManager.instance.primaryFocus?.unfocus();
       textInputController.clear();
     }
   }
 
-  Widget _tagInputField() {
-    return SizedBox(
-      width: 0.65.sw,
-      child: SearchField<TagEntity>(
-        searchInputDecoration: _searchInputDecoration(),
-        controller: textInputController,
-        suggestionAction: SuggestionAction.unfocus,
-        onSearchTextChanged: (value) {
-          if (value.isNotEmpty) {
-            context.read<TagsCubit>().searchTag(value);
-          }
-          return;
-        },
-        onSuggestionTap: (suggestion) {
-          if (_notAlreadyAssigned(suggestion.item)) {
-            _addNewTag(suggestion.item!);
-          }
-          textInputController.clear();
-        },
-        suggestions: _searchResultSuggestions(),
-      ),
-    );
+  void _getTagFromSearchResult(TagEntity tag) {
+    _addNewTag(tag);
   }
 
-  bool _notAlreadyAssigned(TagEntity? item) {
-    return item != null && !assignedTags.contains(item);
-  }
-
-  List<SearchFieldListItem<TagEntity>> _searchResultSuggestions() {
-    return searchResult
-        .map((e) => SearchFieldListItem<TagEntity>(
-              e.name,
-              child: Text(e.name),
-              item: e,
-            ))
-        .toList();
-  }
-
-  SearchInputDecoration _searchInputDecoration() {
-    return SearchInputDecoration(
-      cursorColor: ColorPallet.lightBlue,
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorPallet.lightBlue),
-        borderRadius: BorderRadius.circular(smallCornerRadius),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorPallet.border),
-        borderRadius: BorderRadius.circular(smallCornerRadius),
-      ),
-    );
+  void _createNewTag() {
+    context.read<TagsCubit>().createTag(textInputController.text);
   }
 
   Widget _assignedTags() {

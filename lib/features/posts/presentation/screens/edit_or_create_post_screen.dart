@@ -194,7 +194,6 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
               _contentHtmlEditor(),
               _excerpt(),
               _categorySelector(),
-              // TODO: make tags feature implemented it here
               _tags(),
               _featuredImageInput(),
             ].withGapInBetween(40),
