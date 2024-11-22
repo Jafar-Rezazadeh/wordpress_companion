@@ -65,7 +65,6 @@ class FailureWidget extends StatelessWidget {
       children: [
         Text(
           "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
-          overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const Gap(5),

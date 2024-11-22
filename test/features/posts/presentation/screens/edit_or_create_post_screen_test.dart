@@ -7,10 +7,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
+import 'package:wordpress_companion/features/tags/domain/entities/tag_entity.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
+class MockTagsCubit extends MockCubit<TagsState> implements TagsCubit {}
 
 class FakePostParams extends Fake implements PostParams {}
 
@@ -22,9 +29,24 @@ class FakeMediaEntity extends Fake implements MediaEntity {
   String get sourceUrl => "source";
 }
 
+class FakeCategoryEntity extends Fake implements CategoryEntity {
+  @override
+  int get id => 10;
+}
+
+class FakeTagEntity extends Fake implements TagEntity {
+  @override
+  int get id => 5;
+
+  @override
+  String get name => "tag";
+}
+
 void main() {
   late PostParamsBuilder postParamsBuilder;
   late PostsCubit mockPostsCubit;
+  late CategoriesCubit mockCategoriesCubit;
+  late TagsCubit mockTagsCubit;
 
   final dummyPost = PostEntity(
     id: 60,
@@ -48,8 +70,12 @@ void main() {
   );
 
   Widget makeTestWidget(PostEntity? post) => ScreenUtilInit(
-        child: BlocProvider(
-          create: (context) => mockPostsCubit,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => mockPostsCubit),
+            BlocProvider(create: (context) => mockCategoriesCubit),
+            BlocProvider(create: (context) => mockTagsCubit),
+          ],
           child: MaterialApp(
             home: Material(
               child: EditOrCreatePostScreen(
@@ -68,9 +94,17 @@ void main() {
   setUp(() {
     postParamsBuilder = PostParamsBuilder();
     mockPostsCubit = MockPostsCubit();
+    mockCategoriesCubit = MockCategoriesCubit();
+    mockTagsCubit = MockTagsCubit();
     when(
       () => mockPostsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => mockCategoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
+    when(
+      () => mockTagsCubit.state,
+    ).thenAnswer((_) => const TagsState.initial());
   });
   group("postParamsBuilder -", () {
     testWidgets("should set the initial post to builder when it is NOT null",
@@ -107,11 +141,15 @@ void main() {
           find.byType(CustomDropDownButton<PostStatusEnum>);
       final customInputFinder = find.byType(CustomFormInputField);
       final contentEditorFinder = find.byType(QuillEditor);
+      final categorySelectorFinder = find.byType(CategorySelectorWidget);
+      final tagInputFinder = find.byType(TagInputWidget);
       final featuredImageInputFinder = find.byType(FeaturedImageInput);
 
       expect(statusInputFinder, findsOneWidget);
-      expect(customInputFinder, findsNWidgets(4));
+      expect(customInputFinder, findsNWidgets(3));
       expect(contentEditorFinder, findsOneWidget);
+      expect(categorySelectorFinder, findsOneWidget);
+      expect(tagInputFinder, findsOneWidget);
       expect(featuredImageInputFinder, findsOneWidget);
 
       //act
@@ -119,7 +157,7 @@ void main() {
           .widget<CustomDropDownButton<PostStatusEnum>>(statusInputFinder)
           .onChanged(PostStatusEnum.private);
 
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         await tester.enterText(customInputFinder.at(i), "test");
       }
 
@@ -133,6 +171,14 @@ void main() {
           .setContents(delta);
 
       await tester
+          .widget<CategorySelectorWidget>(categorySelectorFinder)
+          .onSelect([FakeCategoryEntity()]);
+
+      await tester
+          .widget<TagInputWidget>(tagInputFinder)
+          .onChanged([FakeTagEntity()]);
+
+      await tester
           .widget<FeaturedImageInput>(featuredImageInputFinder)
           .onImageSelected(FakeMediaEntity());
 
@@ -144,6 +190,8 @@ void main() {
       expect(params.slug, "test");
       expect(params.content, "<p>test</p>");
       expect(params.excerpt, "test");
+      expect(params.categories, [FakeCategoryEntity().id]);
+      expect(params.tags, [FakeTagEntity().id]);
       expect(params.featuredImage, 5);
     });
 
@@ -171,7 +219,8 @@ void main() {
   });
 
   group("onSubmit -", () {
-    testWidgets("should call createPost when post prop is null",
+    testWidgets(
+        "should call createPost when post prop is null and form in valid",
         (tester) async {
       //arrange
       await tester.pumpWidget(makeTestWidget(null));
@@ -179,16 +228,20 @@ void main() {
 
       //verification
       final submitFinder = find.byKey(const Key("submit_button"));
+      final titleFinder = find.byKey(const Key("title_key"));
+      expect(titleFinder, findsOneWidget);
       expect(submitFinder, findsOneWidget);
 
       //act
+      await tester.enterText(titleFinder, "test");
       await tester.tap(submitFinder);
 
       //assert
       verify(() => mockPostsCubit.createPosts(any())).called(1);
     });
 
-    testWidgets("should call updatePost when given prop is NOT null",
+    testWidgets(
+        "should call updatePost when given prop is NOT null and form in valid",
         (tester) async {
       //arrange
       await tester.pumpWidget(makeTestWidget(dummyPost));
@@ -203,6 +256,23 @@ void main() {
 
       //assert
       verify(() => mockPostsCubit.updatePosts(any())).called(1);
+    });
+
+    testWidgets("should Not Call update or create when form is NOT Valid",
+        (tester) async {
+      await tester.pumpWidget(makeTestWidget(null));
+      await tester.pumpAndSettle();
+
+      //verification
+      final submitFinder = find.byKey(const Key("submit_button"));
+      expect(submitFinder, findsOneWidget);
+
+      //act
+      await tester.tap(submitFinder);
+
+      //assert
+      verifyNever(() => mockPostsCubit.createPosts(any()));
+      verifyNever(() => mockPostsCubit.updatePosts(any()));
     });
   });
 

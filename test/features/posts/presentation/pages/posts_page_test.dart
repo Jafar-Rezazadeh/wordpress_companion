@@ -6,10 +6,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/categories_exports.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 import 'package:wordpress_companion/features/posts/presentation/pages/posts_page.dart';
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
+class MockTagsCubit extends MockCubit<TagsState> implements TagsCubit {}
 
 class FakePostEntity extends Fake implements PostEntity {
   @override
@@ -30,12 +36,19 @@ class FakePostEntity extends Fake implements PostEntity {
 
 void main() {
   late PostsCubit postsCubit;
+  late TagsCubit tagsCubit;
+  late CategoriesCubit categoriesCubit;
   setUpAll(() {
     registerFallbackValue(GetPostsFilters());
   });
   setUp(() {
     postsCubit = MockPostsCubit();
+    categoriesCubit = MockCategoriesCubit();
+    tagsCubit = MockTagsCubit();
     when(() => postsCubit.state).thenAnswer((_) => const PostsState.initial());
+    when(() => tagsCubit.state).thenAnswer((_) => const TagsState.initial());
+    when(() => categoriesCubit.state)
+        .thenAnswer((_) => const CategoriesState.initial());
   });
 
   group("floating action button -", () {
@@ -53,8 +66,12 @@ void main() {
                   GoRoute(
                     name: editOrCreatePostRoute,
                     path: editOrCreatePostRoute,
-                    builder: (context, state) => BlocProvider(
-                      create: (context) => postsCubit,
+                    builder: (context, state) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(create: (context) => postsCubit),
+                        BlocProvider(create: (context) => tagsCubit),
+                        BlocProvider(create: (context) => categoriesCubit),
+                      ],
                       child: const EditOrCreatePostScreen(),
                     ),
                   )

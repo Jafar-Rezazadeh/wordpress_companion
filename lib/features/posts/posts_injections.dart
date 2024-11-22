@@ -18,4 +18,7 @@ initPostsInjections(GetIt getIt) {
       updatePost: UpdatePost(postsRepository: postsRepository),
     ),
   );
+  getIt.registerFactory(
+    () => TagsCubit(tagsService: getIt()),
+  );
 }

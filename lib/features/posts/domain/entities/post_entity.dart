@@ -19,6 +19,7 @@ class PostEntity extends Equatable {
   final String featureMediaLink;
   final String commentStatus;
   final List<int> categories;
+  // TODO: get the Categories form query params
   final List<int> tags;
 
   const PostEntity({

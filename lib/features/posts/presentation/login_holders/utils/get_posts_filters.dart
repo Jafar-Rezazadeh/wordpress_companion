@@ -23,7 +23,11 @@ class GetPostsFilters {
   }
 
   setCategories(List<int>? value) {
-    _categories = value;
+    if (value?.isEmpty == true) {
+      _categories = null;
+    } else {
+      _categories = value;
+    }
     return this;
   }
 

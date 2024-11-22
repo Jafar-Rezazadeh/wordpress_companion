@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/application/categories_cubit/categories_cubit.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
 // ignore: must_be_immutable
@@ -57,15 +58,30 @@ class FakePostEntity extends Fake implements PostEntity {
 
 class MockPostsCubit extends MockCubit<PostsState> implements PostsCubit {}
 
+class MockTagsCubit extends MockCubit<TagsState> implements TagsCubit {}
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
 void main() {
   late PostsCubit postsCubit;
+  late CategoriesCubit categoriesCubit;
+  late TagsCubit tagsCubit;
 
   setUp(() {
     postsCubit = MockPostsCubit();
+    categoriesCubit = MockCategoriesCubit();
+    tagsCubit = MockTagsCubit();
 
     when(
       () => postsCubit.state,
     ).thenAnswer((_) => const PostsState.initial());
+    when(
+      () => tagsCubit.state,
+    ).thenAnswer((_) => const TagsState.initial());
+    when(
+      () => categoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
   });
 
   Future<Null> makeTestWidgetForRouter(WidgetTester tester) async {
@@ -89,8 +105,13 @@ void main() {
                         final post = state.extra as PostEntity?;
 
                         return Material(
-                          child: BlocProvider(
-                            create: (context) => postsCubit,
+                          child: MultiBlocProvider(
+                            providers: [
+                              BlocProvider(create: (context) => postsCubit),
+                              BlocProvider(create: (context) => tagsCubit),
+                              BlocProvider(
+                                  create: (context) => categoriesCubit),
+                            ],
                             child: EditOrCreatePostScreen(post: post),
                           ),
                         );

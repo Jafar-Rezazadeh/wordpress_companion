@@ -1,11 +1,99 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
+import 'package:wordpress_companion/features/categories/application/widgets/category_selector_widget.dart';
+import 'package:wordpress_companion/features/categories/domain/entities/category_entity.dart';
+import 'package:wordpress_companion/features/categories/application/categories_cubit/categories_cubit.dart';
 import 'package:wordpress_companion/features/posts/presentation/login_holders/utils/get_posts_filters.dart';
 import 'package:wordpress_companion/features/posts/presentation/widgets/posts_page/posts_filter_widget.dart';
 
+class FakeCategoryEntity extends Fake implements CategoryEntity {
+  @override
+  int get id => 10;
+}
+
+class MockCategoriesCubit extends MockCubit<CategoriesState>
+    implements CategoriesCubit {}
+
 void main() {
+  late CategoriesCubit categoriesCubit;
+
+  final statusDropDownFinder = find.byType(
+    CustomDropDownButton<PostStatusEnum>,
+  );
+  final dateExpansionFinder = find.byKey(
+    const Key("date_filter_expansion"),
+  );
+  final categorySelectorExpansion = find.byKey(
+    const Key("category_selector_expansion"),
+  );
+  final afterDateInput = find.byKey(const Key("after_date_input"));
+  final beforeDateInput = find.byKey(const Key("before_date_input"));
+
+  setUp(() {
+    categoriesCubit = MockCategoriesCubit();
+    when(
+      () => categoriesCubit.state,
+    ).thenAnswer((_) => const CategoriesState.initial());
+  });
+
+  Future<void> makeTestWidget(
+    WidgetTester tester,
+    GetPostsFilters filters, {
+    Function()? onClear,
+  }) {
+    return tester.pumpWidget(
+      BlocProvider<CategoriesCubit>(
+        create: (context) => categoriesCubit,
+        child: ScreenUtilInit(
+          child: MaterialApp(
+            home: Material(
+              child: PostsFilterWidget(
+                filters: filters,
+                onApply: () {},
+                onClear: onClear ?? () {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> verifyAllInputs(WidgetTester tester) async {
+    expect(statusDropDownFinder, findsOneWidget);
+    expect(dateExpansionFinder, findsOneWidget);
+    expect(categorySelectorExpansion, findsOneWidget);
+
+    await tester.tap(dateExpansionFinder);
+    await tester.tap(categorySelectorExpansion);
+    await tester.pumpAndSettle();
+
+    expect(afterDateInput, findsOneWidget);
+    expect(beforeDateInput, findsOneWidget);
+    expect(find.byType(CategorySelectorWidget), findsOneWidget);
+  }
+
+  Future<void> addFiltersViaInputs(WidgetTester tester) async {
+    await tester
+        .widget<CustomDropDownButton<PostStatusEnum>>(statusDropDownFinder)
+        .onChanged(PostStatusEnum.pending);
+    await tester
+        .widget<CustomPersianDateSelector>(afterDateInput)
+        .onSelected(DateTime(1));
+    await tester
+        .widget<CustomPersianDateSelector>(beforeDateInput)
+        .onSelected(DateTime(1));
+
+    await tester
+        .widget<CategorySelectorWidget>(find.byType(CategorySelectorWidget))
+        .onSelect([FakeCategoryEntity()]);
+  }
+
   testWidgets(
       "should set the numberOfAppliedFilters on filter button when based on not null filters",
       (tester) async {
@@ -15,9 +103,10 @@ void main() {
     filters
       ..setAfter("2022-01-01")
       ..setBefore("2022-01-01")
-      ..setStatus([PostStatusEnum.pending]);
+      ..setStatus([PostStatusEnum.pending])
+      ..setCategories([12]);
 
-    await _makeTestWidget(tester, filters);
+    await makeTestWidget(tester, filters);
 
     //verification
     expect(find.byType(FilterButton), findsOneWidget);
@@ -28,7 +117,7 @@ void main() {
         .numberOfAppliedFilters;
 
     //assert
-    expect(numberOfAppliedFilters, 3);
+    expect(numberOfAppliedFilters, 4);
   });
 
   group("statusFilter -", () {
@@ -39,7 +128,7 @@ void main() {
       final filters = GetPostsFilters();
       filters.setStatus([PostStatusEnum.pending]);
 
-      await _makeTestWidget(tester, filters);
+      await makeTestWidget(tester, filters);
 
       await _openFilterBottomSheet(tester);
 
@@ -62,7 +151,7 @@ void main() {
       final filters = GetPostsFilters();
       filters.setStatus(PostStatusEnum.values);
 
-      await _makeTestWidget(tester, filters);
+      await makeTestWidget(tester, filters);
       await _openFilterBottomSheet(tester);
 
       //verification
@@ -86,37 +175,15 @@ void main() {
       //arrange
       final filters = GetPostsFilters();
 
-      await _makeTestWidget(tester, filters);
+      await makeTestWidget(tester, filters);
       await _openFilterBottomSheet(tester);
 
       //verification
-      final statusDropDownFinder =
-          find.byType(CustomDropDownButton<PostStatusEnum>);
-      final dateExpansionFinder =
-          find.byKey(const Key("date_filter_expansion"));
-      final afterDateInput = find.byKey(const Key("after_date_input"));
-      final beforeDateInput = find.byKey(const Key("before_date_input"));
 
-      expect(statusDropDownFinder, findsOneWidget);
-      expect(dateExpansionFinder, findsOneWidget);
-
-      await tester.tap(dateExpansionFinder);
-      await tester.pumpAndSettle();
-
-      //
-      expect(afterDateInput, findsOneWidget);
-      expect(beforeDateInput, findsOneWidget);
+      await verifyAllInputs(tester);
 
       //act
-      await tester
-          .widget<CustomDropDownButton<PostStatusEnum>>(statusDropDownFinder)
-          .onChanged(PostStatusEnum.pending);
-      await tester
-          .widget<CustomPersianDateSelector>(afterDateInput)
-          .onSelected(DateTime(1));
-      await tester
-          .widget<CustomPersianDateSelector>(beforeDateInput)
-          .onSelected(DateTime(1));
+      await addFiltersViaInputs(tester);
 
       await tester.tap(find.byKey(const Key("apply_filter_button")));
       await tester.pumpAndSettle();
@@ -125,6 +192,26 @@ void main() {
       expect(filters.status, [PostStatusEnum.pending]);
       expect(filters.after, DateTime(1).toIso8601String());
       expect(filters.before, DateTime(1).toIso8601String());
+      expect(filters.categories, [FakeCategoryEntity().id]);
+    });
+  });
+
+  group("onClear -", () {
+    testWidgets("should call the onClear when clear_filter_button tapped",
+        (tester) async {
+      //arrange
+      final filters = GetPostsFilters();
+
+      bool isInvoked = false;
+      await makeTestWidget(tester, filters, onClear: () => isInvoked = true);
+      await _openFilterBottomSheet(tester);
+
+      //act
+      await tester.tap(find.byKey(const Key("clear_filter_button")));
+      await tester.pumpAndSettle();
+
+      //assert
+      expect(isInvoked, true);
     });
   });
 }
@@ -134,20 +221,4 @@ Future<void> _openFilterBottomSheet(WidgetTester tester) async {
   await tester.tap(find.byType(FilterButton));
 
   await tester.pumpAndSettle();
-}
-
-Future<void> _makeTestWidget(WidgetTester tester, GetPostsFilters filters) {
-  return tester.pumpWidget(
-    ScreenUtilInit(
-      child: MaterialApp(
-        home: Material(
-          child: PostsFilterWidget(
-            filters: filters,
-            onApply: () {},
-            onClear: () {},
-          ),
-        ),
-      ),
-    ),
-  );
 }

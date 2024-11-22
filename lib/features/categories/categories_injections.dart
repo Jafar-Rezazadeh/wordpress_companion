@@ -18,7 +18,10 @@ initCategoriesInjections(GetIt getIt) {
   final getAllCategories =
       GetAllCategories(categoriesRepository: categoriesRepository);
 
-  // cubits
+  // application
+  getIt.registerLazySingleton<CategoriesService>(
+    () => CategoriesServiceImpl(getAllCategories: getAllCategories),
+  );
   getIt.registerFactory(
     () => CategoriesCubit(
       getAllCategories: getAllCategories,
@@ -29,10 +32,5 @@ initCategoriesInjections(GetIt getIt) {
       deleteCategory:
           DeleteCategory(categoriesRepository: categoriesRepository),
     ),
-  );
-
-  // application
-  getIt.registerLazySingleton<CategoriesService>(
-    () => CategoriesServiceImpl(getAllCategories: getAllCategories),
   );
 }

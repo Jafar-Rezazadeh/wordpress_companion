@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
 
-import '../../../../../core/core_export.dart';
+import '../../../../core/core_export.dart';
 
 part 'categories_state.dart';
 part 'categories_cubit.freezed.dart';
