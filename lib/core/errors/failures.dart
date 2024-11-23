@@ -12,10 +12,12 @@ abstract class Failure extends Equatable {
 class ServerFailure extends Failure {
   @override
   final Response? response;
+  final DioException dioException;
 
   const ServerFailure({
     required super.message,
     required this.response,
+    required this.dioException,
     required super.stackTrace,
   });
   @override
@@ -23,6 +25,7 @@ class ServerFailure extends Failure {
         message,
         response,
         stackTrace,
+        dioException,
       ];
 }
 
@@ -40,17 +43,18 @@ class InternalFailure extends Failure {
 }
 
 class FailureFactory {
-  static Failure createFailure(Object object) {
+  static Failure createFailure(Object object, StackTrace stackTrace) {
     if (object is DioException) {
       return ServerFailure(
-        message: object.message ?? "",
+        message: object.message.toString(),
+        dioException: object,
         response: object.response,
         stackTrace: object.stackTrace,
       );
     } else {
       return InternalFailure(
         message: object.toString(),
-        stackTrace: StackTrace.current,
+        stackTrace: stackTrace,
       );
     }
   }

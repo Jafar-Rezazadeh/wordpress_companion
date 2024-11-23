@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/core/utils/http_status_helper.dart';
-import 'package:wordpress_companion/core/utils/string_formatter.dart';
+import '../utils/http_status_helper.dart';
 
 import '../errors/failures.dart';
 
-// TODO: test this
 class FailureWidget extends StatelessWidget {
   final Failure failure;
   const FailureWidget({super.key, required this.failure});
@@ -66,13 +64,13 @@ class FailureWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          HttpStatusHelper(status: failure.response?.statusCode ?? 0)
-              .translateToMessage(),
+          "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const Gap(5),
         Text(
-          "پیام از سمت سرور: " "${_getMessage(failure) ?? "نامعلوم"}",
-          overflow: TextOverflow.ellipsis,
+          HttpStatusHelper.translateToMessage(
+              failure.response?.statusCode ?? 0),
         ),
       ],
     );
@@ -92,14 +90,19 @@ class FailureWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("خطای ناشناخته"),
+          const Text("Internal Failure"),
           const Gap(10),
           Text(failure.message),
           const Gap(10),
-          Text(
-            StringFormatter.shortenText(failure.stackTrace.toString(), 300),
-            textAlign: TextAlign.left,
-          ),
+          ExpansionTile(
+            title: const Text("اطلاعات بیشتر"),
+            children: [
+              Text(
+                failure.stackTrace.toString(),
+                textAlign: TextAlign.left,
+              ),
+            ],
+          )
         ],
       ),
     );

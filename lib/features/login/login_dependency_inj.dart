@@ -1,15 +1,14 @@
-//coverage:ignore-file
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
-import 'package:wordpress_companion/dependency_injection.dart';
+import '../../core/utils/global_dio_headers_handler.dart';
 
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import 'login_exports.dart';
 
-userLoginDependencyInjection() async {
+initLoginInjection(GetIt getIt) async {
   // data sources
-  getIt.registerLazySingleton<WordpressRemoteDataSource>(
-    () => WordpressRemoteDataSourceImpl(dio: getIt()),
-  );
+  final WordpressRemoteDataSource wordpressRemoteDataSource =
+      WordpressRemoteDataSourceImpl(dio: getIt());
+
   getIt.registerLazySingletonAsync<LocalLoginDataSource>(
     () async {
       final sharedPref = await SharedPreferences.getInstance();
@@ -21,18 +20,17 @@ userLoginDependencyInjection() async {
   // repository
   getIt.registerLazySingleton<LoginRepository>(
     () => UserLoginRepositoryImpl(
-      wordpressRemoteDataSource: getIt(),
+      wordpressRemoteDataSource: wordpressRemoteDataSource,
       localUserLoginDataSource: getIt(),
     ),
   );
 
   // use cases
+  getIt.registerLazySingleton(() => AuthenticateUser(loginRepository: getIt()));
   getIt.registerLazySingleton(
-      () => AuthenticateUser(userLoginRepository: getIt()));
+      () => SaveUserCredentials(loginRepository: getIt()));
   getIt.registerLazySingleton(
-      () => SaveUserCredentials(userLoginRepository: getIt()));
-  getIt.registerLazySingleton(
-      () => GetLastLoginCredentials(userLoginRepository: getIt()));
+      () => GetLastLoginCredentials(loginRepository: getIt()));
 
   // cubit
   getIt.registerFactory(

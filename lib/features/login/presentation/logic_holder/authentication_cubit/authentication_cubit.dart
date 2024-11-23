@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/contracts/use_case.dart';
-import 'package:wordpress_companion/core/utils/global_dio_headers_handler.dart';
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../../../../core/contracts/use_case.dart';
+import '../../../../../core/utils/global_dio_headers_handler.dart';
+import '../../../login_exports.dart';
 import '../../../../../core/errors/failures.dart';
 
 part 'authentication_state.dart';

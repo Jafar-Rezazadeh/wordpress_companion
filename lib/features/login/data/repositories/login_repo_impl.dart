@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../../../core/errors/failures.dart';
+import '../../login_exports.dart';
 
 class UserLoginRepositoryImpl implements LoginRepository {
   final WordpressRemoteDataSource _wordpressRemoteDataSource;
@@ -21,8 +21,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _wordpressRemoteDataSource.authenticateUser(params);
 
       return right(isValidUser);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -34,8 +34,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _localUserLoginDataSource.saveCredentials(params);
 
       return right(userCredentials);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -47,8 +47,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
           await _localUserLoginDataSource.getLastCredentials();
 
       return right(userCredentials);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 
@@ -58,8 +58,8 @@ class UserLoginRepositoryImpl implements LoginRepository {
       await _localUserLoginDataSource.clearCachedCredentials();
 
       return right(null);
-    } catch (e) {
-      return left(FailureFactory.createFailure(e));
+    } catch (e, s) {
+      return left(FailureFactory.createFailure(e, s));
     }
   }
 }

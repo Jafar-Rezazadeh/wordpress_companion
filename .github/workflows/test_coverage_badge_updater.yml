@@ -1,0 +1,75 @@
+name: Test Coverage Badge Updater
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check If Test Coverage exists
+        run: |
+          if [ -f "./coverage/lcov.info" ]; then
+            echo "coverage_file_exists=true" >> $GITHUB_ENV
+          else
+            echo "coverage_file_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: Parse coverage percentage from lcov.info
+        if: env.coverage_file_exists == 'true'
+        id: calculate_coverage
+        run: |
+          total_lines=$(grep -Po 'LF:\d+' coverage/lcov.info | awk -F':' '{sum += $2} END {print sum}')
+          covered_lines=$(grep -Po 'LH:\d+' coverage/lcov.info | awk -F':' '{sum += $2} END {print sum}')
+
+          if [ "$total_lines" -gt 0 ]; then
+          coverage_percentage=$(echo "scale=2; $covered_lines * 100 / $total_lines" | bc)
+          else
+          coverage_percentage="0.00"
+
+          fi
+
+          echo "COVERAGE_PERCENTAGE=$coverage_percentage" >> $GITHUB_ENV
+
+      - name: Update Coverage Badge in README.md
+        if: env.coverage_file_exists == 'true'
+        run: |
+          # Replace the number in the coverage badge URL with the new percentage
+          echo "coverage_percentage: $COVERAGE_PERCENTAGE"
+
+          # Determine the color based on COVERAGE_PERCENTAGE
+          if (( $(echo "$COVERAGE_PERCENTAGE < 50" | bc -l) )); then
+              COLOR="critical"
+          elif (( $(echo "$COVERAGE_PERCENTAGE < 90" | bc -l) )); then
+              COLOR="yellow"
+          else
+              COLOR="success"
+          fi
+
+          # Display the selected color for debugging
+          echo "Selected color: $COLOR"
+
+          sed -i "s/!\[Coverage\](https:\/\/img.shields.io\/badge\/Test--Coverage-[0-9.]*%25-[0-9a-zA-Z]*)/![Coverage](https:\/\/img.shields.io\/badge\/Test--Coverage-${COVERAGE_PERCENTAGE}%25-${COLOR})/" README.md
+
+      - name: Commit Changes
+        if: env.coverage_file_exists == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git diff --exit-code README.md; then
+          git add README.md
+          git commit -m "Update coverage badge in README.md"
+          git push
+          else
+            echo "No changes detected in README.md, skipping commit."
+          fi
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

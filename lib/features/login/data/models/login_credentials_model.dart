@@ -1,4 +1,4 @@
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../login_exports.dart';
 
 class LoginCredentialsModel extends LoginCredentialsEntity {
   const LoginCredentialsModel({

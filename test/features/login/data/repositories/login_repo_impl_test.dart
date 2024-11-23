@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/dependency_injection.dart';
 
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
@@ -29,6 +29,8 @@ void main() {
   late MockWordpressRemoteDataSource mockWordpressRemoteDataSource;
   late MockLocalLoginDataSource mockLocalLoginDataSource;
   late UserLoginRepositoryImpl loginRepositoryImpl;
+  final getIt = GetIt.asNewInstance();
+
   const LoginCredentialsParams fakeParams = (
     name: "test",
     applicationPassword: "test1234",

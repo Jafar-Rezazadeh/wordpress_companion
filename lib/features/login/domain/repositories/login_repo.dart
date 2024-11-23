@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../login_exports.dart';
 
 import '../../../../core/errors/failures.dart';
 

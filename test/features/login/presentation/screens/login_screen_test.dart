@@ -7,7 +7,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/widgets/custom_input_field.dart';
+import 'package:wordpress_companion/core/widgets/custom_form_input_field.dart';
 import 'package:wordpress_companion/core/widgets/failure_widget.dart';
 import 'package:wordpress_companion/core/widgets/loading_widget.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
@@ -226,7 +226,7 @@ void main() {
         await tester.pumpWidget(loginScreenWidget);
         await tester.pumpAndSettle();
 
-        final input = tester.widget<CustomInputField>(
+        final input = tester.widget<CustomFormInputField>(
           find.byKey(const Key("application_password")),
         );
         final inputSuffixIconData =
@@ -457,7 +457,7 @@ bool? _getCheckBoxValue(WidgetTester tester) {
 }
 
 IconData? _getInputSuffixIconData(WidgetTester tester, Finder inputFinder) {
-  final input = tester.widget<CustomInputField>(inputFinder);
+  final input = tester.widget<CustomFormInputField>(inputFinder);
   final inputSuffixIconData =
       ((input.suffixIcon as IconButton).icon as Icon).icon;
 

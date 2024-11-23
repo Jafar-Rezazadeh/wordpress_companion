@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordpress_companion/features/login/login_exports.dart';
+import '../../login_exports.dart';
 
 import '../../../../core/core_export.dart';
 
@@ -21,13 +21,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _applicationPasswordController =
       TextEditingController();
   final TextEditingController _domainController = TextEditingController();
+
   bool _rememberMeValue = true;
   bool _obscurePassword = true;
 
   @override
   void initState() {
-    BlocProvider.of<LoginCredentialsCubit>(context).getLastLoginCredentials();
     super.initState();
+    BlocProvider.of<LoginCredentialsCubit>(context).getLastLoginCredentials();
   }
 
   @override
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _userNameController.text = credentials.userName;
         _applicationPasswordController.text = credentials.applicationPassword;
         _domainController.text = credentials.domain;
-        _rememberMeValue = credentials.rememberMe;
+        _rememberMeValue = credentials.rememberMe ?? _rememberMeValue;
       },
     );
   }
@@ -117,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _userName(),
               _applicationPassword(),
               _rememberMe(),
+              // TODO: add auto login
               _domain(),
               Gap(0.01.sh),
               _submitButton()
@@ -128,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _userName() {
-    return CustomInputField(
+    return CustomFormInputField(
       key: const Key("username"),
       label: "نام کاربری",
       controller: _userNameController,
@@ -140,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomInputField(
+        CustomFormInputField(
           key: const Key("application_password"),
           controller: _applicationPasswordController,
           obscureText: _obscurePassword,
@@ -219,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _domain() {
-    return CustomInputField(
+    return CustomFormInputField(
       key: const Key("domain"),
       controller: _domainController,
       validator: InputValidator.isNotEmpty,

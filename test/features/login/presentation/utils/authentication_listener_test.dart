@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/core_export.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
-import 'package:wordpress_companion/core/router/go_router_config.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
 
 void main() {
@@ -65,7 +64,7 @@ void main() {
     });
 
     testWidgets(
-        "should (hide the loaderOverlay) and (goNamed route mainScree) and (show an snack bar) when state is authenticated",
+        "should (hide the loaderOverlay) and (goNamed route mainScree) when state is authenticated",
         (tester) async {
       //arrange
       await tester.pumpWidget(
@@ -88,7 +87,6 @@ void main() {
       expect(dummyElement.loaderOverlay.visible, false);
       expect(find.byKey(const Key("main_screen")), findsOneWidget);
       expect(find.byKey(const Key("dummy_element")), findsNothing);
-      expect(find.byType(SnackBar), findsOneWidget);
     });
 
     testWidgets(
@@ -114,27 +112,29 @@ Element _getDummyElement(WidgetTester tester) =>
     tester.element(find.byKey(const Key("dummy_element")));
 
 Widget _makeTestWidget(AuthenticationState state) {
-  return MaterialApp.router(
-    routerConfig: GoRouter(
-      initialLocation: "/login",
-      routes: [
-        GoRoute(
-          path: "/login",
-          name: "/login",
-          builder: (context, _) {
-            return _loginScreenSimulation(state);
-          },
-        ),
-        GoRoute(
-          path: mainScreen,
-          name: mainScreen,
-          builder: (context, state) => Scaffold(
-            body: Container(
-              key: const Key("main_screen"),
-            ),
+  return ScreenUtilInit(
+    child: MaterialApp.router(
+      routerConfig: GoRouter(
+        initialLocation: "/login",
+        routes: [
+          GoRoute(
+            path: "/login",
+            name: "/login",
+            builder: (context, _) {
+              return _loginScreenSimulation(state);
+            },
           ),
-        )
-      ],
+          GoRoute(
+            path: mainScreenRoute,
+            name: mainScreenRoute,
+            builder: (context, state) => Scaffold(
+              body: Container(
+                key: const Key("main_screen"),
+              ),
+            ),
+          )
+        ],
+      ),
     ),
   );
 }

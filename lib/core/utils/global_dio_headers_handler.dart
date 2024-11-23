@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wordpress_companion/core/utils/encoder.dart';
+import 'encoder.dart';
 
 class GlobalDioHeadersHandler {
   final GetIt _getIt;

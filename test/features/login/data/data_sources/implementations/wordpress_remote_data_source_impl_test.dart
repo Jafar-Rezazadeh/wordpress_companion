@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/utils/encoder.dart';
 import 'package:wordpress_companion/features/login/data/data_sources/implementations/wordpress_remote_data_source_impl.dart';
 import 'package:wordpress_companion/features/login/domain/use_cases/authenticate_user.dart';
@@ -11,8 +12,7 @@ void main() {
   late WordpressRemoteDataSourceImpl wordpressRemoteDataSourceImpl;
   late Dio dio;
   late DioAdapter dioAdapter;
-  const exampleDomain = "https://example.com";
-  const wpV2EndPoint = "wp-json/wp/v2";
+  const exampleDomain = "https://myexample.com";
   const LoginCredentialsParams userAuthenticationParams = (
     name: "test",
     applicationPassword: "qth0 TUwn HrMP EMNm b6MM NvR0",
@@ -23,7 +23,7 @@ void main() {
   setUp(
     () {
       dio = Dio();
-      dioAdapter = DioAdapter(dio: dio);
+      dioAdapter = DioAdapter(dio: dio, printLogs: true);
       wordpressRemoteDataSourceImpl = WordpressRemoteDataSourceImpl(dio: dio);
     },
   );
@@ -34,7 +34,7 @@ void main() {
         () async {
       //arrange
       dioAdapter.onGet(
-        "$exampleDomain/$wpV2EndPoint/users/me",
+        "${exampleDomain + wpV2EndPoint}/users/me",
         (server) => server.reply(
           HttpStatus.unauthorized,
           null,
@@ -63,7 +63,7 @@ void main() {
         () async {
       //arrange
       dioAdapter.onGet(
-        "$exampleDomain/$wpV2EndPoint/users/me",
+        "${exampleDomain + wpV2EndPoint}/users/me",
         headers: {
           "Authorization": CustomEncoder.base64Encode(
               name: userAuthenticationParams.name,
@@ -85,7 +85,7 @@ void main() {
         () async {
       //arrange
       dioAdapter.onGet(
-        "$exampleDomain/$wpV2EndPoint/users/me",
+        "${exampleDomain + wpV2EndPoint}/users/me",
         (server) => server.reply(201, null),
       );
 

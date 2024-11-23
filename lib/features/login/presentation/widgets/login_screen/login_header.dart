@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordpress_companion/core/theme/color_pallet.dart';
+import '../../../../../core/theme/color_pallet.dart';
 
 class LoginHeader extends StatelessWidget {
   final Size headerSize;
