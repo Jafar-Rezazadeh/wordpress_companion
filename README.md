@@ -94,21 +94,22 @@
 ## ساختار درختی پروژه
 
 
-├───core                                                                                                                                                                                                                                                                      
-│   ├───constants                                                                                                                                                                                                                                                             
-│   ├───contracts                                                                                                                                                                                                                                                             
-│   ├───entities                                                                                                                                                                                                                                                              
-│   ├───errors                                                                                                                                                                                                                                                                
-│   ├───extensions                                                                                                                                                                                                                                                            
-│   ├───presentation                                                                                                                                                                                                                                                          
-│   │   ├───cubits                                                                                                                                                                                                                                                            
-│   │   │   └───global_profile_cubit                                                                                                                                                                                                                                          
-│   │   ├───screens                                                                                                                                                                                                                                                           
-│   │   └───widgets                                                                                                                                                                                                                                                           
-│   ├───router                                                                                                                                                                                                                                                                
-│   ├───services                                                                                                                                                                                                                                                              
-│   ├───theme                                                                                                                                                                                                                                                                 
-│   ├───utils                                                                                                                                                                                                                                                                 
+```
+├───core
+│   ├───constants
+│   ├───contracts
+│   ├───entities
+│   ├───errors
+│   ├───extensions
+│   ├───presentation
+│   │   ├───cubits
+│   │   │   └───global_profile_cubit
+│   │   ├───screens
+│   │   └───widgets
+│   ├───router
+│   ├───services
+│   ├───theme
+│   ├───utils
 │   └───widgets
 └───features
     ├───categories
@@ -247,3 +248,4 @@
             ├───entities
             ├───repositories
             └───use_cases
+```
