@@ -11,6 +11,12 @@
 
 ## ویژگی‌ها
 
+- **تنظیمات سایت**
+  <br/>
+  <br/>
+- **تنظیمات پروفایل**
+  <br/>
+  <br/>
 - **مدیریت پست‌ها**:
   - افزودن پست جدید
   - ویرایش پست‌های موجود
@@ -87,3 +93,157 @@
 
 ## ساختار درختی پروژه
 
+
+├───core                                                                                                                                                                                                                                                                      
+│   ├───constants                                                                                                                                                                                                                                                             
+│   ├───contracts                                                                                                                                                                                                                                                             
+│   ├───entities                                                                                                                                                                                                                                                              
+│   ├───errors                                                                                                                                                                                                                                                                
+│   ├───extensions                                                                                                                                                                                                                                                            
+│   ├───presentation                                                                                                                                                                                                                                                          
+│   │   ├───cubits                                                                                                                                                                                                                                                            
+│   │   │   └───global_profile_cubit                                                                                                                                                                                                                                          
+│   │   ├───screens                                                                                                                                                                                                                                                           
+│   │   └───widgets                                                                                                                                                                                                                                                           
+│   ├───router                                                                                                                                                                                                                                                                
+│   ├───services                                                                                                                                                                                                                                                              
+│   ├───theme                                                                                                                                                                                                                                                                 
+│   ├───utils                                                                                                                                                                                                                                                                 
+│   └───widgets
+└───features
+    ├───categories
+    │   ├───application
+    │   │   ├───categories_cubit
+    │   │   └───widgets
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───logic_holders
+    │       │   └───utils
+    │       ├───pages
+    │       ├───screens
+    │       └───widgets
+    ├───login
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───logic_holder
+    │       │   ├───authentication_cubit
+    │       │   └───login_credentials
+    │       ├───screens
+    │       ├───utils
+    │       └───widgets
+    │           └───login_screen
+    ├───media
+    │   ├───application
+    │   │   └───image_selector
+    │   │       ├───state_management
+    │   │       │   └───image_list_cubit
+    │   │       ├───utils
+    │   │       └───widgets
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───logic_holders
+    │       │   └───cubits
+    │       │       ├───media_cubit
+    │       │       └───upload_media_cubit
+    │       ├───pages
+    │       ├───screens
+    │       └───widgets
+    │           ├───edit_media_screen
+    │           ├───media_page
+    │           └───upload_media_dialog
+    ├───posts
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───login_holders
+    │       │   ├───posts_cubit
+    │       │   ├───tags_cubit
+    │       │   └───utils
+    │       ├───pages
+    │       ├───screens
+    │       └───widgets
+    │           ├───create_or_edit_screen
+    │           └───posts_page
+    ├───profile
+    │   ├───application
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───screens
+    │       ├───state_management
+    │       │   └───profile-cubit
+    │       ├───utils
+    │       └───widgets
+    ├───site_settings
+    │   ├───data
+    │   │   ├───data_sources
+    │   │   │   ├───abstracts
+    │   │   │   └───implementations
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───use_cases
+    │   └───presentation
+    │       ├───screens
+    │       ├───state_Management
+    │       │   ├───image_finder_cubit
+    │       │   └───site_settings_cubit
+    │       ├───utils
+    │       └───widgets
+    └───tags
+        ├───application
+        ├───data
+        │   ├───data_sources
+        │   │   ├───abstracts
+        │   │   └───implementations
+        │   ├───models
+        │   └───repositories
+        └───domain
+            ├───entities
+            ├───repositories
+            └───use_cases
