@@ -17,7 +17,6 @@ extension MimeTypeExtension on MediaTypeEnum {
   }
 }
 
-// TODO: add this to flutter handy util an extension
 extension StringCustomExtension on String {
   String ellipsSize({required int maxLength, bool fromStart = false}) {
     if (length > maxLength) {

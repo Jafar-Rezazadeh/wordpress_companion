@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO: put this into flutter_handy_utils
 class GroupedRadioButtonTile<T> {
   final Widget title;
   final Widget? secondary;
