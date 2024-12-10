@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordpress_companion/core/errors/failures.dart';
+import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/core/services/media_service.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 
@@ -20,6 +20,7 @@ class ImageListCubit extends Cubit<ImageListState> {
     return GetMediaPerPageParams(
       page: 1,
       perPage: 100,
+      type: MediaTypeEnum.image,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import 'package:wordpress_companion/features/media/application/image_selector/utils/image_cache_tracker.dart';
@@ -11,13 +12,7 @@ class ImageSelectorScreen extends StatefulWidget {
   @override
   Key? get key => const Key("image_list_dialog");
 
-  final Function(MediaEntity media) onSelect;
-  final VoidCallback onBack;
-  const ImageSelectorScreen({
-    super.key,
-    required this.onSelect,
-    required this.onBack,
-  });
+  const ImageSelectorScreen({super.key});
 
   @override
   State<ImageSelectorScreen> createState() => _ImageSelectorScreenState();
@@ -68,7 +63,7 @@ class _ImageSelectorScreenState extends State<ImageSelectorScreen> {
       alignment: Alignment.topLeft,
       child: TextButton.icon(
         key: const Key("back_button"),
-        onPressed: widget.onBack,
+        onPressed: () => Get.back(),
         style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
         iconAlignment: IconAlignment.end,
         label: const Text("بازگشت"),
@@ -124,7 +119,7 @@ class _ImageSelectorScreenState extends State<ImageSelectorScreen> {
     return SequentialImageList(
       medias: listOfMedias,
       imageCacheTracker: ImageCacheTracker(),
-      onSelect: (media) => widget.onSelect(media),
+      onSelect: (media) => Get.back(result: media),
       onScrolledToBottom: () => _goNextPage(),
     );
   }

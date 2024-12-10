@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import '../../core_export.dart';
 import '../../../features/profile/domain/entities/profile_entity.dart';
 
@@ -86,7 +86,7 @@ class CustomDrawer extends StatelessWidget {
     return ListTile(
       key: const Key("site_settings_nav"),
       leading: const Icon(Icons.settings),
-      onTap: () => context.goNamed(siteSettingsScreenRoute),
+      onTap: () => Get.toNamed(siteSettingsScreenRoute),
       title: const Text("تنظیمات سایت"),
     );
   }

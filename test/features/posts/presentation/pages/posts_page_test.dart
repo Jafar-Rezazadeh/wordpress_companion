@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
@@ -51,34 +51,26 @@ void main() {
         .thenAnswer((_) => const CategoriesState.initial());
   });
 
-  group("floating action button -", () {
+  group("add new post", () {
     testWidgets("should go to createOrEditPostRoute when tapped",
         (tester) async {
       //arrange
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: GoRouter(
-            routes: [
-              GoRoute(
-                path: "/",
-                builder: (context, state) => _testWidget(postsCubit),
-                routes: [
-                  GoRoute(
-                    name: editOrCreatePostRoute,
-                    path: editOrCreatePostRoute,
-                    builder: (context, state) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(create: (context) => postsCubit),
-                        BlocProvider(create: (context) => tagsCubit),
-                        BlocProvider(create: (context) => categoriesCubit),
-                      ],
-                      child: const EditOrCreatePostScreen(),
-                    ),
-                  )
+        GetMaterialApp(
+          getPages: [
+            GetPage(
+              name: editOrCreatePostRoute,
+              page: () => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => postsCubit),
+                  BlocProvider(create: (context) => tagsCubit),
+                  BlocProvider(create: (context) => categoriesCubit),
                 ],
+                child: const EditOrCreatePostScreen(),
               ),
-            ],
-          ),
+            ),
+          ],
+          home: _testWidget(postsCubit),
         ),
       );
       await tester.pumpAndSettle();

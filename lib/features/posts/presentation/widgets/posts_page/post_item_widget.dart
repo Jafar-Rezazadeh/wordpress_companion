@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/extensions/widgets_separator_.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
@@ -22,7 +22,7 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       shadowColor: ColorPallet.lowBackGround,
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        onTap: () => context.goNamed(editOrCreatePostRoute, extra: widget.post),
+        onTap: () => Get.toNamed(editOrCreatePostRoute, arguments: widget.post),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         leading: _featuredImage(),
@@ -41,7 +41,8 @@ class _PostItemWidgetState extends State<PostItemWidget> {
       width: 50,
       height: 50,
       child: CachedNetworkImage(
-        imageUrl: widget.post.featureMediaLink,
+        imageUrl:
+            widget.post.featureMediaLink.replaceAll("localhost", "192.168.1.2"),
         fit: BoxFit.cover,
         errorListener: (value) {},
         errorWidget: (context, error, stackTrace) => const Icon(Icons.image),

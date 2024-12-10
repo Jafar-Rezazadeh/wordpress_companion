@@ -54,12 +54,14 @@ class _SequentialImageListState extends State<SequentialImageList> {
       try {
         await widget.imageCacheTracker.precache(
           context,
-          NetworkImage(widget.medias[i].sourceUrl),
+          NetworkImage(widget.medias[i].sourceUrl
+              .replaceAll("localhost", "192.168.1.2")),
         );
 
         if (!mounted) return;
 
-        setState(() => images.add(NetworkImage(widget.medias[i].sourceUrl)));
+        setState(() => images.add(NetworkImage(widget.medias[i].sourceUrl
+            .replaceAll("localhost", "192.168.1.2"))));
       } catch (e) {
         debugPrint('Error loading image at index $i: $e');
       }

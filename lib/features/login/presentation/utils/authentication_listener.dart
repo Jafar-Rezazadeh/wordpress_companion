@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/widgets/custom_bottom_sheet.dart';
 import '../../login_exports.dart';
 
 import '../../../../core/errors/failures.dart';
-import '../../../../core/router/go_router_config.dart';
+import '../../../../core/router/router_config.dart';
 
 class AuthenticationStateListener {
   final BuildContext context;
@@ -28,7 +28,7 @@ class AuthenticationStateListener {
       authenticated: (credentials) {
         context.loaderOverlay.hide();
         WidgetsBinding.instance.addPostFrameCallback(
-          (timeStamp) => context.goNamed(mainScreenRoute, extra: credentials),
+          (timeStamp) => Get.offNamed(mainScreenRoute, arguments: credentials),
         );
 
         return;

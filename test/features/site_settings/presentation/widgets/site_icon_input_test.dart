@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/core_export.dart';
@@ -46,38 +46,26 @@ void main() {
   Future<void> makeTestWidget(WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: GoRouter(
-            initialLocation: "/",
-            routes: [
-              GoRoute(
-                path: "/",
-                builder: (context, state) => Material(
-                  child: BlocProvider(
-                    create: (context) => imageFinderCubit,
-                    child: SiteIconInput(
-                      initialImageId: 2,
-                      onSelect: (value) {},
-                    ),
-                  ),
+        GetMaterialApp(
+          getPages: [
+            GetPage(
+              name: imageSelectorRoute,
+              page: () => BlocProvider(
+                create: (context) => imageListCubit,
+                child: const Material(
+                  child: ImageSelectorScreen(),
                 ),
               ),
-              GoRoute(
-                name: imageSelectorRoute,
-                path: imageSelectorRoute,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => imageListCubit,
-                  child: Material(
-                    child: Scaffold(
-                      body: ImageSelectorScreen(
-                        onSelect: (media) => Navigator.of(context).pop(media),
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+            )
+          ],
+          home: Material(
+            child: BlocProvider(
+              create: (context) => imageFinderCubit,
+              child: SiteIconInput(
+                initialImageId: 2,
+                onSelect: (value) {},
+              ),
+            ),
           ),
         ),
       );
@@ -114,7 +102,7 @@ void main() {
 
   group("image input -", () {
     testWidgets(
-        "should push the ImageSelectorScreen when taped on the imageBox",
+        "should go to the ImageSelectorScreen when taped on the imageBox",
         (tester) async {
       //arrange
       await makeTestWidget(tester);
@@ -140,8 +128,9 @@ void main() {
       //act
 
       tester
-          .widget<ImageSelectorScreen>(find.byType(ImageSelectorScreen))
+          .widget<SequentialImageList>(find.byType(SequentialImageList))
           .onSelect(FakeMediaEntity());
+
       await tester.pumpAndSettle();
 
       //assert
@@ -157,8 +146,9 @@ void main() {
 
       //verification
       tester
-          .widget<ImageSelectorScreen>(find.byType(ImageSelectorScreen))
+          .widget<SequentialImageList>(find.byType(SequentialImageList))
           .onSelect(FakeMediaEntity());
+
       await tester.pump();
       expect(find.byType(Image), findsOneWidget);
       await tester.pumpAndSettle();

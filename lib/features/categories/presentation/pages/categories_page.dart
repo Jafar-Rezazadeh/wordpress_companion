@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_handy_utils/flutter_handy_utils.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/presentation/logic_holders/utils/category_order_by_enum_translator.dart';
 
@@ -55,9 +55,7 @@ class _CategoriesPageState extends State<CategoriesPage>
     return FloatingActionButton(
       heroTag: "add_category_hero_tag",
       key: const Key("add_category"),
-      onPressed: () {
-        context.goNamed(createOrEditCategoryRoute);
-      },
+      onPressed: () => Get.toNamed(createOrEditCategoryRoute),
       child: const Icon(Icons.add),
     );
   }

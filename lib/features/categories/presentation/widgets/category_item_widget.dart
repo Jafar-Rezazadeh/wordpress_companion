@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
 
@@ -20,7 +20,7 @@ class CategoryItemWidget extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: ListTile(
         onTap: () =>
-            context.goNamed(createOrEditCategoryRoute, extra: category),
+            Get.toNamed(createOrEditCategoryRoute, arguments: category),
         leading: _name(context),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: edgeToEdgePaddingHorizontal,
