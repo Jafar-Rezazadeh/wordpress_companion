@@ -10,15 +10,17 @@ class UpdateMyProfileParamsBuilder {
   String _nickName = "";
   String _slug = "";
 
-  setFromInitialData(ProfileEntity profile) {
-    _name = profile.name;
-    _firstName = profile.firstName;
-    _lastName = profile.lastName;
-    _email = profile.email;
-    _url = profile.url;
-    _description = profile.description;
-    _nickName = profile.nickName;
-    _slug = profile.slug;
+  setFromInitialData(ProfileEntity? profile) {
+    if (profile != null) {
+      _name = profile.name;
+      _firstName = profile.firstName;
+      _lastName = profile.lastName;
+      _email = profile.email;
+      _url = profile.url;
+      _description = profile.description;
+      _nickName = profile.nickName;
+      _slug = profile.slug;
+    }
 
     return this;
   }

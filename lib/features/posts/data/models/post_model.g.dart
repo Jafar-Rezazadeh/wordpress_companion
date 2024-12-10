@@ -19,7 +19,9 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       content: PostModel._contentReadValue(json, 'content') as String,
       excerpt: PostModel._excerptReadValue(json, 'excerpt') as String,
       author: (json['author'] as num).toInt(),
-      authorName: PostModel._authorNameReadValue(json, 'authorName') as String,
+      authorName:
+          PostModel._authorNameReadValue(json, 'authorName') as String? ??
+              'نامعلوم',
       featuredMedia: (json['featured_media'] as num).toInt(),
       featureMediaLink:
           PostModel._featureMediaLinkReadValue(json, 'featureMediaLink')

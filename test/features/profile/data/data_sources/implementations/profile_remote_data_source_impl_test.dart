@@ -7,7 +7,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
-import '../../../../../dummy_params.dart';
+import '../../../../../dummy_stuff.dart';
 import '../../../../../json_response_simulator.dart';
 
 class FakeUpdateMyProfileParams extends Fake implements UpdateMyProfileParams {}

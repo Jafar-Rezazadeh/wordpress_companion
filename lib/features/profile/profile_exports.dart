@@ -12,6 +12,7 @@ export 'package:wordpress_companion/features/profile/domain/use_cases/get_my_pro
 export 'package:wordpress_companion/features/profile/domain/use_cases/update_my_profile.dart';
 
 //presentation
+export 'package:wordpress_companion/features/profile/presentation/state_management/profile_controller.dart';
 export 'package:wordpress_companion/features/profile/presentation/state_management/profile-cubit/profile_cubit.dart';
 export 'package:wordpress_companion/features/profile/presentation/utils/update_my_profile_params_builder.dart';
 export 'package:wordpress_companion/features/profile/presentation/screens/profile_screen.dart';

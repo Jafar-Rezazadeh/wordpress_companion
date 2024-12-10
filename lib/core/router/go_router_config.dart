@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
@@ -32,6 +33,10 @@ final goRouter = GoRouter(
     _mainScreenRoute(),
     _imageSelectorDialog(),
   ],
+  errorBuilder: (context, state) => Scaffold(
+    appBar: AppBar(title: const Text("Error")),
+    body: const Center(child: Text("Page not found")),
+  ),
 );
 
 GoRoute _loginScreenRoute() {
@@ -66,7 +71,8 @@ ShellRoute _mainScreenRoute() {
             path: profileScreenRoute,
             builder: (context, state) => BlocProvider(
               create: (context) => getIt<ProfileCubit>(),
-              child: const ProfileScreen(),
+              // TODO: move the GetMaterialApp to top of the tree
+              child: GetMaterialApp(home: ProfileScreen()),
             ),
           ),
           GoRoute(

@@ -21,7 +21,7 @@ class WordpressCompanion extends StatelessWidget {
     );
   }
 
-  MaterialApp _materialApp() {
+  Widget _materialApp() {
     return MaterialApp.router(
       locale: const Locale("fa", "IR"),
       supportedLocales: const [

@@ -1,296 +1,143 @@
-import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wordpress_companion/core/contracts/use_case.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
-class MockProfileCubit extends MockCubit<ProfileState>
-    implements ProfileCubit {}
+import '../../../../dummy_stuff.dart';
 
-class FakeProfileEntity extends Fake implements ProfileEntity {}
+class MockGetMyProfile extends Mock implements GetMyProfile {}
 
-class FakeUpdateMyProfileParams extends Fake implements UpdateMyProfileParams {}
+class MockUpdateMyProfile extends Mock implements UpdateMyProfile {}
 
 void main() {
-  late ProfileCubit profileCubit;
-
-  final dummyProfileEntity = ProfileEntity(
-    id: 0,
-    userName: "username",
-    name: "name",
-    firstName: "firstName",
-    lastName: "lastName",
-    email: "test@gmail.com",
-    url: "url",
-    description: "description",
-    link: "link",
-    locale: "locale",
-    nickName: "nickName",
-    slug: "slug",
-    registeredDate: DateTime(1),
-    avatarUrls: const ProfileAvatarUrlsEntity(
-      size24px: "",
-      size48px: "",
-      size96px: "",
-    ),
-    roles: const [UserRoleEnum.administrator],
+  late ProfileController profileController;
+  late MockGetMyProfile mockGetMyProfile;
+  final dummyProfileEntity = DummyObjects.profileEntity();
+  final dummyFailure = InternalFailure(
+    message: "message",
+    stackTrace: StackTrace.fromString("stackTraceString"),
   );
 
   setUpAll(() {
-    registerFallbackValue(FakeUpdateMyProfileParams());
+    registerFallbackValue(NoParams());
   });
 
   setUp(() {
-    profileCubit = MockProfileCubit();
+    Get.testMode = true;
+    mockGetMyProfile = MockGetMyProfile();
+    profileController = ProfileController(
+      getMyProfile: mockGetMyProfile,
+      updateMyProfile: MockUpdateMyProfile(),
+    );
     when(
-      () => profileCubit.state,
-    ).thenAnswer((_) => const ProfileState.initial());
+      () => mockGetMyProfile.call(any()),
+    ).thenAnswer((_) async => right(dummyProfileEntity));
   });
 
-  group("profileCubit -", () {
-    group("builder -", () {
-      testWidgets("should build loadingWidget when ProfileState is loading",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([
-            const ProfileState.loading(),
-          ]),
-        );
+  tearDown(() {
+    Get.delete();
+    Get.reset();
+  });
 
-        //act
-        await tester.pumpWidget(_testWidget(profileCubit));
-        await tester.pump();
+  group("status changes -", () {
+    testWidgets(
+        "should show (FailureWidget) when the status is error at the beginning",
+        (tester) async {
+      //arrange
+      when(
+        () => mockGetMyProfile.call(any()),
+      ).thenAnswer((_) async => left(dummyFailure));
 
-        //assert
-        expect(find.byType(LoadingWidget), findsOneWidget);
-        expect(find.byKey(const Key("contents_key")), findsNothing);
-        expect(find.byType(FailureWidget), findsNothing);
-      });
+      Get.put(profileController);
+      await tester.pumpWidget(_testWidget());
+      await tester.pumpAndSettle();
 
-      testWidgets(
-          "should build the content when profileState is anything else loading",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([
-            ProfileState.loaded(dummyProfileEntity),
-          ]),
-        );
+      //act
 
-        //act
-        await tester.pumpWidget(_testWidget(profileCubit));
-        await tester.pumpAndSettle();
-
-        //assert
-        expect(find.byKey(const Key("contents_key")), findsOneWidget);
-        expect(find.byType(LoadingWidget), findsNothing);
-        expect(find.byType(FailureWidget), findsNothing);
-      });
+      //assert
+      expect(profileController.status.isError, true);
+      expect(find.byType(FailureWidget), findsOneWidget);
     });
 
-    group("listener -", () {
-      testWidgets(
-          "should insert the profile data to inputs when profile (state is loaded)",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([
-            ProfileState.loaded(dummyProfileEntity),
-          ]),
-          initialState: const ProfileState.loading(),
-        );
+    testWidgets(
+        "should show (FailureWidget) when profileController status changes to error",
+        (tester) async {
+      //arrange
+      Get.put<ProfileController>(profileController);
 
-        //act
-        await tester.pumpWidget(_testWidget(profileCubit));
-        await tester.pumpAndSettle();
+      await tester.pumpWidget(_testWidget());
+      await tester.pumpAndSettle();
 
-        //assert
-        expect(find.text(dummyProfileEntity.userName), findsOneWidget);
-        expect(find.text(dummyProfileEntity.name), findsOneWidget);
-        expect(find.text(dummyProfileEntity.firstName), findsOneWidget);
-        expect(find.text(dummyProfileEntity.lastName), findsOneWidget);
-        expect(find.text(dummyProfileEntity.email), findsOneWidget);
-        expect(find.text(dummyProfileEntity.slug), findsOneWidget);
-        expect(find.text(dummyProfileEntity.nickName), findsOneWidget);
-        expect(find.text(dummyProfileEntity.url), findsOneWidget);
-        expect(find.text(dummyProfileEntity.description), findsOneWidget);
-      });
+      //verification
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      expect(find.byType(FailureWidget), findsNothing);
 
-      testWidgets("should show a failure_bottom_sheet when state is failure",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([
-            ProfileState.error(
-              InternalFailure(
-                  message: "message",
-                  stackTrace: StackTrace.fromString("stackTraceString")),
-            )
-          ]),
-        );
-        await tester.pumpWidget(_testWidget(profileCubit));
+      //act
+      profileController.change(null, status: RxStatus.error());
+      await tester.pumpAndSettle();
 
-        //verification
+      //assert
+      expect(profileController.status.isError, true);
+      expect(find.byType(FailureWidget), findsOneWidget);
+    });
 
-        //act
+    testWidgets("should show (LoadingWidget) when status is loading",
+        (tester) async {
+      //arrange
+      Get.put(profileController);
+      await tester.pumpWidget(_testWidget());
+      await tester.pumpAndSettle();
 
-        //assert
-      });
+      // verification
+      expect(find.byType(LoadingWidget), findsNothing);
+
+      //act
+      profileController.change(null, status: RxStatus.loading());
+      await tester.pump();
+
+      //assert
+      expect(find.byType(LoadingWidget), findsOneWidget);
+    });
+
+    testWidgets(
+        "should set the state to (UpdateParamsBuilder) when state changes",
+        (tester) async {
+      //arrange
+      Get.put(profileController);
+
+      final fakeState = DummyObjects.profileEntity(name: "test name");
+      when(
+        () => mockGetMyProfile.call(any()),
+      ).thenAnswer((_) async => right(fakeState));
+
+      await tester.pumpWidget(_testWidget());
+      await tester.pumpAndSettle();
+
+      //verification
+      expect(find.byType(ProfileScreen), findsOneWidget);
+
+      //act
+      profileController.getMyProfile();
+      await tester.pumpAndSettle();
+
+      //assert
+      final profileScreen =
+          tester.widget<ProfileScreen>(find.byType(ProfileScreen));
+      final params = profileScreen.paramsBuilder.build();
+
+      expect(params.name, "test name");
     });
   });
 
-  group("user interactions -", () {
-    group("inputs -", () {
-      group("email input -", () {
-        testWidgets(
-            "should email input be Not Valid if value is empty or invalid email",
-            (tester) async {
-          //arrange
-          whenListen(
-            profileCubit,
-            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
-          );
-          await tester.pumpWidget(_testWidget(profileCubit));
-          await tester.pumpAndSettle();
-
-          //verification
-          expect(find.byKey(const Key("email_input")), findsOneWidget);
-
-          //act
-          final emailInput = tester.widget<TextFormField>(
-            find.descendant(
-                of: find.byKey(const Key("email_input")),
-                matching: find.byType(TextFormField)),
-          );
-
-          //assert
-          expect(emailInput.validator!("test"), isA<String>());
-          expect(emailInput.validator!(""), isA<String>());
-        });
-        testWidgets(
-            "should email input has been focused if value is invalid when submit button is tapped",
-            (tester) async {
-          //arrange
-          whenListen(
-            profileCubit,
-            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
-          );
-          await tester.pumpWidget(_testWidget(profileCubit));
-          await tester.pumpAndSettle();
-
-          //verification
-          expect(find.byKey(const Key("email_input")), findsOneWidget);
-
-          //act
-          final emailInput = tester.widget<CustomFormInputField>(
-            find.byKey(const Key("email_input")),
-          );
-          await tester.enterText(find.byKey(const Key("email_input")), "test");
-          emailInput.focusNode?.unfocus();
-          await tester.pump();
-          expect(emailInput.focusNode?.hasFocus, false);
-
-          await tester.tap(find.byKey(const Key("submit_button")));
-          await tester.pumpAndSettle();
-
-          //assert
-          expect(emailInput.focusNode?.hasFocus, true);
-        });
-
-        testWidgets("should email input be Valid if value is a valid email",
-            (tester) async {
-          //arrange
-          whenListen(
-            profileCubit,
-            Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
-          );
-          await tester.pumpWidget(_testWidget(profileCubit));
-          await tester.pumpAndSettle();
-
-          //verification
-          expect(find.byKey(const Key("email_input")), findsOneWidget);
-
-          //act
-          final emailInput = tester.widget<TextFormField>(
-            find.descendant(
-                of: find.byKey(const Key("email_input")),
-                matching: find.byType(TextFormField)),
-          );
-
-          //assert
-          expect(emailInput.validator!("test@gmail.com"), isNull);
-        });
-      });
-    });
-    group("submit -", () {
-      testWidgets("should call the updateProfile of cubit when form is valid",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
-        );
-
-        await tester.pumpWidget(_testWidget(profileCubit));
-        await tester.pumpAndSettle();
-
-        //verification
-        expect(find.byKey(const Key("email_input")), findsOneWidget);
-        expect(find.byKey(const Key("submit_button")), findsOneWidget);
-
-        //act
-        await tester.enterText(
-            find.byKey(const Key("email_input")), "test@gmail.com");
-        await tester.pumpAndSettle();
-        await tester.tap(find.byKey(const Key("submit_button")));
-        await tester.pumpAndSettle();
-
-        //assert
-        verify(() => profileCubit.updateProfile(any())).called(1);
-      });
-
-      testWidgets(
-          "should Not call the updateProfile of cubit when form is invalid",
-          (tester) async {
-        //arrange
-        whenListen(
-          profileCubit,
-          Stream.fromIterable([ProfileState.loaded(dummyProfileEntity)]),
-        );
-
-        await tester.pumpWidget(_testWidget(profileCubit));
-        await tester.pumpAndSettle();
-
-        //verification
-        expect(find.byKey(const Key("submit_button")), findsOneWidget);
-
-        //act
-        await tester.enterText(find.byKey(const Key("email_input")), "test");
-        await tester.tap(find.byKey(const Key("submit_button")));
-        await tester.pumpAndSettle();
-
-        //assert
-        verifyNever(() => profileCubit.updateProfile(any()));
-      });
-    });
-  });
+  group("onSubmit -", () {});
 }
 
-Widget _testWidget(ProfileCubit profileCubit) {
+ScreenUtilInit _testWidget() {
   return ScreenUtilInit(
-    child: MaterialApp(
-      home: BlocProvider(
-        create: (_) => profileCubit,
-        child: const ProfileScreen(),
-      ),
-    ),
+    child: GetMaterialApp(home: ProfileScreen()),
   );
 }

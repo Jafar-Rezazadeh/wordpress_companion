@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
 
-import '../../../../dummy_params.dart';
+import '../../../../dummy_stuff.dart';
 import '../../../../json_response_simulator.dart';
 
 void main() {
