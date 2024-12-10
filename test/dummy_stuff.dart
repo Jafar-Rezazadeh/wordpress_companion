@@ -10,7 +10,7 @@ class DummyObjects {
         name: name ?? " name",
         firstName: "firstName",
         lastName: "lastName",
-        email: "email",
+        email: "email@gmail.com",
         url: "url",
         description: "description",
         link: "link",
