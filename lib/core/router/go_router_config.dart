@@ -69,11 +69,7 @@ ShellRoute _mainScreenRoute() {
           GoRoute(
             name: profileScreenRoute,
             path: profileScreenRoute,
-            builder: (context, state) => BlocProvider(
-              create: (context) => getIt<ProfileCubit>(),
-              // TODO: move the GetMaterialApp to top of the tree
-              child: GetMaterialApp(home: ProfileScreen()),
-            ),
+            builder: (context, state) => GetMaterialApp(home: ProfileScreen()),
           ),
           GoRoute(
             name: siteSettingsScreenRoute,

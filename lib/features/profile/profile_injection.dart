@@ -14,14 +14,6 @@ initProfileInjection(GetIt getIt) {
     profileRemoteDataSource: profileRemoteDataSource,
   );
 
-  // cubits
-  getIt.registerFactory(
-    () => ProfileCubit(
-      getMyProfile: GetMyProfile(profileRepository: profileRepository),
-      updateMyProfile: UpdateMyProfile(profileRepository: profileRepository),
-    ),
-  );
-
   // Service
   getIt.registerLazySingleton<ProfileService>(
     () => ProfileServiceImpl(
