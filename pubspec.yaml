@@ -1,5 +1,5 @@
 name: wordpress_companion
-description: "A new Flutter project."
+description: "wordpress companion is an app that helps you manage different part of your wordpress website"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
