@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.JafarRezazadeh_gmail.wordpress_companion"
+    namespace = "com.JafarRezazadeh76_gmail.wordpress_companion"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -34,7 +34,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.JafarRezazadeh_gmail.wordpress_companion"
+        applicationId = "com.JafarRezazadeh76_gmail.wordpress_companion"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion
