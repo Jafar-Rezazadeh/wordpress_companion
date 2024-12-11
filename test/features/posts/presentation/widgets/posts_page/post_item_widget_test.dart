@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:wordpress_companion/core/core_export.dart';
@@ -88,38 +88,28 @@ void main() {
     return await mockNetworkImagesFor(() async {
       await tester.pumpWidget(
         ScreenUtilInit(
-          child: MaterialApp.router(
-            routerConfig: GoRouter(
-              initialLocation: "/",
-              routes: [
-                GoRoute(
-                  path: "/",
-                  builder: (context, state) => Material(
-                    child: PostItemWidget(post: FakePostEntity()),
-                  ),
-                  routes: [
-                    GoRoute(
-                      name: editOrCreatePostRoute,
-                      path: editOrCreatePostRoute,
-                      builder: (context, state) {
-                        final post = state.extra as PostEntity?;
+          child: GetMaterialApp(
+            getPages: [
+              GetPage(
+                name: editOrCreatePostRoute,
+                page: () {
+                  final post = Get.arguments as PostEntity?;
 
-                        return Material(
-                          child: MultiBlocProvider(
-                            providers: [
-                              BlocProvider(create: (context) => postsCubit),
-                              BlocProvider(create: (context) => tagsCubit),
-                              BlocProvider(
-                                  create: (context) => categoriesCubit),
-                            ],
-                            child: EditOrCreatePostScreen(post: post),
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ],
+                  return Material(
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider(create: (context) => postsCubit),
+                        BlocProvider(create: (context) => tagsCubit),
+                        BlocProvider(create: (context) => categoriesCubit),
+                      ],
+                      child: EditOrCreatePostScreen(post: post),
+                    ),
+                  );
+                },
+              )
+            ],
+            home: Material(
+              child: PostItemWidget(post: FakePostEntity()),
             ),
           ),
         ),
@@ -127,7 +117,7 @@ void main() {
     });
   }
 
-  group("onTap -", () {
+  group("onItemTap -", () {
     testWidgets("should go to editOrCreatePostRoute when the post item tapped",
         (tester) async {
       //arrange
@@ -141,13 +131,12 @@ void main() {
       //assert
       expect(find.byType(EditOrCreatePostScreen), findsOneWidget);
     });
+
     testWidgets(
         "should go to editOrCreatePostRoute and send the post when the post item tapped",
         (tester) async {
       //arrange
       await makeTestWidgetForRouter(tester);
-
-      //verification
 
       //act
       await tester.tap(find.byType(ListTile));
@@ -156,11 +145,9 @@ void main() {
       //assert
       final editOrCreateScreenFinder = find.byType(EditOrCreatePostScreen);
       expect(editOrCreateScreenFinder, findsOneWidget);
-      final postInEditCreateScreen = tester
-          .widget<EditOrCreatePostScreen>(
-            editOrCreateScreenFinder,
-          )
-          .post;
+      final postInEditCreateScreen =
+          tester.widget<EditOrCreatePostScreen>(editOrCreateScreenFinder).post;
+
       expect(postInEditCreateScreen, isNotNull);
     });
   });
@@ -215,6 +202,7 @@ void main() {
       //assert
       expect(textColor, ColorPallet.yellowishGreen);
     });
+
     testWidgets("should color be (ColorPallet.crimson) when status is (trash)",
         (tester) async {
       //arrange

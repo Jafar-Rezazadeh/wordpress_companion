@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/categories/categories_exports.dart';
@@ -30,32 +30,23 @@ void main() {
     ).thenAnswer((_) => const CategoriesState.initial());
   });
 
-  MaterialApp testWidget() {
-    return MaterialApp.router(
-      routerConfig: GoRouter(routes: [
-        ShellRoute(
-          builder: (context, state, child) => BlocProvider(
-            create: (context) => categoryCubit,
-            child: ScreenUtilInit(child: child),
-          ),
-          routes: [
-            GoRoute(
-                path: "/",
-                builder: (context, state) =>
-                    const CategoryItemWidget(category: fakeCategory, depth: 0),
-                routes: [
-                  GoRoute(
-                    name: createOrEditCategoryRoute,
-                    path: createOrEditCategoryRoute,
-                    builder: (context, state) {
-                      final category = state.extra as CategoryEntity?;
-                      return CreateOrEditCategoryScreen(category: category);
-                    },
-                  )
-                ])
+  Widget testWidget() {
+    return ScreenUtilInit(
+      child: BlocProvider(
+        create: (context) => categoryCubit,
+        child: GetMaterialApp(
+          getPages: [
+            GetPage(
+              name: createOrEditCategoryRoute,
+              page: () {
+                final category = Get.arguments as CategoryEntity?;
+                return CreateOrEditCategoryScreen(category: category);
+              },
+            )
           ],
+          home: const CategoryItemWidget(category: fakeCategory, depth: 0),
         ),
-      ]),
+      ),
     );
   }
 

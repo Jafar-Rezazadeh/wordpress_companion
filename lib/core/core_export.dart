@@ -9,7 +9,7 @@ export 'package:wordpress_companion/core/utils/custom_url_launcher.dart';
 export 'package:wordpress_companion/core/errors/failures.dart';
 export 'package:wordpress_companion/core/constants/enums.dart';
 export 'package:wordpress_companion/core/extensions/extensions.dart';
-export 'package:wordpress_companion/core/router/go_router_config.dart';
+export 'package:wordpress_companion/core/router/router_config.dart';
 
 // widgets
 export 'package:wordpress_companion/core/widgets/pushed_screen_app_bar.dart';

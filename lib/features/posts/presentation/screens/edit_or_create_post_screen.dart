@@ -299,7 +299,9 @@ class _EditOrCreatePostScreenState extends State<EditOrCreatePostScreen> {
   Widget _featuredImageInput() {
     return FeaturedImageInput(
       initialPostImageLink: widget.post?.featureMediaLink,
-      onImageSelected: (image) => _postParamsBuilder.setFeaturedImage(image.id),
+      onImageSelected: (image) {
+        return _postParamsBuilder.setFeaturedImage(image.id);
+      },
       onClearImage: () => _postParamsBuilder.setFeaturedImage(0),
     );
   }

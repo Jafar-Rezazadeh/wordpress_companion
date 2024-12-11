@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
 import '../../../../core/core_export.dart';
 import '../../site_settings_exports.dart';
@@ -79,7 +79,8 @@ class _SiteIconInputState extends State<SiteIconInput> {
   }
 
   Future<void> _openSelectMedialDialog(BuildContext context) async {
-    final MediaEntity? image = await context.push(imageSelectorRoute);
+    final MediaEntity? image =
+        await Get.toNamed(imageSelectorRoute) as MediaEntity?;
 
     if (image != null) {
       setState(() => selectedImage = image);

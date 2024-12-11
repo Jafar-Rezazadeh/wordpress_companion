@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/posts/posts_exports.dart';
 
@@ -46,7 +46,7 @@ class _PostsPageState extends State<PostsPage>
   Widget _createPostButton() {
     return FloatingActionButton(
       heroTag: "create_post_hero_tag",
-      onPressed: () => context.goNamed(editOrCreatePostRoute),
+      onPressed: () => Get.toNamed(editOrCreatePostRoute),
       child: const Icon(Icons.add),
     );
   }

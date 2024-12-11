@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/profile/profile_exports.dart';
@@ -158,31 +158,34 @@ void main() {
           (tester) async {
         //arrange
         await tester.pumpWidget(
-          MaterialApp.router(
-            routerConfig: GoRouter(
-              initialLocation: "/",
-              routes: [
-                GoRoute(
-                  path: "/",
-                  builder: (context, state) => testWidgetTree,
-                  routes: [
-                    GoRoute(
-                      name: siteSettingsScreenRoute,
-                      path: siteSettingsScreenRoute,
-                      builder: (context, state) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(create: (context) => imageFinderCubit),
-                          BlocProvider(create: (context) => siteSettingsCubit),
-                        ],
-                        child: const SiteSettingsScreen(),
-                      ),
-                    )
-                  ],
-                )
-              ],
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => imageFinderCubit),
+              BlocProvider(create: (context) => siteSettingsCubit),
+              BlocProvider(create: (context) => globalProfileCubit),
+            ],
+            child: ScreenUtilInit(
+              child: GetMaterialApp(
+                getPages: [
+                  GetPage(
+                    name: siteSettingsScreenRoute,
+                    page: () => const SiteSettingsScreen(),
+                  )
+                ],
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      return CustomDrawer(
+                        customUrlLauncher: mockCustomUrlLauncher,
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
         );
+
         await tester.pumpAndSettle();
 
         //verification

@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../../../../core/constants/enums.dart';
+import '../../../../core/core_export.dart';
 import '../../profile_exports.dart';
 
 part 'profile_model.g.dart';

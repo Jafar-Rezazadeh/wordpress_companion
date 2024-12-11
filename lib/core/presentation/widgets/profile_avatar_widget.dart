@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import '../../core_export.dart';
 import '../../../features/profile/profile_exports.dart';
 
@@ -12,7 +12,7 @@ class ProfileAvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       key: const Key("profile_avatar"),
-      onTap: () => context.goNamed(profileScreenRoute),
+      onTap: () => Get.toNamed(profileScreenRoute),
       child: _avatarBuilder(),
     );
   }

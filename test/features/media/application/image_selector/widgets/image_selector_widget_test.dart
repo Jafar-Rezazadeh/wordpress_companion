@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
@@ -30,40 +31,38 @@ void main() {
 
   Widget makeTestWidget({
     Function(MediaEntity media)? onSelect,
-    Function()? onBack,
   }) {
-    return MaterialApp(
-      home: Material(
-        child: BlocProvider(
-          create: (context) => imageListCubit,
-          child: ImageSelectorScreen(
-            onSelect: onSelect ?? (media) {},
-            onBack: onBack ?? () {},
-          ),
-        ),
-      ),
+    return GetMaterialApp(
+      home: Builder(builder: (context) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) async {
+            final result = await Get.to(BlocProvider(
+              create: (context) => imageListCubit,
+              child: const Material(child: ImageSelectorScreen()),
+            ));
+            onSelect != null ? onSelect(result) : null;
+          },
+        );
+        return Container();
+      }),
     );
   }
 
   group("backButton -", () {
-    testWidgets("should invoke the onBack when back_button tapped",
+    testWidgets("should pop the screen when back_button tapped",
         (tester) async {
       //arrange
-      bool isBackInvoked = false;
-      await tester.pumpWidget(
-        makeTestWidget(
-          onBack: () {
-            isBackInvoked = true;
-          },
-        ),
-      );
+      await tester.pumpWidget(makeTestWidget());
+      await tester.pumpAndSettle();
+      // verification
+      expect(find.byType(ImageSelectorScreen), findsOneWidget);
 
       //act
       await tester.tap(find.byKey(const Key("back_button")));
       await tester.pumpAndSettle();
 
       //assert
-      expect(isBackInvoked, true);
+      expect(find.byType(ImageSelectorScreen), findsNothing);
     });
   });
 
@@ -71,7 +70,7 @@ void main() {
     testWidgets("should call the getFirstPage when initState", (tester) async {
       //arrange
       await tester.pumpWidget(makeTestWidget());
-      await tester.pump(Durations.short1);
+      await tester.pumpAndSettle();
 
       //assert
       verify(() => imageListCubit.getFirstPageData()).called(1);
@@ -82,7 +81,7 @@ void main() {
           (tester) async {
         //arrange
         await tester.pumpWidget(makeTestWidget());
-        await tester.pump(Durations.short1);
+        await tester.pumpAndSettle();
 
         //verification
         expect(find.byType(CustomSearchInput), findsOneWidget);
@@ -101,7 +100,7 @@ void main() {
           (tester) async {
         //arrange
         await tester.pumpWidget(makeTestWidget());
-        await tester.pump(Durations.short1);
+        await tester.pumpAndSettle();
 
         //verification
         expect(find.byType(CustomSearchInput), findsOneWidget);
@@ -119,18 +118,21 @@ void main() {
       });
     });
     group("SequentialList -", () {
-      testWidgets("should invoke the onSelect when user tapped on an image",
+      testWidgets(
+          "should get the selected media as back result when user tapped on an image",
           (tester) async {
         //arrange
-        bool isSelectedInvoked = false;
+        MediaEntity? result;
 
         await tester.pumpWidget(
           makeTestWidget(
             onSelect: (media) {
-              isSelectedInvoked = true;
+              result = media;
             },
           ),
         );
+        await tester.pumpAndSettle();
+
         //verification
         expect(find.byType(SequentialImageList), findsOneWidget);
 
@@ -142,8 +144,9 @@ void main() {
         await tester.pumpAndSettle();
 
         //assert
-        expect(isSelectedInvoked, isTrue);
+        expect(result, isNotNull);
       });
+
       testWidgets(
           "should invoke the getNextPageData when onScrolledToBottom is called",
           (tester) async {
@@ -157,7 +160,7 @@ void main() {
           ]),
         );
         await tester.pumpWidget(makeTestWidget());
-        await tester.pump(Durations.short1);
+        await tester.pumpAndSettle();
 
         //verification
         expect(find.byType(SequentialImageList), findsOneWidget);
@@ -189,7 +192,7 @@ void main() {
         );
 
         await tester.pumpWidget(makeTestWidget());
-        await tester.pump(Durations.short1);
+        await tester.pumpAndSettle();
 
         //assert
         expect(find.byKey(const Key("failure_dialog")), findsOneWidget);

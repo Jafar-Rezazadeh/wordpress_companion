@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_handy_utils/flutter_handy_utils.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:wordpress_companion/features/media/domain/entities/media_entity.dart';
 
 import '../../../../../core/core_export.dart';
@@ -69,7 +69,8 @@ class _FeaturedImageInputState extends State<FeaturedImageInput> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(mediumCornerRadius),
       child: CachedNetworkImage(
-        imageUrl: selectedImageLink ?? "",
+        imageUrl:
+            selectedImageLink?.replaceAll("localhost", "192.168.1.2") ?? "",
         height: 200,
         width: 200,
         fit: BoxFit.cover,
@@ -82,10 +83,14 @@ class _FeaturedImageInputState extends State<FeaturedImageInput> {
   }
 
   Future<dynamic> _showImageSelector() async {
-    final MediaEntity? selectedImage = await context.push(imageSelectorRoute);
+    final MediaEntity? selectedImage =
+        await Get.toNamed(imageSelectorRoute) as MediaEntity?;
+
     if (selectedImage != null) {
       widget.onImageSelected(selectedImage);
-      selectedImageLink = selectedImage.sourceUrl;
+      setState(() {
+        selectedImageLink = selectedImage.sourceUrl;
+      });
     }
   }
 

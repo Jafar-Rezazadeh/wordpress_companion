@@ -20,6 +20,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  Widget _profile() {
+    return const Padding(
+      padding: EdgeInsets.only(left: 15),
+      child: ProfileAvatarWidget(),
+    );
+  }
+
   List<Widget> _actions(BuildContext context) {
     return [
       IconButton(
@@ -32,13 +39,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       const Gap(5),
     ];
-  }
-
-  Widget _profile() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 15),
-      child: ProfileAvatarWidget(),
-    );
   }
 
   @override

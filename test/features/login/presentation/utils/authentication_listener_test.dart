@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/login/login_exports.dart';
@@ -11,9 +11,7 @@ void main() {
     testWidgets("should do nothing when state is initial", (tester) async {
       //arrange
       await tester.pumpWidget(
-        _makeTestWidget(
-          const AuthenticationState.initial(),
-        ),
+        MaterialApp(home: _testWidget(const AuthenticationState.initial())),
       );
 
       //act
@@ -22,14 +20,14 @@ void main() {
       //assert
       expect(dummyElement.loaderOverlay.visible, false);
     });
+
     testWidgets(
         "should unfocus the scope and show the loaderOverlay when state is authenticating",
         (tester) async {
       //arrange
       await tester.pumpWidget(
-        _makeTestWidget(
-          const AuthenticationState.authenticating(),
-        ),
+        MaterialApp(
+            home: _testWidget(const AuthenticationState.authenticating())),
       );
 
       //act
@@ -47,9 +45,12 @@ void main() {
         (tester) async {
       //arrange
       await tester.pumpWidget(
-        _makeTestWidget(
-          AuthenticationState.authenticationFailed(
-            InternalFailure(message: "message", stackTrace: StackTrace.current),
+        MaterialApp(
+          home: _testWidget(
+            AuthenticationState.authenticationFailed(
+              InternalFailure(
+                  message: "message", stackTrace: StackTrace.current),
+            ),
           ),
         ),
       );
@@ -67,15 +68,24 @@ void main() {
         "should (hide the loaderOverlay) and (goNamed route mainScree) when state is authenticated",
         (tester) async {
       //arrange
+      final state = AuthenticationState.authenticated(
+        const LoginCredentialsEntity(
+          userName: "name",
+          applicationPassword: "pass",
+          domain: "domain",
+          rememberMe: true,
+        ),
+      );
+
       await tester.pumpWidget(
-        _makeTestWidget(
-          AuthenticationState.authenticated(
-            const LoginCredentialsEntity(
-                userName: "name",
-                applicationPassword: "pass",
-                domain: "domain",
-                rememberMe: true),
-          ),
+        GetMaterialApp(
+          getPages: [
+            GetPage(
+              name: mainScreenRoute,
+              page: () => Container(key: const Key("main_screen")),
+            )
+          ],
+          home: _testWidget(state),
         ),
       );
       await tester.pumpAndSettle();
@@ -94,7 +104,9 @@ void main() {
         (tester) async {
       //arrange
       await tester.pumpWidget(
-        _makeTestWidget(const AuthenticationState.notValidUser()),
+        MaterialApp(
+          home: _testWidget(const AuthenticationState.notValidUser()),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -111,48 +123,22 @@ void main() {
 Element _getDummyElement(WidgetTester tester) =>
     tester.element(find.byKey(const Key("dummy_element")));
 
-Widget _makeTestWidget(AuthenticationState state) {
+Widget _testWidget(AuthenticationState state) {
   return ScreenUtilInit(
-    child: MaterialApp.router(
-      routerConfig: GoRouter(
-        initialLocation: "/login",
-        routes: [
-          GoRoute(
-            path: "/login",
-            name: "/login",
-            builder: (context, _) {
-              return _loginScreenSimulation(state);
-            },
-          ),
-          GoRoute(
-            path: mainScreenRoute,
-            name: mainScreenRoute,
-            builder: (context, state) => Scaffold(
-              body: Container(
-                key: const Key("main_screen"),
-              ),
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}
+    child: LoaderOverlay(
+      child: Scaffold(
+        body: Builder(
+          builder: (context) {
+            AuthenticationStateListener(
+              context: context,
+              state: state,
+            ).when();
 
-LoaderOverlay _loginScreenSimulation(AuthenticationState state) {
-  return LoaderOverlay(
-    child: Scaffold(
-      body: Builder(
-        builder: (context) {
-          AuthenticationStateListener(
-            context: context,
-            state: state,
-          ).when();
-
-          return Container(
-            key: const Key("dummy_element"),
-          );
-        },
+            return Container(
+              key: const Key("dummy_element"),
+            );
+          },
+        ),
       ),
     ),
   );

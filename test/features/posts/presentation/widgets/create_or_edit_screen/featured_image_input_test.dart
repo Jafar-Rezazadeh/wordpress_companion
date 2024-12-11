@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wordpress_companion/core/core_export.dart';
 import 'package:wordpress_companion/features/media/media_exports.dart';
@@ -28,41 +28,33 @@ void main() {
       () => imageListCubit.state,
     ).thenReturn(const ImageListState.initial());
   });
-  makeTestWidget(
-      {required Function(MediaEntity image) onImageSelected,
-      required VoidCallback onClearImage}) {
-    return MaterialApp.router(
-      routerConfig: GoRouter(
-        initialLocation: "/",
-        routes: [
-          GoRoute(
-            path: "/",
-            builder: (context, state) => Material(
-              child: FeaturedImageInput(
-                onImageSelected: onImageSelected,
-                onClearImage: onClearImage,
-              ),
+
+  makeTestWidget({
+    required Function(MediaEntity image) onImageSelected,
+    required VoidCallback onClearImage,
+  }) {
+    return GetMaterialApp(
+      getPages: [
+        GetPage(
+          name: imageSelectorRoute,
+          page: () => BlocProvider(
+            create: (context) => imageListCubit,
+            child: const Scaffold(
+              body: ImageSelectorScreen(),
             ),
           ),
-          GoRoute(
-            name: imageSelectorRoute,
-            path: imageSelectorRoute,
-            builder: (context, state) => BlocProvider(
-              create: (context) => imageListCubit,
-              child: Scaffold(
-                body: ImageSelectorScreen(
-                  onSelect: (media) => Navigator.pop(context, media),
-                  onBack: () => Navigator.pop(context),
-                ),
-              ),
-            ),
-          ),
-        ],
+        )
+      ],
+      home: Material(
+        child: FeaturedImageInput(
+          onImageSelected: onImageSelected,
+          onClearImage: onClearImage,
+        ),
       ),
     );
   }
 
-  testWidgets("should push to imageSelectorRoute when imageSelector is tapped",
+  testWidgets("should go to imageSelectorRoute when imageSelector is tapped",
       (tester) async {
     //arrange
     onImageSelected(MediaEntity media) {}
@@ -87,7 +79,7 @@ void main() {
   });
 
   testWidgets(
-      "should invoke the onImageSelect when imageSelector onSelect invoked",
+      "should invoke the onImageSelect when imageSelector onSelect invoked and return the selected image",
       (tester) async {
     //arrange
     MediaEntity? media;
@@ -112,8 +104,9 @@ void main() {
     expect(find.byType(ImageSelectorScreen), findsOneWidget);
 
     tester
-        .widget<ImageSelectorScreen>(find.byType(ImageSelectorScreen))
+        .widget<SequentialImageList>(find.byType(SequentialImageList))
         .onSelect(FakeMediaEntity());
+
     await tester.pumpAndSettle();
 
     //assert
